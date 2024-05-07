@@ -28,7 +28,7 @@ def games() -> str:
     return renderTemplate("games/index.html")
 
 
-@gamesBlueprint.route("/<gameId: str>")
+@gamesBlueprint.route("/<string:gameId>")
 def game(
         gameId: str
 ) -> str:
