@@ -2,7 +2,6 @@
 Initializer for config submodule.
 """
 
-from .config import Config
-from .configData import Data, Server, Logging
+from .config import Config, Server, Logging
 
-__all__ = ["Config", "Data", "Server", "Logging"]
+__all__ = ["Config", "Server", "Logging"]
