@@ -1,0 +1,9 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ game.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ game.title }}</h1>
+    <p>{{ game.description }}</p>
+    <p><a href="{{ url_for("games.games") }}">Back to games</a></p>
+{% endblock %}
