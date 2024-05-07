@@ -62,12 +62,33 @@ class Logging:
                 self.level = INFO
 
 
+class API:
+    """
+    Contains API related config data.
+    """
+    key: str
+    base: str
+
+    def __init__(
+            self
+    ) -> None:
+        """
+        Initializes the API object.
+
+        Returns:
+            None
+        """
+        self.key = environ.get("API_KEY")
+        self.base = environ.get("API_BASE")
+
+
 class Config:
     """
     Contains config data.
     """
     server: Server
     logging: Logging
+    api: API
 
     def __init__(
             self
@@ -83,3 +104,4 @@ class Config:
 
         self.server = Server()
         self.logging = Logging()
+        self.api = API()
