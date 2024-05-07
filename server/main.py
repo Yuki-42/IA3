@@ -2,14 +2,31 @@
 Main file for IA3 Project.
 """
 
+# Standard Library Imports
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Third Party Imports
+from flask import Flask
+
+# Local Imports
+from internals.config import Config
+from server.internals.routes import info, games
+
+# Constants
+config: Config = Config()
+
+# Create the Flask app
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# Add routes
+app.register_blueprint(info)
+app.register_blueprint(games)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+# Run the app
+if __name__ == "__main__":
+    app.run(
+        host=config.server.host,
+        port=config.server.port,
+        debug=config.server.debug
+   )
