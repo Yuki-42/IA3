@@ -1,3 +1,12 @@
+:root {
+    --primary-background: #ffffff;
+    --secondary-background: #f1f1f1;
+    --yellow-1: #dbb700;
+    --yellow-2: #ccaa00;
+    --text-black: #000000;
+    --text-white: #ffffff;
+}
+
 body {
     min-height: 100vh;
     margin: 0;
@@ -12,9 +21,29 @@ header {
 
 footer {
     min-height: 50px;
-    background: PapayaWhip;
+    background: var(--yellow-1);
 }
 
 main {
     flex: 1;
+}
+
+.gallery {
+    display: grid;
+    margin: 2em 0 2em 0;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1em;
+}
+
+.gallery-item {
+    background-color: var(--yellow-1);
+    border-radius: 5px;
+    padding: 1em;
+    text-align: center;
+    width: auto;
+}
+
+.gallery-item img {
+    max-width: 100%;
+    height: auto;
 }
