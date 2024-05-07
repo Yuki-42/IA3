@@ -3,6 +3,7 @@ Contains classes representing config data.
 """
 # Standard Library Imports
 from os import environ
+from logging import INFO, DEBUG, WARNING, ERROR
 
 # Third Party Imports
 from dotenv import load_dotenv as loadEnv
@@ -34,7 +35,7 @@ class Logging:
     """
     Contains logging related config data.
     """
-    level: str
+    level: int
     writeToFile: bool
 
     def __init__(
@@ -46,8 +47,19 @@ class Logging:
         Returns:
             None
         """
-        self.level = environ.get("LOGGING_LEVEL")
         self.writeToFile = environ.get("LOGGING_WRITE_TO_FILE") == "True"
+
+        match environ.get("LOGGING_LEVEL").lower():
+            case "info":
+                self.level = INFO
+            case "debug":
+                self.level = DEBUG
+            case "warning":
+                self.level = WARNING
+            case "error":
+                self.level = ERROR
+            case _:
+                self.level = INFO
 
 
 class Config:
