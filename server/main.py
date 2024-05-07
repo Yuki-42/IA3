@@ -9,7 +9,7 @@ from flask import Flask
 
 # Local Imports
 from internals.config import Config
-from server.internals.routes import info, games
+from server.internals.routes import infoBlueprint, gamesBlueprint
 
 # Constants
 config: Config = Config()
@@ -17,11 +17,9 @@ config: Config = Config()
 # Create the Flask app
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-
 # Add routes
-app.register_blueprint(info)
-app.register_blueprint(games)
-
+app.register_blueprint(infoBlueprint)
+app.register_blueprint(gamesBlueprint)
 
 # Run the app
 if __name__ == "__main__":
@@ -29,4 +27,4 @@ if __name__ == "__main__":
         host=config.server.host,
         port=config.server.port,
         debug=config.server.debug
-   )
+    )
