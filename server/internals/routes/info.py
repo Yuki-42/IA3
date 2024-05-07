@@ -1,22 +1,20 @@
 """
-Contains info routes. Has urlPrefix of /.
+Contains infoBlueprint routes. Has urlPrefix of /.
 """
 
 # Standard Library Imports
-from datetime import datetime
 
 # Third Party Imports
-from flask import request, jsonify
 from flask.blueprints import Blueprint
 
 # Internal Imports
-from ..internals.helpers import renderTemplate
+from ..helpers import renderTemplate
 
 # Constants
-info = Blueprint("info", __name__, url_prefix="/")
+infoBlueprint: Blueprint = Blueprint("info", __name__, url_prefix="/")
 
 
-@info.route("/")
+@infoBlueprint.route("/")
 def index() -> str:
     """
     The index page.
@@ -27,7 +25,7 @@ def index() -> str:
     return renderTemplate("info/index.html")
 
 
-@info.route("/about")
+@infoBlueprint.route("/about")
 def about() -> str:
     """
     The about page.
