@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 :root {
     --primary-background: #ffffff;
     --secondary-background: #f1f1f1;
@@ -5,6 +7,8 @@
     --yellow-2: #ccaa00;
     --text-black: #000000;
     --text-white: #ffffff;
+    --green-1: #034320;
+    font-family: "Open Sans", sans-serif;
 }
 
 body {
@@ -15,13 +19,31 @@ body {
 }
 
 header {
-    min-height: 50px;
-    background: lightcyan;
+    min-height: 12vh;
+    background: var(--green-1);
 }
 
 footer {
-    min-height: 50px;
     background: var(--yellow-1);
+    text-align: center;
+    padding: 2em 0;  /* top right bottom left */
+
+    max-height: max-content;
+}
+
+footer #site-info {
+    margin-top: 0.6vh;
+    margin-bottom: 0.2vh;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+footer img {
+    width: 20vw;
+    height: 20vh;
+    padding: 0 0;
+    margin: -6vh 0 -3vh;
+    border: none;
 }
 
 main {
@@ -46,4 +68,9 @@ main {
 .gallery-item img {
     max-width: 100%;
     height: auto;
+}
+
+.grid-margins {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;  /* 3 columns, left and right are for shoulder space, middle is main */
 }
