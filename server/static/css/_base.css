@@ -1,10 +1,8 @@
 body {
     min-height: 100vh;
     margin: 0;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    align-items: start;
-    align-content: start;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -15,4 +13,8 @@ header {
 footer {
     min-height: 50px;
     background: PapayaWhip;
+}
+
+main {
+    flex: 1;
 }
