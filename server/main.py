@@ -11,7 +11,7 @@ from injector import Binder, singleton
 
 # Local Imports
 from internals.config import Config
-from internals.routes import infoBlueprint, gamesBlueprint, testsBlueprint
+from internals.routes import *
 from internals.wrapper.api import API
 
 # Constants
@@ -30,6 +30,7 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 app.register_blueprint(infoBlueprint)
 app.register_blueprint(gamesBlueprint)
 app.register_blueprint(testsBlueprint)
+app.register_blueprint(apiBlueprint)
 
 
 def configureDependencies(
@@ -44,8 +45,8 @@ def configureDependencies(
     Returns:
         None
     """
-    # binder.bind(Config, config, scope=singleton)
-    # binder.bind(API, api, scope=singleton)
+    binder.bind(Config, config, scope=singleton)
+    binder.bind(API, api, scope=singleton)
 
 
 # Add dependencies
