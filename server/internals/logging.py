@@ -284,7 +284,7 @@ class EndpointLoggerAdapter(LoggerAdapter):
 
 def createLogger(
         name: str,
-        level: str = "DEBUG",
+        level: int = INFO,
         formatString: str = "[%(asctime)s] [%(loggername)s] [%(levelname)s] %(message)s",
         handlers: list[Handler] = None,
         doColour: bool = True,
@@ -317,20 +317,6 @@ def createLogger(
     # Check if the logging directory exists, if not, create it
     if not path.exists(Path(f"{getcwd()}/Logs/{loggingDirectory}")):
         mkdir(Path(f"{getcwd()}/Logs/{loggingDirectory}"))
-
-    match level.lower():
-        case "debug":
-            level = DEBUG
-        case "info":
-            level = INFO
-        case "warning":
-            level = WARNING
-        case "error":
-            level = ERROR
-        case "critical":
-            level = CRITICAL
-        case _:
-            raise ValueError("Invalid level specified")
 
     logger: Logger = getLogger(name)  # Sets the logger's name
     logger.setLevel(level)  # Sets the logger's level
