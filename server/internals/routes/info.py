@@ -14,7 +14,7 @@ from ..helpers import renderTemplate
 infoBlueprint: Blueprint = Blueprint("info", __name__, url_prefix="/")
 
 
-@infoBlueprint.route("/", methods=["GET"])
+@infoBlueprint.get("/")
 def index() -> str:
     """
     The index page.
@@ -25,7 +25,7 @@ def index() -> str:
     return renderTemplate("info/index.html")
 
 
-@infoBlueprint.route("/about", methods=["GET"])
+@infoBlueprint.get("/about")
 def about() -> str:
     """
     The about page.

@@ -16,7 +16,7 @@ testsBlueprint: Blueprint = Blueprint("tests", __name__, url_prefix="/tests")
 
 
 # Routes
-@testsBlueprint.route("/", methods=["GET"])
+@testsBlueprint.get("/")
 def index() -> str:
     """
     The tests page. Displays all modules available for testing.
@@ -27,7 +27,7 @@ def index() -> str:
     return renderTemplate("tests/index.html")
 
 
-@testsBlueprint.route("/creator", methods=["GET"])
+@testsBlueprint.get("/creator")
 @inject
 def creator() -> str:
     """

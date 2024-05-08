@@ -18,7 +18,7 @@ gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
 
 
 # Routes
-@gamesBlueprint.route("/", methods=["GET"])
+@gamesBlueprint.get("/")
 @inject
 def games() -> str:
     """
@@ -30,7 +30,7 @@ def games() -> str:
     return renderTemplate("games/index.html")
 
 
-@gamesBlueprint.route("/<string:gameId>", methods=["GET"])
+@gamesBlueprint.get("/<string:gameId>")
 @inject
 def game(
         gameId: str
