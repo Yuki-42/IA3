@@ -37,6 +37,7 @@ class Requester:
             url: str,
             params: Optional[Dict[str, Any]] = None,
             headers: Optional[Dict[str, str]] = None,
+            overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
         """
@@ -46,6 +47,7 @@ class Requester:
             url (str): The URL to make the request to.
             params (Optional[Dict[str, Any]]): The parameters to pass to the request.
             headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
         Returns:
@@ -58,7 +60,7 @@ class Requester:
         params["key"] = self.config.api.key
 
         result: Response = get(
-            f"{self.config.api.base}/{url}",
+            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
             headers=headers,
             params=params,
             **kwargs
@@ -72,6 +74,7 @@ class Requester:
             url: str,
             data: Optional[Dict[str, Any]] = None,
             headers: Optional[Dict[str, str]] = None,
+            overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
         """
@@ -81,6 +84,7 @@ class Requester:
             url (str): The URL to make the request to.
             data (Optional[Dict[str, Any]]): The data to pass to the request.
             headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
         Returns:
@@ -93,14 +97,13 @@ class Requester:
         data["key"] = self.config.api.key
 
         response: Response = post(
-            f"{self.config.api.base}/{url}",
+            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
             headers=headers,
             data=data,
             **kwargs
         )
 
         response.raise_for_status()
-
         return response.json()
 
     def put(
@@ -108,6 +111,7 @@ class Requester:
             url: str,
             data: Optional[Dict[str, Any]] = None,
             headers: Optional[Dict[str, str]] = None,
+            overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
         """
@@ -117,6 +121,7 @@ class Requester:
             url (str): The URL to make the request to.
             data (Optional[Dict[str, Any]]): The data to pass to the request.
             headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
         Returns:
@@ -129,14 +134,13 @@ class Requester:
         data["key"] = self.config.api.key
 
         response: Response = put(
-            f"{self.config.api.base}/{url}",
+            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
             headers=headers,
             data=data,
             **kwargs
         )
 
         response.raise_for_status()
-
         return response.json()
 
     def delete(
@@ -144,6 +148,7 @@ class Requester:
             url: str,
             data: Optional[Dict[str, Any]] = None,
             headers: Optional[Dict[str, str]] = None,
+            overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
         """
@@ -153,6 +158,7 @@ class Requester:
             url (str): The URL to make the request to.
             data (Optional[Dict[str, Any]]): The data to pass to the request.
             headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
         Returns:
@@ -165,12 +171,11 @@ class Requester:
         data["key"] = self.config.api.key
 
         response: Response = delete(
-            f"{self.config.api.base}/{url}",
+            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
             headers=headers,
             data=data,
             **kwargs
         )
 
         response.raise_for_status()
-
         return response.json()
