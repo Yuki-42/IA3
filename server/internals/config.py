@@ -68,6 +68,7 @@ class API:
     """
     key: str
     base: str
+    useSsl: bool
 
     def __init__(
             self
@@ -80,6 +81,7 @@ class API:
         """
         self.key = environ.get("API_KEY")
         self.base = environ.get("API_BASE")
+        self.useSsl = environ.get("API_USE_SSL") == "True"
 
 
 class Config:
