@@ -3,7 +3,7 @@ Contains the Requester class.
 """
 
 # Standard Library Imports
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Callable
 
 # Third Party Imports
 from requests import get, post, put, delete, Response
@@ -53,21 +53,14 @@ class Requester:
         Returns:
             Any: The response from the RAWG API.
         """
-        # Add the API key to the parameters
-        if params is None:
-            params = {}
-
-        params["key"] = self.config.api.key
-
-        result: Response = get(
-            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
-            headers=headers,
+        return self._action(
+            method=get,
+            url=url,
             params=params,
+            overwriteUrl=overwriteUrl,
+            headers=headers,
             **kwargs
         )
-
-        result.raise_for_status()
-        return result.json()
 
     def post(
             self,
@@ -90,21 +83,14 @@ class Requester:
         Returns:
             Any: The response from the RAWG API.
         """
-        # Add the API key to the data
-        if data is None:
-            data = {}
-
-        data["key"] = self.config.api.key
-
-        response: Response = post(
-            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
+        return self._action(
+            method=post,
+            url=url,
+            overwriteUrl=overwriteUrl,
             headers=headers,
             data=data,
             **kwargs
         )
-
-        response.raise_for_status()
-        return response.json()
 
     def put(
             self,
@@ -127,21 +113,14 @@ class Requester:
         Returns:
             Any: The response from the RAWG API.
         """
-        # Add the API key to the data
-        if data is None:
-            data = {}
-
-        data["key"] = self.config.api.key
-
-        response: Response = put(
-            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
+        return self._action(
+            method=put,
+            url=url,
+            overwriteUrl=overwriteUrl,
             headers=headers,
             data=data,
             **kwargs
         )
-
-        response.raise_for_status()
-        return response.json()
 
     def delete(
             self,
@@ -164,16 +143,38 @@ class Requester:
         Returns:
             Any: The response from the RAWG API.
         """
-        # Add the API key to the data
-        if data is None:
-            data = {}
-
-        data["key"] = self.config.api.key
-
-        response: Response = delete(
-            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
+        return self._action(
+            method=delete,
+            url=url,
+            params=data,
+            overwriteUrl=overwriteUrl,
             headers=headers,
-            data=data,
+            **kwargs
+        )
+
+    def _action(
+            self,
+            method: Callable,
+            url: str,
+            params: Optional[Dict[str, Any]] = None,
+            overwriteUrl: bool = False,
+            **kwargs
+    ) -> Any:
+        """
+        Makes a request to the RAWG API. This is a template method.
+
+        Returns:
+            Any: The response from the RAWG API.
+        """
+        # Add the API key to the data
+        if params is None:
+            params = {}
+
+        params["key"] = self.config.api.key
+
+        response: Response = method(
+            f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url,
+            params=params,
             **kwargs
         )
 
