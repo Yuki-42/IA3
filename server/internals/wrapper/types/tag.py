@@ -1,5 +1,5 @@
 """
-Contains the Publisher class.
+Contains the Tag class.
 """
 
 # Standard Library Imports
@@ -9,14 +9,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class Publisher(BaseModel):
+class Tag(BaseModel):
     """
-    Represents a publisher.
+    Represents a type.
     """
-    id: Optional[int] = None
+    id: int
     name: str
     slug: str
-    games_count: Optional[int] = None
+    games_count: int
     image_background: str
     description: Optional[str] = None
-    

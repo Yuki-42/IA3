@@ -1,5 +1,5 @@
 """
-Contains the Publisher class.
+Contains the Genre class.
 """
 
 # Standard Library Imports
@@ -9,14 +9,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class Publisher(BaseModel):
+class Genre(BaseModel):
     """
-    Represents a publisher.
+    Represents a genre.
     """
-    id: Optional[int] = None
+    id: int
     name: str
     slug: str
-    games_count: Optional[int] = None
+    games_count: int
     image_background: str
     description: Optional[str] = None
-    

@@ -9,8 +9,8 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 # Internal Imports
-from .developer import Developer
-from .game import Game
+from server.internals.wrapper.types.developer import Developer
+from server.internals.wrapper.types.game import Game
 
 
 class Response(BaseModel):
