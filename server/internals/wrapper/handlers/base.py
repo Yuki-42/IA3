@@ -34,7 +34,7 @@ class BaseHandler:
         self.logger = logger
         self.baseUrl = f"{config.base}/base"
 
-    def get(
+    async def get(
             self,
             url: str,
             params: Dict = None
@@ -58,5 +58,3 @@ class BaseHandler:
 
         response.raise_for_status()
         return response.json()
-
-

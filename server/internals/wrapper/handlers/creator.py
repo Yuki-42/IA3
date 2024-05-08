@@ -34,7 +34,7 @@ class CreatorHandler(BaseHandler):
         super().__init__(config, logger)
         self.baseUrl = f"{config.base}/creators"
 
-    def getCreators(
+    async def getCreators(
             self,
             page: int = 1,
             pageSize: int = 20
@@ -56,7 +56,7 @@ class CreatorHandler(BaseHandler):
             results=creators
         )
 
-    def getCreator(
+    async def getCreator(
             self,
             id: int | str
     ) -> Creator:

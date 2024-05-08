@@ -12,6 +12,7 @@ from requests import get
 from .types import *
 from .handlers import *
 from ..config import Config, API as APIConfig
+from ..logging import SuppressedLoggerAdapter, createLogger
 
 
 class API:
@@ -19,15 +20,18 @@ class API:
     Handles managing API requests.
     """
     # Type hints
-    __slots__ = ("config",)
+    __slots__ = ("config", "logger", "creator")
 
     def __init__(
             self,
-            config: APIConfig
+            config: Config
     ) -> None:
         """
         Initializes the API class.
 
         Args:
-            config (APIConfig): The configuration to use.
+            config (Config): The configuration to use.
         """
+        self.config = config.api
+        self.logger = createLogger("API", level=config.logging.level)
+        self.creator = CreatorHandler(config.api, self.logger)
