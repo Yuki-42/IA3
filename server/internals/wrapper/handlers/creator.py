@@ -6,24 +6,27 @@ Contains the Creator handler.
 from typing import List, Dict
 
 # Third Party Imports
-from requests import get
 
 # Local Imports
-from .base import BaseHandler
-from ..types import Creator
 from ..response import Response
+from ..types import Creator
 from ...config import API as APIConfig
 from ...logging import SuppressedLoggerAdapter
+from ...requester import Requester
 
 
-class CreatorHandler(BaseHandler):
+class CreatorHandler:
     """
     Handles managing Creator requests.
     """
+
+    __slots__ = ("config", "logger", "baseUrl", "requester")
+
     def __init__(
             self,
             config: APIConfig,
-            logger: SuppressedLoggerAdapter
+            logger: SuppressedLoggerAdapter,
+            requester: Requester
     ) -> None:
         """
         Initializes the CreatorHandler class.
@@ -31,10 +34,11 @@ class CreatorHandler(BaseHandler):
         Args:
             config (APIConfig): The configuration to use.
         """
-        super().__init__(config, logger)
         self.baseUrl = f"{config.base}/creators"
+        self.logger = logger
+        self.requester = requester
 
-    async def getCreators(
+    def getCreators(
             self,
             page: int = 1,
             pageSize: int = 20
@@ -45,7 +49,10 @@ class CreatorHandler(BaseHandler):
         Returns:
             List[Creator]: A list of creators.
         """
-        response: Dict = self.get(self.baseUrl)
+        response: Dict = self.requester.get(self.baseUrl, {
+            "page": page,
+            "page_size": pageSize
+        })
 
         creators: List[Creator] = [
             Creator(**creator) for creator in response["results"]
@@ -56,7 +63,7 @@ class CreatorHandler(BaseHandler):
             results=creators
         )
 
-    async def getCreator(
+    def getCreator(
             self,
             id: int | str
     ) -> Creator:
@@ -69,6 +76,4 @@ class CreatorHandler(BaseHandler):
         Returns:
             Creator: The creator.
         """
-        response: Dict = self.get(f"{self.baseUrl}/{id}")
-
-        return Creator(**response)
+        return Creator(**self.requester.get(f"{self.baseUrl}/{id}"))
