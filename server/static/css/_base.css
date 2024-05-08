@@ -23,6 +23,24 @@ header {
     background: var(--green-1);
 }
 
+header nav {
+    float: left;
+    padding-top: 4vh;
+    padding-bottom: 4vh;
+    margin-left: -1vw;
+    display: flex;
+    flex-direction: row;
+}
+
+header nav div a {
+    color: var(--text-white);
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+    font-size: larger;
+}
+
 footer {
     background: var(--yellow-1);
     text-align: center;

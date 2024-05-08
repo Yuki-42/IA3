@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+
+{% block title %}Tests{% endblock %}
+
+{% block content %}
+    <section id="main">
+        <div id="left"></div>
+        <div id="centre" class="gallery">
+            <div class="gallery-item" id="creator">
+                <a href="{{ url_for("tests.creator") }}">
+                    <h2>Creator</h2>
+                </a>
+            </div>
+        </div>
+        <div id="right"></div>
+    </section>
+{% endblock %}
