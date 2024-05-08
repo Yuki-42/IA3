@@ -2,17 +2,30 @@
 
 {% block title %}Creator Tests{% endblock %}
 
+{% block scripts %}
+<script defer src="{{ url_for("static", filename="js/tests/creator.js") }}"></script>
+{% endblock %}
+
 {% block content %}
     <section id="main" class="grid-margins">
         <div id="left"></div>
         <div id="centre">
             <h1>Creator Tests</h1>
+            <!-- TODO: Create two separate testing dropdowns for direct-to-api tests and API wrapper testing -->
             <div id="get-list">
                 <h2>Get List</h2>
                 <p>Get a list of all the creators.</p>
-                <form action="" method="get">
-                    <input type="submit" value="Get List">
-                </form>
+                <div>
+                    <div>
+                        <label for="all-page">Page Number (<code>page</code>)</label>
+                        <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                    </div>
+                    <div>
+                        <label for="all-page-size">Page Size (<code>page_size</code>)</label>
+                        <input type="number" id="all-page-size" name="all-page-size" value="10" min="1" max="40"><br>
+                    </div>
+                    <button id="get-list-button" onclick="getAll();">Test</button>
+                </div>
             </div>
         </div>
         <div id="right"></div>
