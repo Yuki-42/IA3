@@ -8,6 +8,7 @@ from datetime import datetime
 # Third Party Imports
 from flask import request, jsonify
 from flask.blueprints import Blueprint
+from flask_injector import inject
 
 # Internal Imports
 from ..helpers import renderTemplate
@@ -17,7 +18,8 @@ gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
 
 
 # Routes
-@gamesBlueprint.route("/")
+@gamesBlueprint.route("/", methods=["GET"])
+@inject
 def games() -> str:
     """
     The games page.
@@ -28,7 +30,8 @@ def games() -> str:
     return renderTemplate("games/index.html")
 
 
-@gamesBlueprint.route("/<string:gameId>")
+@gamesBlueprint.route("/<string:gameId>", methods=["GET"])
+@inject
 def game(
         gameId: str
 ) -> str:
