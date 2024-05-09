@@ -34,7 +34,24 @@
                                     <label for="all-page-size">Page Size (<code>page_size</code>)</label>
                                     <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="40"><br>
                                 </div>
-                            <button id="get-list-button" onclick="getAll();">Run Test</button>
+                                <button id="get-list-button" onclick="getAll();">Run Test</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Response</h4>
+                            <div id="get-list-response"></div>
+                        </div>
+                    </div>
+                    <div id="get-details" class="test">
+                        <div>
+                            <h3>Get Details</h3>
+                            <p>Get details of one specific creator.</p>
+                            <div>
+                                <div class="parameter">
+                                    <label for="details-id">Creator Id (<code>id</code>)</label>
+                                    <input type="text" id="details-id" name="details-id"><br>
+                                </div>
+                                <button id="get-list-button" onclick="getDetails();">Run Test</button>
                             </div>
                         </div>
                         <div>

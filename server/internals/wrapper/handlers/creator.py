@@ -76,4 +76,5 @@ class CreatorHandler:
         Returns:
             Creator: The creator.
         """
+        self.logger.info(f"Getting creator details with id: {id}")
         return Creator(**self.requester.get(f"{self.baseUrl}/{id}"))

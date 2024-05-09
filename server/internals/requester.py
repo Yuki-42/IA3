@@ -163,9 +163,17 @@ class Requester:
         """
         Makes a request to the RAWG API. This is a template method.
 
+        Args:
+            method (Callable): The requests function to use.
+            url (str): The URL to make the request to.
+            params (Optional[Dict[str, Any]]): The parameters to pass to the request.
+            overwriteUrl (bool): Whether to use only use the URL or include the base URL.
+            **kwargs: Any additional keyword arguments to pass to the request.
+
         Returns:
             Any: The response from the RAWG API.
         """
+        self.logger.info(f"{method.__name__.upper()} request to {url} with params {params} and kwargs {kwargs}")
         # Add the API key to the data
         if params is None:
             params = {}

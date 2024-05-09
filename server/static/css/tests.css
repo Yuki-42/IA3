@@ -16,6 +16,8 @@
     background-color: var(--yellow-1);
     max-height: 200vh;
     overflow: scroll;
+    overflow-x: hidden;
+    margin-bottom: 2vh;
 }
 
 .test code, pre {
