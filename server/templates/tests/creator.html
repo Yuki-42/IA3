@@ -2,8 +2,13 @@
 
 {% block title %}Creator Tests{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for("static", filename="css/tests.css") }}">
+{% endblock %}
+
 {% block scripts %}
-<script defer src="{{ url_for("static", filename="js/tests/creator.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/tests/creator.js") }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/gh/pgrabovets/json-view@master/dist/jsonview.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -11,20 +16,55 @@
         <div id="left"></div>
         <div id="centre">
             <h1>Creator Tests</h1>
+            <p>Test <code>creator</code> endpoints.</p>
+            <div id="tests">
             <!-- TODO: Create two separate testing dropdowns for direct-to-api tests and API wrapper testing -->
-            <div id="get-list">
-                <h2>Get List</h2>
-                <p>Get a list of all the creators.</p>
-                <div>
-                    <div>
-                        <label for="all-page">Page Number (<code>page</code>)</label>
-                        <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                <div id="direct-api-tests" class="tests-group">
+                    <h2>Direct API Tests</h2>
+                    <div id="get-list" class="test">
+                        <div>
+                            <h3>Get List</h3>
+                            <p>Get a list of all the creators.</p>
+                            <div>
+                                <div>
+                                    <label for="all-page">Page Number (<code>page</code>)</label>
+                                    <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                                </div>
+                                <div>
+                                    <label for="all-page-size">Page Size (<code>page_size</code>)</label>
+                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="40"><br>
+                                </div>
+                            <button id="get-list-button" onclick="getAll();">Run Test</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Response</h4>
+                            <div id="get-list-response"></div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="all-page-size">Page Size (<code>page_size</code>)</label>
-                        <input type="number" id="all-page-size" name="all-page-size" value="10" min="1" max="40"><br>
+                </div>
+                <div id="api-class-tests" class="tests-group">
+                    <h2>API Class Tests</h2>
+                    <div id="get-list-class" class="test">
+                        <div>
+                            <h3>Get List</h3>
+                            <p>Get a list of all the creators.</p>
+                            <div>
+                                <div>
+                                    <label for="all-page">Page Number (<code>page</code>)</label>
+                                    <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                                </div>
+                                <div>
+                                    <label for="all-page-size">Page Size (<code>page_size</code>)</label>
+                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="40"><br>
+                                </div>
+                            </div>
+                            <button id="get-list-class-button" onclick="getAllClass();">Run Test</button>
+                        </div>
+                        <div>
+
+                        </div>
                     </div>
-                    <button id="get-list-button" onclick="getAll();">Test</button>
                 </div>
             </div>
         </div>

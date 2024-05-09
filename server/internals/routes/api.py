@@ -1,6 +1,7 @@
 """
 Contains apiBlueprint routes. Has urlPrefix of /api. Soley for forwarding requests to RAWG without exposing the API key.
 """
+from typing import Dict
 
 # Standard Library Imports
 
@@ -24,7 +25,7 @@ def index(
         url: str,
         api: API,
         config: Config
-) -> str:
+) -> Dict:
     """
     The API forwarding route. Requests have to come from the server itself.
 
@@ -39,5 +40,14 @@ def index(
     if request.remote_addr != config.server.host and config.server.debug is False:
         raise Unauthorized("Requests to the API must come from the server itself.")
 
-    return api.requester.get(url)
+    # Get the data
+    data: Dict = api.requester.get(url)
 
+    # Edit the data to remove the API key from the next and previous URLs
+    if "next" in data:
+        data["next"] = data["next"].replace(config.api.key, "KEY")
+
+    if "previous" in data and data["previous"] is not None:
+        data["previous"] = data["previous"].replace(config.api.key, "KEY")
+
+    return data

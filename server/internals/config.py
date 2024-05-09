@@ -16,6 +16,7 @@ class Server:
     host: str
     port: int
     debug: bool
+    password: str
 
     def __init__(
             self
@@ -29,6 +30,7 @@ class Server:
         self.host = environ.get("SERVER_HOST")
         self.port = int(environ.get("SERVER_PORT"))
         self.debug = environ.get("SERVER_DEBUG") == "True"
+        self.password = environ.get("SERVER_PASSWORD")
 
 
 class Logging:
