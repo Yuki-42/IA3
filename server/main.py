@@ -3,11 +3,13 @@ Main file for IA3 Project.
 """
 
 # Standard Library Imports
+from base64 import b64decode
 
 # Third Party Imports
-from flask import Flask
+from flask import Flask, session, request, redirect, url_for as flaskUrlFor
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
+from werkzeug import Response
 
 # Local Imports
 from internals.config import Config
@@ -31,6 +33,39 @@ app.register_blueprint(infoBlueprint)
 app.register_blueprint(gamesBlueprint)
 app.register_blueprint(testsBlueprint)
 app.register_blueprint(apiBlueprint)
+
+
+@app.before_request
+def beforeRequest() -> Response | None:
+    """
+    Runs before each request. Ensures that the user is logged in.
+
+    If the user is not logged in, respond with a 401 error code.
+
+    Returns:
+        None
+    """
+    print(f"Request from {request.remote_addr} with headers {request.headers}")
+
+    if request.remote_addr == config.server.host:
+        return None
+
+    fail: Response = Response(
+        "Unauthorized",
+        headers={"WWW-Authenticate": "Basic realm='Login Required. Username is ignored.'"},
+        status=401
+    )
+
+    if "Authorization" not in request.headers:
+        return fail
+
+    # Decode the authorization header and check if it is correct
+    password: str = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")[1]
+
+    if password != config.server.password:
+        return fail
+
+    pass
 
 
 def configureDependencies(
