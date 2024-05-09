@@ -7,6 +7,7 @@ async function getAll() {
     let data = await _get("/api/creators");
     console.log(data);
 
-     // Put the data in get-list-response
-    document.getElementById("get-list-response").innerHTML = JSON.stringify(data, null, 2);
+    // Display data using json-view
+    const tree = jsonview.create(data);
+    jsonview.render(tree, document.getElementById("get-list-response"));
 }
