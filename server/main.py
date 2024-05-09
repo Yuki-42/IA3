@@ -63,9 +63,10 @@ def beforeRequest() -> Response | None:
         return fail
 
     # Decode the authorization header and check if it is correct
-    password: str = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")[1]
 
-    if password != config.server.password:
+    username, password = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")
+
+    if password != config.server.password or username != config.server.username:
         return fail
 
     pass
