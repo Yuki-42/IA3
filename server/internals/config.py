@@ -34,7 +34,7 @@ class Server:
         self.host = environ.get("SERVER_HOST")
         self.port = int(environ.get("SERVER_PORT"))
         self.debug = environ.get("SERVER_DEBUG") == "True"
-        self.username = environ.get("SERVER_USERNAME")
+        self.username = environ.get("SERVER_USER")
         self.password = environ.get("SERVER_PASSWORD")
         self.cert = environ.get("SERVER_CERT")
         self.key = environ.get("SERVER_KEY")

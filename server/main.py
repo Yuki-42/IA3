@@ -6,7 +6,7 @@ Main file for IA3 Project.
 from base64 import b64decode
 
 # Third Party Imports
-from flask import Flask, session, request, redirect, url_for as flaskUrlFor
+from flask import Flask, request
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 from werkzeug import Response
@@ -37,6 +37,7 @@ app.register_blueprint(infoBlueprint)
 app.register_blueprint(gamesBlueprint)
 app.register_blueprint(testsBlueprint)
 app.register_blueprint(apiBlueprint)
+app.register_blueprint(errorsBlueprint)
 
 
 @app.before_request
@@ -51,11 +52,12 @@ def beforeRequest() -> Response | None:
     """
     logger.logRequest(request)
     if request.remote_addr == config.server.host:
-        return None
+        # Continue to route
+        pass
 
     fail: Response = Response(
         "Unauthorized",
-        headers={"WWW-Authenticate": "Basic realm='Login Required. Username is ignored.'"},
+        headers={"WWW-Authenticate": "Basic realm='Login Required.'"},
         status=401
     )
 
