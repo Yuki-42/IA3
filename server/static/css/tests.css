@@ -1,0 +1,22 @@
+.tests-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 0 1em;
+}
+
+.test {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    border-radius: 10px;
+    padding: 0.3em 1em 1em;
+    outline: none;
+    background-color: var(--yellow-1);
+}
+
+.test code, pre {
+    /* Fix the background to be --yellow-code */
+    background-color: var(--code-yellow);
+}
