@@ -459,8 +459,7 @@ class EndpointLoggerAdapter(LoggerAdapter):
 
         self.log(
             INFO,
-            f"Request from {request.remote_addr} to {request.path} with method {request.method} "
-            f"and headers {headers} from user agent {request.user_agent}"
+            f"Request from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent}"
         )
         if self.logger.hasHandlers():
             # Get the index of the handler
