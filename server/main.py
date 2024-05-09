@@ -13,11 +13,15 @@ from werkzeug import Response
 
 # Local Imports
 from internals.config import Config
+from internals.logging import createLogger, EndpointLoggerAdapter
 from internals.routes import *
 from internals.wrapper.api import API
 
 # Constants
 config: Config = Config()
+
+# Create the logger
+logger: EndpointLoggerAdapter = createLogger("endpoints", level=config.logging.level, adapterMode=EndpointLoggerAdapter)
 
 # Connect to the API
 api: API = API(config)
@@ -45,8 +49,7 @@ def beforeRequest() -> Response | None:
     Returns:
         None
     """
-    print(f"Request from {request.remote_addr} with headers {request.headers}")
-
+    logger.logRequest(request)
     if request.remote_addr == config.server.host:
         return None
 

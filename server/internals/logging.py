@@ -2,13 +2,13 @@
 Contains the miscellaneous methods associated with the project but not part of the main logic of the system
 """
 # Standard library imports
-from datetime import datetime
-from logging import CRITICAL, DEBUG, ERROR, FileHandler, Formatter, Handler, INFO, Logger, LoggerAdapter, StreamHandler, WARNING, getLogger
-from logging import LogRecord
+from logging import FileHandler, Formatter, Handler, INFO, Logger, LoggerAdapter, StreamHandler, getLogger, LogRecord
 from os import getcwd, mkdir, path
 from pathlib import Path
+from sqlite3 import connect, Cursor
 from sys import stdout
-from typing import Literal
+from types import TracebackType
+from typing import Literal, Tuple, Any, Type
 
 # External imports
 from flask import Request, has_request_context, request
@@ -180,6 +180,168 @@ class RequestFormatter(Formatter):
 # TODO: Make an audit logs handler that logs all information to an sqlite database and periodically removes logs older than
 #  one week. https://stackoverflow.com/questions/67693767/how-do-i-create-an-sqlite-3-database-handler-for-my-python-logger
 
+# Custom log record that includes the request information
+class RequestLogRecord(LogRecord):
+    """
+    A log record that includes the request information.
+    """
+    __slots__ = ("url", "method", "remoteAddress", "userAgent", "cookies", "headers")
+
+    def __init__(
+            self,
+            url: str,
+            method: str,
+            remoteAddress: str,
+            userAgent: str,
+            cookies: str,
+            headers: str,
+            name: str,
+            level: int,
+            pathname: str,
+            lineno: int,
+            msg: str,
+            args: tuple,
+            exc_info: Tuple[Type[BaseException], BaseException, TracebackType | None],
+            func: str,
+            sinfo: str
+    ) -> None:
+        """
+        Initializes the log record.
+
+        Args:
+            url (str): The URL of the request.
+            method (str): The method of the request.
+            remoteAddress (str): The remote address of the request.
+            userAgent (str): The user agent of the request.
+            cookies (str): The cookies of the request.
+            headers (str): The headers of the request.
+            name (str): The name of the logger.
+            level (int): The level of the log message.
+            pathname (str): The path of the file.
+            lineno (int): The line number.
+            msg (str): The log message.
+            args (tuple): Additional arguments.
+            exc_info (tuple): Exception information.
+            func (str): The function name.
+            sinfo (str): The stack information.
+        """
+        super().__init__(
+            name,
+            level,
+            pathname,
+            lineno,
+            msg,
+            args,
+            exc_info,
+            func,
+            sinfo
+        )
+        self.url = url
+        self.method = method
+        self.remoteAddress = remoteAddress
+        self.userAgent = userAgent
+        self.cookies = cookies
+        self.headers = headers
+
+
+class AuditLogsHandler(Handler):
+    """
+    A handler that logs all information to an sqlite database and periodically removes logs older than one week.
+    """
+    __slots__ = ("file", "connection")
+
+    def __init__(
+            self,
+            file: Path | str = Path(f"{getcwd()}/Logs/logs.db")
+    ) -> None:
+        """
+        Initializes the handler.
+
+        Args:
+            file (Path | str): The file to log to.
+        """
+        super().__init__()
+        self.file = file
+        self.connection = connect(
+            file,
+            check_same_thread=False
+        )
+
+        # Check if the logs table exists
+        cursor: Cursor = self.connection.cursor()
+
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS logs (
+                id INTEGER PRIMARY KEY,
+                timestamp TEXT,
+                level TEXT,
+                message TEXT,
+                url TEXT,
+                method TEXT,
+                remote_address TEXT,
+                user_agent TEXT,
+                cookies TEXT,
+                headers TEXT
+            );
+            """
+        )
+
+    def emit(
+            self,
+            record: LogRecord
+    ) -> None:
+        """
+        A black hole emit method that does nothing.
+
+        Args:
+            record (LogRecord):
+
+        Returns:
+            None
+        """
+
+    def dbEmit(
+            self,
+            record: RequestLogRecord
+    ) -> None:
+        """
+        Emits the log record to the sqlite database.
+
+        Args:
+            record (LogRecord): The log record to emit.
+        """
+        cursor: Cursor = self.connection.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO logs (
+                timestamp,
+                level,
+                message,
+                url,
+                method,
+                remote_address,
+                user_agent,
+                cookies,
+                headers
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """,
+            (
+                record.created,
+                record.levelname,
+                record.getMessage(),
+                record.url,
+                record.method,
+                record.remoteAddress,
+                record.userAgent,
+                record.cookies,
+                record.headers
+            )
+        )
+
+        self.connection.commit()
+
 
 # Custom LoggerAdapter that can be disabled
 class SuppressedLoggerAdapter(LoggerAdapter):
@@ -235,23 +397,40 @@ class EndpointLoggerAdapter(LoggerAdapter):
     # Type hints
     suppressed: bool
 
-    def __init__(self, logger: Logger, extra: dict[str, str] | None = None):
+    def __init__(
+            self,
+            logger: Logger,
+            extra: dict[str, str] | None = None
+    ) -> None:
+        """
+        Initializes the logger adapter.
+
+        Args:
+            logger (Logger): The logger to adapt.
+            extra (dict[str, str] | None):
+        """
         super().__init__(logger, extra)
         self.suppressed = False
 
-    def suppress(self):
+    def suppress(self) -> None:
         """
         Suppresses the logger.
         """
         self.suppressed = True
 
-    def unsuppress(self):
+    def unsuppress(self) -> None:
         """
         Unsuppresses the logger.
         """
         self.suppressed = False
 
-    def log(self, level: int, msg: str, *args, **kwargs):
+    def log(
+            self,
+            level: int,
+            msg: str,
+            *args,
+            **kwargs
+    ) -> None:
         """
         Logs the message to the logger.
 
@@ -264,12 +443,15 @@ class EndpointLoggerAdapter(LoggerAdapter):
         if not self.suppressed:
             super().log(level, msg, *args, **kwargs)
 
-    def logRequest(self, request: Request):
+    def logRequest(
+            self,
+            _request: Request
+    ) -> None:
         """
         Logs the request to the endpoint.
 
         Args:
-            request (Request): The request to log.
+            _request (Request): The request to log.
         """
         headers: str = ""
         for key, value in request.headers:
@@ -280,6 +462,32 @@ class EndpointLoggerAdapter(LoggerAdapter):
             f"Request from {request.remote_addr} to {request.path} with method {request.method} "
             f"and headers {headers} from user agent {request.user_agent}"
         )
+        if self.logger.hasHandlers():
+            # Get the index of the handler
+            for index, handler in enumerate(self.logger.handlers):
+                if isinstance(handler, AuditLogsHandler):
+                    handler.dbEmit(
+                        RequestLogRecord(
+                            url=request.url,
+                            method=request.method,
+                            remoteAddress=request.remote_addr,
+                            userAgent=request.user_agent.string,
+                            cookies=request.cookies.__str__(),
+                            headers=headers,
+                            name=self.logger.name,
+                            level=INFO,
+                            pathname="",
+                            lineno=0,
+                            msg=f"Request from {request.remote_addr} to {request.path} with method {request.method} "
+                                f"and headers {headers} from user agent {request.user_agent}",
+                            args=(),
+                            exc_info=None,
+                            func="",
+                            sinfo=""
+                        )
+                    )
+                    break
+
 
 
 def createLogger(
@@ -289,7 +497,8 @@ def createLogger(
         handlers: list[Handler] = None,
         doColour: bool = True,
         colourCoding: dict[str, str] = None,
-        adapterMode: str = "suppressed"
+        adapterMode: Type[SuppressedLoggerAdapter] | Type[EndpointLoggerAdapter] = SuppressedLoggerAdapter,
+        dbFile: Path | str = Path(f"{getcwd()}/Logs/logs.db")
 ) -> SuppressedLoggerAdapter | EndpointLoggerAdapter:
     """
     Creates a logger with the specified name, logging path, level, and formatter.
@@ -302,7 +511,8 @@ def createLogger(
         doColour (bool): Whether to use colour coding in the logger for logging outputs.
         colourCoding (dict): The colour coding for the logger. Defaults to the default colour coding defined in the
             function.
-        adapterMode (str): The mode of the adapter. Can be either "suppressed" or "endpoint".
+        adapterMode (str): The mode of the adapter. Can be either SuppressedLoggerAdapter or EndpointLoggerAdapter.
+        dbFile (Path | str): The file to log to.
 
     Returns:
         logger (Logger): The logger object.
@@ -329,9 +539,9 @@ def createLogger(
         handlers: list[Handler] = [
             FileHandler(
                 Path(
-                    f"{getcwd()}/Logs/{loggingDirectory}/{logFileName}{datetime.now().strftime('%d.%m.%Y')}.log"
+                    f"{getcwd()}/Logs/{loggingDirectory}/{logFileName}.log"
                 ),
-                encoding="utf-8"
+                encoding="utf-8",
             ),
             StreamHandler(
                 stdout
@@ -341,24 +551,18 @@ def createLogger(
     colourFormatter: ColourCodedFormatter = ColourCodedFormatter(formatString, colourCoding=colourCoding)
     formatter: Formatter = Formatter(formatString)
 
+    if adapterMode == EndpointLoggerAdapter:
+        handlers.append(AuditLogsHandler())
+
     for handler in handlers:
         if not doColour or isinstance(handler, FileHandler):
             handler.setFormatter(formatter)
             logger.addHandler(handler)
             pass
-
         else:
             handler.setFormatter(colourFormatter)
             logger.addHandler(handler)
 
-    # A logger adapter is used here to allow for the logger name to be included in the log messages. This is useful
-    # when multiple loggers are used in the same project.
-    match adapterMode:
-        case "suppressed":
-            adapter = SuppressedLoggerAdapter
-        case "endpoint":
-            adapter = EndpointLoggerAdapter
-        case _:
-            raise ValueError("Invalid adapter mode specified")
-
-    return adapter(logger, extra={"loggername": name})
+    # This works for some reason
+    # noinspection PyUnresolvedReferences
+    return adapterMode(logger, extra={"loggername": name})
