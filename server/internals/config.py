@@ -17,6 +17,9 @@ class Server:
     port: int
     debug: bool
     password: str
+    cert: str
+    key: str
+    ssl: bool
 
     def __init__(
             self
@@ -31,6 +34,9 @@ class Server:
         self.port = int(environ.get("SERVER_PORT"))
         self.debug = environ.get("SERVER_DEBUG") == "True"
         self.password = environ.get("SERVER_PASSWORD")
+        self.cert = environ.get("SERVER_CERT")
+        self.key = environ.get("SERVER_KEY")
+        self.ssl = environ.get("SERVER_SSL") == "True"
 
 
 class Logging:
