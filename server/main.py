@@ -30,7 +30,7 @@ api: API = API(config)
 Flask.url_for.__annotations__ = {}
 
 # Create the Flask app
-app = Flask(__name__, static_folder="static", template_folder="templates")
+app: Flask = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Add routes
 app.register_blueprint(infoBlueprint)
