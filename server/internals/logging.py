@@ -248,7 +248,7 @@ class AuditLogsHandler(Handler):
     """
     A handler that logs all information to an sqlite database and periodically removes logs older than one week.
     """
-    __slots__ = ("file", "connection")
+    __slots__ = ("file", "connection", "cursor")
 
     def __init__(
             self,
@@ -266,11 +266,10 @@ class AuditLogsHandler(Handler):
             file,
             check_same_thread=False
         )
+        self.cursor: Cursor = self.connection.cursor()
 
         # Check if the logs table exists
-        cursor: Cursor = self.connection.cursor()
-
-        cursor.execute(
+        self.cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS logs (
                 id INTEGER PRIMARY KEY,
@@ -311,9 +310,8 @@ class AuditLogsHandler(Handler):
         Args:
             record (LogRecord): The log record to emit.
         """
-        cursor: Cursor = self.connection.cursor()
 
-        cursor.execute(
+        self.cursor.execute(
             """
             INSERT INTO logs (
                 timestamp,

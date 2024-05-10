@@ -10,6 +10,7 @@ async function getAll() {
     // Display data using json-view
     const tree = jsonview.create(data);
     jsonview.render(tree, document.getElementById("get-list-response"));
+    tree.id = "get-list-response-data";
 }
 
 async function getDetails() {
@@ -23,4 +24,5 @@ async function getDetails() {
     // Display data using json-view
     const tree = jsonview.create(data);
     jsonview.render(tree, document.getElementById("get-details-response"));
+    tree.id = "get-details-response-data";
 }
