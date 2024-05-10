@@ -24,3 +24,8 @@
     /* Fix the background to be --yellow-code */
     background-color: var(--code-yellow);
 }
+
+.horizontal-list {
+    display: flex;
+    flex-direction: column;
+}

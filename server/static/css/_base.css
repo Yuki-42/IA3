@@ -124,3 +124,7 @@ code, pre {
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;  /* 3 columns, left and right are for shoulder space, middle is main */
 }
+
+.centre {
+    text-align: center;
+}
