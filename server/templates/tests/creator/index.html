@@ -17,6 +17,10 @@
         <div id="centre">
             <h1>Creator Tests</h1>
             <p>Test <code>creator</code> endpoints.</p>
+            {% if error %}
+                <h2>An error occurred:</h2>
+                <div class="error">{{ error }}</div>
+            {% endif %}
             <div id="tests">
                 <div id="direct-api-tests" class="tests-group">
                     <h2>Direct API Tests</h2>
