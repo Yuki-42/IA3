@@ -1,17 +1,41 @@
 {% extends "_base.html" %}
 
-{% block title %}Class Test - creator - {{ type }}
+{% block title %}Class Test - creator - {{ type }}{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/tests.css") }}">
+{% endblock %}
 
 {% block content %}
     <section class="grid-margins">
-        <h1>Class Test - creator - {{ type }}</h1>
-        {% if type == "list" %}
-            <p>List of creators. Data:</p>
-        {% elif type == "details" %}
-            <p>Details of one creator.</p>
-            {{ creator }}
-        {% else %}
-            <p>Error: Invalid type provided. Expected: "list" | "details" => Actual = {{ type }}</p>
-        {% endif %}
+        <div id="left"></div>
+        <div id="centre">
+            <h1>Class Test - creator - {{ type }}</h1>
+            {% if type == "list" %}
+                <p>List of creators. Data:</p>
+                {% for creator in creators %}
+                    <div class="result">
+                        <div class="creator">
+                            <a href="/creator/{{ creator.id }}">{{ creator.name }}</a>
+                            <img src="{{ creator.image_background }}" alt="Background image for {{ creator.name }}">
+                        </div>
+                        <div>
+                            <p>Data:</p>
+                            <ul>
+                                {% for key, value in creator %}
+                                    <li><code>{{ key }}</code>: <code>{{ value }}</code></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% elif type == "details" %}
+                <p>Details of one creator.</p>
+                {{ creator }}
+            {% else %}
+                <p>Error: Invalid type provided. Expected: "list" | "details" => Actual = {{ type }}</p>
+            {% endif %}
+        </div>
+        <div id="right"></div>
     </section>
 {% endblock %}

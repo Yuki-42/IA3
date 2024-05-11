@@ -14,11 +14,11 @@ class Creator(BaseModel):
     """
     Represents a creator.
     """
-    id: Optional[int] = None
+    id: int
     name: str
     slug: str
-    image_background: str
-    description: str
+    image_background: Optional[str] = None
+    description: Optional[str] = None
     games_count: Optional[int] = None
     reviews_count: Optional[int] = None
     rating: Optional[float] = None

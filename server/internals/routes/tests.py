@@ -1,7 +1,7 @@
 """
 Contains testBlueprint routes. Has urlPrefix of /tests.
 """
-
+from flask import request
 # Standard Library Imports
 
 # Third Party Imports
@@ -43,10 +43,7 @@ def creator() -> str:
 @inject
 def creatorClass(
         api: API,
-        testType: str,
-        id: str = None,
-        page: int = None,
-        pageSize: int = None
+        testType: str
 ) -> str:
     """
     The creator class tests page.
@@ -54,29 +51,40 @@ def creatorClass(
     Args:
         api (API): The API wrapper.
         testType (str): The type of test to run.
-        id (str): The id of the creator.
-        page (int): The page number.
-        pageSize (int): The number of items per page.
 
     Returns:
         str: The rendered creator class tests page.
     """
-
     if testType not in ["list", "details"]:
         return renderTemplate("tests/creator/index.html", error="Invalid test type.")
+
+    # Get request parameters
+    id: str = request.args.get("id")
+    page: str = request.args.get("page")
+    pageSize: str = request.args.get("pageSize")
 
     # If the test type is list, check if the page and pageSize are valid.
     if testType == "list":
         if page is None or pageSize is None:
             return renderTemplate(
                 "tests/creator/index.html",
-                error="<code>page</code> and <code>pageSize</code> are required."
+                error="`page` and `pageSize` are required."
+            )
+
+        # Convert the page and pageSize to integers.
+        try:
+            page: int = int(page)
+            pageSize: int = int(pageSize)
+        except ValueError:
+            return renderTemplate(
+                "tests/creator/index.html",
+                error="`page` and `pageSize` must be integers."
             )
 
         if page < 1 or pageSize < 1:
             return renderTemplate(
                 "tests/creator/index.html",
-                error="<code>page</code> and <code>pageSize</code> must be greater than 0."
+                error="`page` and `pageSize` must be greater than 0."
             )
 
         if pageSize >= 25:
@@ -87,13 +95,12 @@ def creatorClass(
 
         # Get the creators from the API.
         response: Response = api.creator.getCreators(page=page, pageSize=pageSize)
-        return renderTemplate("tests/creator/list.html", creators=response.results)
+        return renderTemplate("tests/creator/class.html", type=testType, creators=response.results)
 
     # Test type is details.
     if id is None:
-        return renderTemplate("tests/creator/index.html", error="<code>id</code> is required.")
+        return renderTemplate("tests/creator/index.html", error="`id` is required.")
 
     # Get the creator from the API.
     response: Response = api.creator.getCreator(id=id)
-    return renderTemplate("tests/creator/details.html", creator=response)
-
+    return renderTemplate("tests/creator/class.html", type=testType, creator=response)

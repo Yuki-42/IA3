@@ -34,7 +34,7 @@ class CreatorHandler:
         Args:
             config (APIConfig): The configuration to use.
         """
-        self.baseUrl = f"{config.base}/creators"
+        self.baseUrl = "creators"
         self.logger = logger
         self.requester = requester
 
