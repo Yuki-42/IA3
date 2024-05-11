@@ -39,11 +39,11 @@ def creator() -> str:
     return renderTemplate("tests/creator/index.html")
 
 
-@testsBlueprint.get("/creator/<string:type>")
+@testsBlueprint.get("/creator/<string:testType>")
 @inject
 def creatorClass(
         api: API,
-        testType: str = None,
+        testType: str,
         id: str = None,
         page: int = None,
         pageSize: int = None
