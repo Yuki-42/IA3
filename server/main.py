@@ -4,6 +4,7 @@ Main file for IA3 Project.
 
 # Standard Library Imports
 from base64 import b64decode
+from os import getcwd, chdir
 
 # Third Party Imports
 from flask import Flask, request
@@ -16,6 +17,10 @@ from internals.config import Config
 from internals.logging import createLogger, EndpointLoggerAdapter
 from internals.routes import *
 from internals.wrapper.api import API
+
+# Before we do anything, check if the working directory is correct. This is a fix for running the server from parent directory using the start script.
+if "server" not in getcwd():
+    chdir("server")
 
 # Constants
 config: Config = Config()
