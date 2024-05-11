@@ -51,9 +51,10 @@ def beforeRequest() -> Response | None:
         None
     """
     logger.logRequest(request)
-    if request.remote_addr == config.server.host:
+    # Check if the request is coming from the server or is from one of the development machines
+    if request.remote_addr == config.server.host or (request.remote_addr in ["192.168.0.223"] and config.server.debug):
         # Continue to route
-        pass
+        return
 
     fail: Response = Response(
         "Unauthorized",
