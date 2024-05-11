@@ -8,10 +8,14 @@ from pathlib import Path
 from sqlite3 import connect, Cursor
 from sys import stdout
 from types import TracebackType
-from typing import Literal, Tuple, Any, Type
+from typing import Literal, Tuple, Type
+from threading import Lock, Thread
 
 # External imports
 from flask import Request, has_request_context, request
+
+# Constants
+databaseLock: Lock = Lock()
 
 
 def getEscapeCode(
@@ -312,35 +316,38 @@ class AuditLogsHandler(Handler):
         Args:
             record (LogRecord): The log record to emit.
         """
-
-        self.cursor.execute(
-            """
-            INSERT INTO logs (
-                timestamp,
-                level,
-                message,
-                url,
-                method,
-                remote_address,
-                user_agent,
-                cookies,
-                headers
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-            """,
-            (
-                record.created,
-                record.levelname,
-                record.getMessage(),
-                record.url,
-                record.method,
-                record.remoteAddress,
-                record.userAgent,
-                record.cookies,
-                record.headers
+        try:
+            databaseLock.acquire()
+            self.cursor.execute(
+                """
+                INSERT INTO logs (
+                    timestamp,
+                    level,
+                    message,
+                    url,
+                    method,
+                    remote_address,
+                    user_agent,
+                    cookies,
+                    headers
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """,
+                (
+                    record.created,
+                    record.levelname,
+                    record.getMessage(),
+                    record.url,
+                    record.method,
+                    record.remoteAddress,
+                    record.userAgent,
+                    record.cookies,
+                    record.headers
+                )
             )
-        )
 
-        self.connection.commit()
+            self.connection.commit()
+        finally:
+            databaseLock.release()
 
 
 # Custom LoggerAdapter that can be disabled
