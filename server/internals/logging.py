@@ -252,7 +252,7 @@ class AuditLogsHandler(Handler):
 
     def __init__(
             self,
-            file: Path | str = Path(f"{getcwd()}/Logs/logs.db")
+            file: Path | str = None
     ) -> None:
         """
         Initializes the handler.
@@ -260,6 +260,8 @@ class AuditLogsHandler(Handler):
         Args:
             file (Path | str): The file to log to.
         """
+        if file is None:
+            file = Path(f"{getcwd()}/Logs/logs.db")  # Default to the logs.db file in the Logs directory
         super().__init__()
         self.file = file
         self.connection = connect(
@@ -484,7 +486,6 @@ class EndpointLoggerAdapter(LoggerAdapter):
                         )
                     )
                     break
-
 
 
 def createLogger(

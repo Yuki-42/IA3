@@ -19,11 +19,8 @@ from internals.routes import *
 from internals.wrapper.api import API
 
 # Before we do anything, check if the working directory is correct. This is a fix for running the server from parent directory using the start script.
-print(getcwd())
 if not getcwd().endswith("server"):
     chdir("server")
-
-print(getcwd())
 
 # Constants
 config: Config = Config()
