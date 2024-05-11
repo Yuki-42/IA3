@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+
+{% block title %}Class Test - creator - {{ type }}
+
+{% block content %}
+    <section class="grid-margins">
+        <h1>Class Test - creator - {{ type }}</h1>
+        {% if type == "list" %}
+            <p>List of creators. Data:</p>
+        {% elif type == "details" %}
+            <p>Details of one creator.</p>
+            {{ creator }}
+        {% else %}
+            <p>Error: Invalid type provided. Expected: "list" | "details" => Actual = {{ type }}</p>
+        {% endif %}
+    </section>
+{% endblock %}

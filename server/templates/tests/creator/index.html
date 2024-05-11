@@ -18,7 +18,6 @@
             <h1>Creator Tests</h1>
             <p>Test <code>creator</code> endpoints.</p>
             <div id="tests">
-            <!-- TODO: Create two separate testing dropdowns for direct-to-api tests and API wrapper testing -->
                 <div id="direct-api-tests" class="tests-group">
                     <h2>Direct API Tests</h2>
                     <div id="get-list" class="test">
@@ -32,9 +31,9 @@
                                 </div>
                                 <div>
                                     <label for="all-page-size">Page Size (<code>page_size</code>)</label>
-                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="40"><br>
+                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="25"><br>
                                 </div>
-                                <button id="get-list-button" onclick="getAll();">Run Test</button>
+                                <button id="get-list-button" onclick="getList();">Run Test</button>
                             </div>
                         </div>
                         <div class="horizontal-list">
@@ -57,7 +56,7 @@
                         </div>
                         <div>
                             <h4>Response</h4>
-                            <div id="get-list-response"></div>
+                            <div id="get-details-response"></div>
                         </div>
                     </div>
                 </div>
@@ -69,18 +68,28 @@
                             <p>Get a list of all the creators.</p>
                             <div>
                                 <div>
-                                    <label for="all-page">Page Number (<code>page</code>)</label>
-                                    <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                                    <label for="all-page-class">Page Number (<code>page</code>)</label>
+                                    <input type="number" id="all-page-class" name="all-page-class" value="1" min="1"><br>
                                 </div>
                                 <div>
-                                    <label for="all-page-size">Page Size (<code>page_size</code>)</label>
-                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="40"><br>
+                                    <label for="all-page-size-class">Page Size (<code>page_size</code>)</label>
+                                    <input type="number" id="all-page-size-class" name="all-page-size-class" value="5" min="1" max="25"><br>
                                 </div>
                             </div>
-                            <button id="get-list-class-button" onclick="getAllClass();">Run Test</button>
+                            <button id="get-list-class-button" onclick="getListClass();">Run Test</button>
                         </div>
+                    </div>
+                    <div id="get-details" class="test">
                         <div>
-
+                            <h3>Get Details</h3>
+                            <p>Get details of one specific creator.</p>
+                            <div>
+                                <div class="parameter">
+                                    <label for="details-id-class">Creator Id (<code>id</code>)</label>
+                                    <input type="text" id="details-id-class" name="details-id-class"><br>
+                                </div>
+                                <button id="get-list-button-class" onclick="getDetailsClass();">Run Test</button>
+                            </div>
                         </div>
                     </div>
                 </div>
