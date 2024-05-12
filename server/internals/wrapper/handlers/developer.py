@@ -46,8 +46,8 @@ class DeveloperHandler:
         Gets a list of developers.
 
         Args:
-            page (int): The page number.
-            pageSize (int): The number of items per page.
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
 
         Returns:
             List[Developer]: A list of developers.
