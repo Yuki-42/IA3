@@ -20,7 +20,7 @@ gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
 # Routes
 @gamesBlueprint.get("/")
 @inject
-def games() -> str:
+def index() -> str:
     """
     The games page.
 
