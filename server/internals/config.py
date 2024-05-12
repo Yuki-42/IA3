@@ -39,6 +39,7 @@ class Server:
         self.cert = environ.get("SERVER_CERT")
         self.key = environ.get("SERVER_KEY")
         self.ssl = environ.get("SERVER_SSL") == "True"
+        self.defaultTheme = environ.get("SERVER_DEFAULT_THEME")
 
 
 class Logging:

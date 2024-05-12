@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script defer src="{{ url_for("static", filename="js/tests/utils.js") }}"></script>
     <script defer src="{{ url_for("static", filename="js/tests/creator.js") }}"></script>
     <script defer src="https://cdn.jsdelivr.net/gh/pgrabovets/json-view@master/dist/jsonview.js"></script>
 {% endblock %}
@@ -30,21 +31,20 @@
                             <p>Get a list of all the creators.</p>
                             <div>
                                 <div>
-                                    <label for="all-page">Page Number (<code>page</code>)</label>
-                                    <input type="number" id="all-page" name="all-page" value="1" min="1"><br>
+                                    <label for="list-page">Page Number (<code>page</code>)</label>
+                                    <input type="number" id="list-page" name="list-page" value="1" min="1"><br>
                                 </div>
                                 <div>
-                                    <label for="all-page-size">Page Size (<code>page_size</code>)</label>
-                                    <input type="number" id="all-page-size" name="all-page-size" value="5" min="1" max="25"><br>
+                                    <label for="list-page-size">Page Size (<code>page_size</code>)</label>
+                                    <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
                                 </div>
                                 <button id="get-list-button" onclick="getList();">Run Test</button>
                             </div>
                         </div>
                         <div class="horizontal-list">
-                            <h4>Response</h4><button onclick="expandAll('get-list-response-data');">Expand all content</button>
-
+                            <h4>Response</h4>
+                            <div id="get-list-response"></div>
                         </div>
-                        <div id="get-list-response"></div>
                     </div>
                     <div id="get-details" class="test">
                         <div>

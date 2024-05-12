@@ -1,3 +1,31 @@
+function getCookie(name) {
+    // Get the value of a cookie by name
+    let cookie = document.cookie.split(";").find(cookie => cookie.includes(name));
+    return cookie ? cookie.split("=")[1] : "";
+}
+
+function setCookie(name, value) {
+    // Set the cookie with the name to the value. Path is the root of the website
+    document.cookie = `${name}=${value}; path=/;`
+}
+
+
+function toggleTheme() {
+    // Get the current theme
+    let theme = getCookie("theme");
+
+    // Set the theme to the opposite of the current theme
+    if(theme === "dark") {
+        setCookie("theme", "light");
+    } else {
+        setCookie("theme", "dark");
+    }
+
+    // Reload the stylesheets
+    reloadColours();
+}
+
+
 function _get(url, parameters = {}) {
     // Fetch data from the server using the GET method with url arguments
     return fetch(url + "?" + new URLSearchParams(parameters), {
@@ -8,8 +36,25 @@ function _get(url, parameters = {}) {
     }).then(response => response.json());
 }
 
-function expandAll(divId) {
-    // Expand all nodes in the json-view
-    let tree = document.getElementById(divId);
-    tree.expand();
+function reloadColours(){
+    let colours = document.getElementById("colours");
+
+    colours.href = colours.href.replace(/\?.*|$/, "?reload=" + new Date().getTime());
 }
+
+
+// Wait for the DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+    // Get the current theme
+    let theme = getCookie("theme");
+
+    // Get the theme toggle element
+    let themeToggle = document.getElementById("theme-selector-checkbox");
+
+    // Set the theme toggle to the current theme
+    themeToggle.checked = theme === "dark";
+
+    // Add the event listener to the theme toggle
+    themeToggle.addEventListener("change", toggleTheme);
+});
+

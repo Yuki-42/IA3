@@ -14,10 +14,12 @@
     padding: 0.3em 1em 1em;
     outline: none;
     background-color: var(--yellow-1);
-    max-height: 200vh;
+    max-height: 50vh;
     overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 2vh;
+    /* Hide the scrollbar */
+    scrollbar-width: none;
 }
 
 .test code, pre {

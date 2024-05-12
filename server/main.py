@@ -7,7 +7,7 @@ from base64 import b64decode
 from os import getcwd, chdir
 
 # Third Party Imports
-from flask import Flask, request
+from flask import Flask, request, Request
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 from werkzeug import Response
@@ -37,6 +37,10 @@ Flask.url_for.__annotations__ = {}
 # Create the Flask app
 app: Flask = Flask(__name__, static_folder="static", template_folder="templates")
 
+# Set static and template folders
+app.static_folder = "static"
+app.template_folder = "templates"
+
 # Add routes
 app.register_blueprint(infoBlueprint)
 app.register_blueprint(gamesBlueprint)
@@ -56,6 +60,12 @@ def beforeRequest() -> Response | None:
         None
     """
     logger.logRequest(request)
+
+    # Check if the request is for static
+    if request.path == "/static/css/_colours.css" and request.method == "GET":
+        # Return the correct colour css file based on the theme
+        return app.send_static_file(f"css/{request.cookies.get("theme", config.server.defaultTheme)}_colours.css")
+
     # Check if the request is coming from the server or is from one of the development machines
     if request.remote_addr == config.server.host or (request.remote_addr in ["192.168.0.223"] and config.server.debug):
         # Continue to route
@@ -78,6 +88,26 @@ def beforeRequest() -> Response | None:
         return fail
 
     pass
+
+
+@app.after_request
+def afterRequest(
+        response: Response
+) -> Response:
+    """
+    Runs after each request. Logs the response and deals with cookies.
+
+    Args:
+        response (Response): The response to log.
+
+    Returns:
+        Response: The response.
+    """
+    # Add a theme cookie to the response if the user doesn't have one
+    if "theme" not in request.cookies:
+        response.set_cookie("theme", config.server.defaultTheme)
+
+    return response
 
 
 def configureDependencies(

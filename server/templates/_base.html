@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
+    <link id="colours" rel="stylesheet" href="{{ url_for("static", filename="css/_colours.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename="css/_base.css") }}">
     <script src="{{ url_for("static", filename="js/_base.js") }}"></script>
+    <script src="https://kit.fontawesome.com/a7e9f794eb.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {% block styles %}{% endblock %}
     {% block scripts %}{% endblock %}
 </head>
@@ -26,7 +29,12 @@
                 </div>
             </nav>
         </div>
-        <div id="header-right"></div>
+        <div id="header-right">
+            <div id="theme-selector">
+                <label for="theme-selector-checkbox">Dark Mode</label>
+                <input id="theme-selector-checkbox" type="checkbox">
+            </div>
+        </div>
     </header>
     <main>
         {% block content %}{% endblock %}

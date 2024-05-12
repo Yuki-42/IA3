@@ -1,7 +1,7 @@
 async function getList() {
     // Get parameters
-    let page = document.getElementById("all-page").value;
-    let pageSize = document.getElementById("all-page-size").value;
+    let page = document.getElementById("list-page").value;
+    let pageSize = document.getElementById("list-page-size").value;
 
     // Get data from the server
     let data = await _get("/api/creators");
@@ -9,8 +9,7 @@ async function getList() {
 
     // Display data using json-view
     const tree = jsonview.create(data);
-    jsonview.render(tree, document.getElementById("get-list-response"));
-    tree.id = "get-list-response-data";
+    setResponse(tree, "get-list-response")
 }
 
 async function getDetails() {
@@ -23,8 +22,7 @@ async function getDetails() {
 
     // Display data using json-view
     const tree = jsonview.create(data);
-    jsonview.render(tree, document.getElementById("get-details-response"));
-    tree.id = "get-details-response-data";
+    setResponse(tree, "get-details-response")
 }
 
 async function getListClass() {

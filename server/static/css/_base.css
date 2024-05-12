@@ -2,15 +2,6 @@
 @import url("https://fonts.googleapis.com/css?family=JetBrains Mono");
 
 :root {
-    --primary-background: #ffffff;
-    --secondary-background: #f1f1f1;
-    --code-normal: #cccccc;
-    --code-yellow: #f5d342;
-    --yellow-1: #dbb700;
-    --yellow-2: #ccaa00;
-    --text-black: #000000;
-    --text-white: #ffffff;
-    --green-1: #034320;
     font-family: "Open Sans", sans-serif;
 }
 
@@ -36,7 +27,8 @@
 }
 
 body {
-    min-height: 100vh;
+    min-height: 101vh;
+    height: 104%;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -57,7 +49,7 @@ header nav {
 }
 
 header nav div a {
-    color: var(--text-white);
+    color: var(--text-secondary);
     text-decoration: none;
     padding: 0.5em 1em;
     border-radius: 5px;
@@ -66,26 +58,26 @@ header nav div a {
 }
 
 footer {
-    display: flex;
     justify-content: center;
     gap: 4em;
     background: var(--yellow-1);
     text-align: center;
     padding: 2em 0;  /* top right bottom left */
     max-height: min-content;
+    min-height: 8vh;
 }
 
 footer #site-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 1.2em;
+    font-size: 0.8em;
     font-weight: bold;
 }
 
 footer img {
-    width: 20vw;
-    height: 20vh;
+    width: 15vw;
+    height: 15vh;
     padding: 0 0;
     margin: -6vh 0 -3vh;
     border: none;
@@ -130,4 +122,48 @@ code, pre {
 
 .centre {
     text-align: center;
+}
+
+#theme-selector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 1em 0;
+}
+
+#theme-selector input {
+    align-self: center;
+    -webkit-appearance: none;
+    position: relative;
+    background-color: var(--code-normal);
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.7s ease;
+}
+
+#theme-selector input::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    border-radius: 20px;
+    transform: scale(0.8);
+    transition: all 0.7s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+#theme-selector input:checked::before {
+    background-color: #fff;
+    left: 82px;
+}
+
+#theme-selector input:checked {
+    background-color: var(--yellow-1);
 }
