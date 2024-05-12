@@ -18,7 +18,7 @@ class API:
     Handles managing API requests.
     """
     # Type hints
-    __slots__ = ("config", "logger", "requester", "creator")
+    __slots__ = ("config", "logger", "requester", "creator", "developer")
 
     def __init__(
             self,
@@ -34,4 +34,5 @@ class API:
         self.logger = createLogger("API", level=config.logging.level)
 
         self.requester: Requester = Requester(config)  # Create a requester object to use
-        self.creator = CreatorHandler(config.api, self.logger, self.requester)
+        self.creator = CreatorHandler(self.logger, self.requester)
+        self.developer = DeveloperHandler(self.logger, self.requester)
