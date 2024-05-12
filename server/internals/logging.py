@@ -189,16 +189,11 @@ class RequestLogRecord(LogRecord):
     """
     A log record that includes the request information.
     """
-    __slots__ = ("url", "method", "remoteAddress", "userAgent", "cookies", "headers")
+    __slots__ = ("request",)
 
     def __init__(
             self,
-            url: str,
-            method: str,
-            remoteAddress: str,
-            userAgent: str,
-            cookies: str,
-            headers: str,
+            request: Request,
             name: str,
             level: int,
             pathname: str,
@@ -213,12 +208,7 @@ class RequestLogRecord(LogRecord):
         Initializes the log record.
 
         Args:
-            url (str): The URL of the request.
-            method (str): The method of the request.
-            remoteAddress (str): The remote address of the request.
-            userAgent (str): The user agent of the request.
-            cookies (str): The cookies of the request.
-            headers (str): The headers of the request.
+            request
             name (str): The name of the logger.
             level (int): The level of the log message.
             pathname (str): The path of the file.
@@ -240,12 +230,7 @@ class RequestLogRecord(LogRecord):
             func,
             sinfo
         )
-        self.url = url
-        self.method = method
-        self.remoteAddress = remoteAddress
-        self.userAgent = userAgent
-        self.cookies = cookies
-        self.headers = headers
+        self.request = request
 
 
 class AuditLogsHandler(Handler):
@@ -336,12 +321,12 @@ class AuditLogsHandler(Handler):
                     record.created,
                     record.levelname,
                     record.getMessage(),
-                    record.url,
-                    record.method,
-                    record.remoteAddress,
-                    record.userAgent,
-                    record.cookies,
-                    record.headers
+                    record.request.url,
+                    record.request.method,
+                    record.request.remote_addr,
+                    record.request.user_agent.string,
+                    record.request.cookies.__str__(),
+                    record.request.headers.__str__()
                 )
             )
 
@@ -466,7 +451,7 @@ class EndpointLoggerAdapter(LoggerAdapter):
 
         self.log(
             INFO,
-            f"Request from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent}"
+            f"Request from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
         )
         if self.logger.hasHandlers():
             # Get the index of the handler
@@ -474,12 +459,7 @@ class EndpointLoggerAdapter(LoggerAdapter):
                 if isinstance(handler, AuditLogsHandler):
                     handler.dbEmit(
                         RequestLogRecord(
-                            url=request.url,
-                            method=request.method,
-                            remoteAddress=request.remote_addr,
-                            userAgent=request.user_agent.string,
-                            cookies=request.cookies.__str__(),
-                            headers=headers,
+                            request=_request,
                             name=self.logger.name,
                             level=INFO,
                             pathname="",
