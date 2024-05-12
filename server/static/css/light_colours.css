@@ -8,5 +8,19 @@
     --text-black: #000000;
     --text-white: #ffffff;
     --green-1: #034320;
+    --text-primary: #000000;
     --text-secondary: #ffffff;
+}
+
+header {
+    background: var(--green-1);
+}
+
+footer {
+    color: var(--text-primary);
+    background: var(--yellow-1);
+}
+
+a {
+    color: var(--text-primary);
 }

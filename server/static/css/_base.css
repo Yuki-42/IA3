@@ -3,6 +3,8 @@
 
 :root {
     font-family: "Open Sans", sans-serif;
+    background-color: var(--primary-background);
+    color: var(--text-primary);
 }
 
 /* Background Colour Classes */
@@ -36,7 +38,6 @@ body {
 
 header {
     min-height: 8vh;
-    background: var(--green-1);
 }
 
 header nav {
@@ -52,15 +53,12 @@ header nav div a {
     color: var(--text-secondary);
     text-decoration: none;
     padding: 0.5em 1em;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s;
     font-size: larger;
 }
 
 footer {
     justify-content: center;
     gap: 4em;
-    background: var(--yellow-1);
     text-align: center;
     padding: 2em 0;  /* top right bottom left */
     max-height: min-content;
@@ -104,11 +102,18 @@ code, pre {
 
 .gallery-item {
     background-color: var(--yellow-1);
+    /* Add a transition for the colour on hover */
+    transition: background-color 0.3s;
     border-radius: 5px;
     padding: 1em;
     text-align: center;
     width: auto;
 }
+
+.gallery-item:hover {
+    background-color: var(--yellow-2);
+}
+
 
 .gallery-item img {
     max-width: 100%;
@@ -130,7 +135,7 @@ code, pre {
     justify-content: center;
     text-align: center;
     color: var(--text-secondary);
-    margin: 1em 0;
+    margin: 1em 6vw 1em 0;
 }
 
 #theme-selector input {
