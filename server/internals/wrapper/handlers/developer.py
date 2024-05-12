@@ -1,5 +1,5 @@
 """
-Contains the Creator handler.
+Contains the Developer handler.
 """
 
 # Standard Library Imports
