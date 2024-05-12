@@ -18,7 +18,14 @@ class API:
     Handles managing API requests.
     """
     # Type hints
-    __slots__ = ("config", "logger", "requester", "creator", "developer")
+    __slots__ = (
+        "config",
+        "logger",
+        "requester",
+        "creator",
+        "developer",
+        "game",
+    )
 
     def __init__(
             self,
@@ -34,5 +41,8 @@ class API:
         self.logger = createLogger("API", level=config.logging.level)
 
         self.requester: Requester = Requester(config)  # Create a requester object to use
+
+        # Create the handlers
         self.creator = CreatorHandler(self.logger, self.requester)
         self.developer = DeveloperHandler(self.logger, self.requester)
+        self.game = GameHandler(self.logger, self.requester)
