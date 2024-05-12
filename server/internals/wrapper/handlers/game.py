@@ -263,7 +263,7 @@ class GameHandler:
             List[Game]: A list of games.
         """
         response: Dict = self.requester.get(
-            f"{self.baseUrl}/{id}/parents",
+            f"{self.baseUrl}/{id}/parent-games",
             {
                 "game_pk": id,
                 "page": page,
@@ -280,7 +280,73 @@ class GameHandler:
             results=games
         )
 
+    def screenshots(
+            self,
+            id: int | str,
+            page: int = 1,
+            pageSize: int = 20,
+            ordering: str = None
+    ) -> Response:
+        """
+        Gets a list of screenshots for a game.
 
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
+            ordering (str): Which field to use when ordering the results.
+
+        Returns:
+            List[Dict]: A list of screenshots.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/screenshots",
+            {
+                "game_pk": id,
+                "page": page,
+                "page_size": pageSize,
+                "ordering": ordering
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]
+        )
+
+    def stores(
+            self,
+            id: int | str,
+            page: int = 1,
+            pageSize: int = 20,
+            ordering: str = None
+    ) -> Response:
+        """
+        Gets a list of stores for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
+            ordering (str): Which field to use when ordering the results.
+
+        Returns:
+            List[Dict]: A list of stores.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/stores",
+            {
+                "game_pk": id,
+                "page": page,
+                "page_size": pageSize,
+                "ordering": ordering
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]  # TODO: Convert all instances of results to Objects
+        )
 
     def details(
             self,
@@ -297,3 +363,78 @@ class GameHandler:
         """
         self.logger.info(f"Getting game details with id: {id}")
         return Game(**self.requester.get(f"{self.baseUrl}/{id}"))
+
+    def achievements(  # TODO: Figure out what the hell this actually returns. The API docs are useless
+            self,
+            id: int | str
+    ) -> Response:
+        """
+        Gets a list of achievements for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+
+        Returns:
+            List[Dict]: A list of achievements.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/achievements",
+            {
+                "id": id
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]
+        )
+
+    def trailers(  # TODO: Figure out what the hell this actually returns. The API docs are useless
+            self,
+            id: int | str
+    ) -> Response:
+        """
+        Gets a list of trailers for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+
+        Returns:
+            List[Dict]: A list of trailers.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/movies",
+            {
+                "id": id
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]
+        )
+
+    def reddit(  # TODO: Figure out what the hell this actually returns. The API docs are useless
+            self,
+            id: int | str
+    ) -> Response:
+        """
+        Gets a list of reddit posts for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+
+        Returns:
+            List[Dict]: A list of reddit posts.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/reddit",
+            {
+                "id": id
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]
+        )
