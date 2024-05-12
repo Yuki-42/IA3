@@ -27,13 +27,22 @@ function toggleTheme() {
 
 
 function _get(url, parameters = {}) {
+    console.log(url)
     // Fetch data from the server using the GET method with url arguments
     return fetch(url + "?" + new URLSearchParams(parameters), {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*" // Allow CORS
         }
-    }).then(response => response.json());
+    }).then(response => {
+        // Capture the response to perform multiple operations
+        let clone = response.clone();
+        clone.text().then(text => {
+            console.log("Server response: ", text);
+        });
+        return response.json();
+    });
 }
 
 function reloadColours(){
