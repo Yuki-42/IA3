@@ -45,6 +45,10 @@ class CreatorHandler:
         """
         Gets a list of creators.
 
+        Args:
+            page (int): The page number.
+            pageSize (int): The number of items per page.
+
         Returns:
             List[Creator]: A list of creators.
         """
