@@ -92,3 +92,23 @@ def notFound(
         "error.html",
         error=error
     )
+
+
+@errorsBlueprint.app_errorhandler(500)
+def internalServerError(
+        error: Exception
+) -> str:
+    """
+    The internal server error page.
+
+    Args:
+        error (Exception): The error to render.
+
+    Returns:
+        str: The rendered internal server error page.
+    """
+    return renderTemplate(
+        "error.html",
+        error=error
+    )
+
