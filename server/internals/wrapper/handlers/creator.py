@@ -10,7 +10,6 @@ from typing import List, Dict
 # Local Imports
 from ..response import Response
 from ..types import Creator
-from ...config import API as APIConfig
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
 
@@ -20,11 +19,10 @@ class CreatorHandler:
     Handles managing Creator requests.
     """
 
-    __slots__ = ("config", "logger", "baseUrl", "requester")
+    __slots__ = ("logger", "baseUrl", "requester")
 
     def __init__(
             self,
-            config: APIConfig,
             logger: SuppressedLoggerAdapter,
             requester: Requester
     ) -> None:
@@ -32,7 +30,8 @@ class CreatorHandler:
         Initializes the CreatorHandler class.
 
         Args:
-            config (APIConfig): The configuration to use.
+            logger (SuppressedLoggerAdapter): The logger to use.
+            requester (Requester): The requester to use.
         """
         self.baseUrl = "creators"
         self.logger = logger
