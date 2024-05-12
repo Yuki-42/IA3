@@ -37,7 +37,7 @@ class CreatorHandler:
         self.logger = logger
         self.requester = requester
 
-    def getCreators(
+    def list(
             self,
             page: int = 1,
             pageSize: int = 20
@@ -62,7 +62,7 @@ class CreatorHandler:
             results=creators
         )
 
-    def getCreator(
+    def details(
             self,
             id: int | str
     ) -> Creator:

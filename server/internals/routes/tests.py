@@ -94,7 +94,7 @@ def creatorClass(
             )
 
         # Get the creators from the API.
-        response: Response = api.creator.getCreators(page=page, pageSize=pageSize)
+        response: Response = api.creator.list(page=page, pageSize=pageSize)
         return renderTemplate("tests/creator/class.html", type=testType, creators=response.results)
 
     # Test type is details.
@@ -102,5 +102,5 @@ def creatorClass(
         return renderTemplate("tests/creator/index.html", error="`id` is required.")
 
     # Get the creator from the API.
-    response: Response = api.creator.getCreator(id=id)
+    response: Response = api.creator.details(id=id)
     return renderTemplate("tests/creator/class.html", type=testType, creator=response)
