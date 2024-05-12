@@ -176,6 +176,112 @@ class GameHandler:
             results=games
         )
 
+    def team(
+            self,
+            id: int | str,
+            page: int = 1,
+            pageSize: int = 20,
+            ordering: str = None
+    ) -> Response:
+        """
+        Gets a list of team members for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
+            ordering (str): Available fields: name, position, created, updated. You can reverse the sort order adding a hyphen, for example: -name.
+
+        Returns:
+            List[Dict]: A list of team members.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/development-team",
+            {
+                "game_pk": id,
+                "page": page,
+                "page_size": pageSize,
+                "ordering": ordering
+            }
+        )
+
+        return Response(
+            data=response,
+            results=response["results"]
+        )
+
+    def series(
+            self,
+            id: int | str,
+            page: int = 1,
+            pageSize: int = 20
+    ) -> Response:
+        """
+        Gets a list of games in a series.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
+
+        Returns:
+            List[Game]: A list of games.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/game-series",
+            {
+                "game_pk": id,
+                "page": page,
+                "page_size": pageSize
+            }
+        )
+
+        games: List[Game] = [
+            Game(**game) for game in response["results"]
+        ]
+
+        return Response(
+            data=response,
+            results=games
+        )
+
+    def parents(
+            self,
+            id: int | str,
+            page: int = 1,
+            pageSize: int = 20
+    ) -> Response:
+        """
+        Gets a list of parent games.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+            page (int): A page number within the paginated result set.
+            pageSize (int): Number of results to return per page.
+
+        Returns:
+            List[Game]: A list of games.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/parents",
+            {
+                "game_pk": id,
+                "page": page,
+                "page_size": pageSize
+            }
+        )
+
+        games: List[Game] = [
+            Game(**game) for game in response["results"]
+        ]
+
+        return Response(
+            data=response,
+            results=games
+        )
+
+
+
     def details(
             self,
             id: int | str
