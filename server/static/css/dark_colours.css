@@ -48,3 +48,7 @@ footer {
 a {
     color: var(--text-secondary);
 }
+
+.test {
+    color: var(--text-secondary);
+}
