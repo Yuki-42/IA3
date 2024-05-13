@@ -1,0 +1,66 @@
+{% extends "_base.html" %}
+{% block title %}{{ type.title() }} Tests{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/tests.css") }}">
+{% endblock %}
+{% block scripts %}
+    <script defer src="{{ url_for("static", filename="js/tests/utils.js") }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/gh/pgrabovets/json-view@master/dist/jsonview.js"></script>
+{% endblock %}
+
+{% block content %}
+<section id="main" class="grid-margins">
+    <div id="left"></div>
+    <div id="centre">
+        <h1>{% block type %}{% endblock %} Tests</h1>
+        <p>Test <code>{% block typeLower %}{% endblock %}</code> endpoints.</p>
+        {% if error %}
+        <h2>An error occurred:</h2>
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <div id="tests">
+            <div id="direct-api-tests" class="tests-group">
+                <h2>Direct API Tests</h2>
+                <div>
+                    {% block apiTests %}{% endblock %}
+                </div>
+            </div>
+            <div id="api-class-tests" class="tests-group">
+                <h2>API Class Tests</h2>
+                <div id="get-list-class" class="test">
+                    <div>
+                        <h3>Get List</h3>
+                        <p>Get a list of all the creators.</p>
+                        <div>
+                            <div>
+                                <label for="all-page-class">Page Number (<code>page</code>)</label>
+                                <input type="number" id="all-page-class" name="all-page-class" value="1" min="1"><br>
+                            </div>
+                            <div>
+                                <label for="all-page-size-class">Page Size (<code>page_size</code>)</label>
+                                <input type="number" id="all-page-size-class" name="all-page-size-class" value="5" min="1" max="25"><br>
+                            </div>
+                        </div>
+                        <button id="get-list-class-button" onclick="getListClass();">Run Test</button>
+                    </div>
+                </div>
+                <div id="get-details" class="test">
+                    <div>
+                        <h3>Get Details</h3>
+                        <p>Get details of one specific creator.</p>
+                        <div>
+                            <div class="parameter">
+                                <label for="details-id-class">Creator Id (<code>id</code>)</label>
+                                <input type="text" id="details-id-class" name="details-id-class"><br>
+                            </div>
+                            <button id="get-list-button-class" onclick="getDetailsClass();">Run Test</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="right"></div>
+</section>
+{% endblock %}
