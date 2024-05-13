@@ -16,6 +16,12 @@ async function getDetails() {
     // Get parameters
     let id = document.getElementById("details-id").value;
 
+    // If this is missing then display an error
+    if (!id) {
+        fillError(document.getElementById("get-details-response"), "Please enter an ID");
+        return;
+    }
+
     // Get data from the server
     let data = await _get("/api/creators/" + id);
     console.log(data);

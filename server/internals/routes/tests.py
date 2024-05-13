@@ -9,11 +9,31 @@ from flask.blueprints import Blueprint
 from flask_injector import inject
 
 # Internal Imports
-from ..helpers import renderTemplate
+from ..helpers import renderTemplate as helpersRenderTemplate
 from ..wrapper import API, Response
 
 # Constants
 testsBlueprint: Blueprint = Blueprint("tests", __name__, url_prefix="/tests")
+
+
+def renderTemplate(template: str, **kwargs) -> str:
+    """
+    Renders a template with the given arguments.
+
+    Args:
+        template (str): The template to render.
+        **kwargs: The arguments to pass to the template.
+
+    Returns:
+        str: The rendered template.
+    """
+    # Extract the parent folder of the template.
+    path: str = template.split("/")[0] if "/" in template else None
+    return helpersRenderTemplate(
+        f"tests/{template}",
+        testType=path,
+        **kwargs
+    )
 
 
 # Routes
@@ -25,7 +45,7 @@ def index() -> str:
     Returns:
         str: The rendered tests page.
     """
-    return renderTemplate("tests/index.html")
+    return renderTemplate("index.html")
 
 
 @testsBlueprint.get("/creator")
@@ -36,7 +56,9 @@ def creator() -> str:
     Returns:
         str: The rendered creator tests page.
     """
-    return renderTemplate("tests/creator/index.html")
+    return renderTemplate(
+        "creator/index.html",
+    )
 
 
 @testsBlueprint.get("/creator/<string:testType>")
@@ -56,7 +78,7 @@ def creatorClass(
         str: The rendered creator class tests page.
     """
     if testType not in ["list", "details"]:
-        return renderTemplate("tests/creator/index.html", error="Invalid test type.")
+        return renderTemplate("creator/index.html", error="Invalid test type.")
 
     # Get request parameters
     id: str = request.args.get("id")
@@ -67,7 +89,7 @@ def creatorClass(
     if testType == "list":
         if page is None or pageSize is None:
             return renderTemplate(
-                "tests/creator/index.html",
+                "creator/index.html",
                 error="`page` and `pageSize` are required."
             )
 
@@ -77,33 +99,33 @@ def creatorClass(
             pageSize: int = int(pageSize)
         except ValueError:
             return renderTemplate(
-                "tests/creator/index.html",
+                "creator/index.html",
                 error="`page` and `pageSize` must be integers."
             )
 
         if page < 1 or pageSize < 1:
             return renderTemplate(
-                "tests/creator/index.html",
+                "creator/index.html",
                 error="`page` and `pageSize` must be greater than 0."
             )
 
         if pageSize >= 25:
             return renderTemplate(
-                "tests/creator/index.html",
+                "creator/index.html",
                 error="<code>pageSize</code> must be less than or equal to 25."
             )
 
         # Get the creators from the API.
         response: Response = api.creator.list(page=page, pageSize=pageSize)
-        return renderTemplate("tests/creator/class.html", type=testType, creators=response.results)
+        return renderTemplate("creator/class.html", type=testType, creators=response.results)
 
     # Test type is details.
     if id is None:
-        return renderTemplate("tests/creator/index.html", error="`id` is required.")
+        return renderTemplate("creator/index.html", error="`id` is required.")
 
     # Get the creator from the API.
     response: Response = api.creator.details(id=id)
-    return renderTemplate("tests/creator/class.html", type=testType, creator=response)
+    return renderTemplate("creator/class.html", type=testType, creator=response)
 
 
 @testsBlueprint.get("/developer")
@@ -114,7 +136,7 @@ def developer() -> str:
     Returns:
         str: The rendered developer tests page.
     """
-    return renderTemplate("tests/developer/index.html")
+    return renderTemplate("developer/index.html")
 
 
 @testsBlueprint.get("/developer/<string:testType>")
@@ -134,7 +156,7 @@ def developerClass(
         str: The rendered developer class tests page.
     """
     if testType not in ["list", "details"]:
-        return renderTemplate("tests/developer/index.html", error="Invalid test type.")
+        return renderTemplate("developer/index.html", error="Invalid test type.")
 
     # Get request parameters
     id: str = request.args.get("id")
@@ -145,7 +167,7 @@ def developerClass(
     if testType == "list":
         if page is None or pageSize is None:
             return renderTemplate(
-                "tests/developer/index.html",
+                "developer/index.html",
                 error="`page` and `pageSize` are required."
             )
 
@@ -155,33 +177,33 @@ def developerClass(
             pageSize: int = int(pageSize)
         except ValueError:
             return renderTemplate(
-                "tests/developer/index.html",
+                "developer/index.html",
                 error="`page` and `pageSize` must be integers."
             )
 
         if page < 1 or pageSize < 1:
             return renderTemplate(
-                "tests/developer/index.html",
+                "developer/index.html",
                 error="`page` and `pageSize` must be greater than 0."
             )
 
         if pageSize >= 25:
             return renderTemplate(
-                "tests/developer/index.html",
+                "developer/index.html",
                 error="<code>pageSize</code> must be less than or equal to 25."
             )
 
         # Get the developers from the API.
         response: Response = api.developer.list(page=page, pageSize=pageSize)
-        return renderTemplate("tests/developer/class.html", type=testType, developers=response.results)
+        return renderTemplate("developer/class.html", type=testType, developers=response.results)
 
     # Test type is details.
     if id is None:
-        return renderTemplate("tests/developer/index.html", error="`id` is required.")
+        return renderTemplate("developer/index.html", error="`id` is required.")
 
     # Get the developer from the API.
     response: Response = api.developer.details(id=id)
-    return renderTemplate("tests/developer/class.html", type=testType, developer=response)
+    return renderTemplate("developer/class.html", type=testType, developer=response)
 
 
 @testsBlueprint.get("/game")
@@ -192,7 +214,7 @@ def game() -> str:
     Returns:
         str: The rendered game tests page.
     """
-    return renderTemplate("tests/game/index.html")
+    return renderTemplate("game/index.html")
 
 
 @testsBlueprint.get("/game/<string:testType>")
@@ -222,7 +244,7 @@ def genre() -> str:
     Returns:
         str: The rendered genre tests page.
     """
-    return renderTemplate("tests/genre/index.html")
+    return renderTemplate("genre/index.html")
 
 
 @testsBlueprint.get("/genre/<string:testType>")
@@ -252,7 +274,7 @@ def platform() -> str:
     Returns:
         str: The rendered platform tests page.
     """
-    return renderTemplate("tests/platform/index.html")
+    return renderTemplate("platform/index.html")
 
 
 @testsBlueprint.get("/platform/<string:testType>")
@@ -282,7 +304,7 @@ def publisher() -> str:
     Returns:
         str: The rendered publisher tests page.
     """
-    return renderTemplate("tests/publisher/index.html")
+    return renderTemplate("publisher/index.html")
 
 
 @testsBlueprint.get("/publisher/<string:testType>")
@@ -312,7 +334,7 @@ def store() -> str:
     Returns:
         str: The rendered store tests page.
     """
-    return renderTemplate("tests/store/index.html")
+    return renderTemplate("store/index.html")
 
 
 @testsBlueprint.get("/store/<string:testType>")
@@ -342,7 +364,7 @@ def tag() -> str:
     Returns:
         str: The rendered tag tests page.
     """
-    return renderTemplate("tests/tag/index.html")
+    return renderTemplate("tag/index.html")
 
 
 @testsBlueprint.get("/tag/<string:testType>")

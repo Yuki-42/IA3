@@ -52,6 +52,24 @@ function reloadColours(){
 }
 
 
+// Adds a child div with the message to the parent div
+function fillError(div, message) {
+    // Create a new div
+    let error = document.createElement("div");
+
+    // Set the class of the div
+    error.className = "error";
+
+    // Set the text of the div
+    error.innerText = message;
+
+    // Clear any children of the parent div with the same class
+    div.querySelectorAll(".error").forEach(element => element.remove());
+
+    // Append the new div to the parent div
+    div.appendChild(error);
+}
+
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", () => {
     // Get the current theme

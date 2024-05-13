@@ -29,6 +29,10 @@
     background-color: var(--green-1);
 }
 
+.black-text {
+    color: var(--text-black);
+}
+
 body {
     min-height: 101vh;
     height: 104%;
@@ -172,4 +176,33 @@ code, pre {
 
 #theme-selector input:checked {
     background-color: var(--yellow-1);
+}
+
+@-webkit-keyframes red-pulse {
+    0% {
+        color: red;
+    }
+    50% {
+        color: inherit;
+    }
+    100% {
+        color: red;
+    }
+}
+
+@keyframes red-pulse {
+    0% {
+        color: red;
+    }
+    50% {
+        color: var(--text-black);
+    }
+    100% {
+        color: red;
+    }
+}
+
+.error {
+    animation: red-pulse 0.7s 3;
+    background-color: inherit;
 }
