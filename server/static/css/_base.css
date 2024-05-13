@@ -5,6 +5,7 @@
     font-family: "Open Sans", sans-serif;
     background-color: var(--primary-background);
     color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Background Colour Classes */
