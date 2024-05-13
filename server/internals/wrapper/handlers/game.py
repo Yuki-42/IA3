@@ -141,6 +141,16 @@ class GameHandler:
             results=games
         )
 
+    @property
+    def trending(self):
+        """
+        Alias for GameHandler.list() with specific ordering. This is a property.
+
+        Returns:
+            Response: A list of trending games.
+        """
+        return self.list(ordering="-rating")
+
     def dlcs(
             self,
             id: int | str,
