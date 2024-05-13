@@ -24,3 +24,12 @@ footer {
 a {
     color: var(--text-primary);
 }
+
+nav a {
+    color: var(--text-white);
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--code-yellow);
+}
