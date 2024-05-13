@@ -1,46 +1,79 @@
 {% extends "tests/_tests_base.html" %}
 
 {% block scripts %}
+    {{ super() }}
     <script defer src="{{ url_for("static", filename="js/tests/developer.js") }}"></script>
 {% endblock %}
 
 {% block apiTests %}
-<div id="get-list" class="test">
-    <div>
-        <h3>Get List</h3>
-        <p>Get a list of {{ testType.lower() }}s.</p>
+    <div id="get-list" class="test test-colours">
         <div>
+            <h3>Get List</h3>
+            <p>Get a list of {{ testType.lower() }}s.</p>
             <div>
-                <label for="list-page">Page Number (<code>page</code>)</label>
-                <input type="number" id="list-page" name="list-page" value="1" min="1"><br>
+                <div>
+                    <label for="list-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="list-page" name="list-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="list-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
+                </div>
+                <button id="get-list-button" onclick="getList();">Run Test</button>
             </div>
-            <div>
-                <label for="list-page-size">Page Size (<code>page_size</code>)</label>
-                <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
-            </div>
-            <button id="get-list-button" onclick="getList();">Run Test</button>
+        </div>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-list-response"></div>
         </div>
     </div>
-    <div class="horizontal-list">
-        <h4>Response</h4>
-        <div id="get-list-response"></div>
-    </div>
-</div>
-<div id="get-details" class="test">
-    <div>
-        <h3>Get Details</h3>
-        <p>Get details of a specific {{ testType.lower() }}.</p>
+    <div id="get-details" class="test test-colours">
         <div>
-            <div class="parameter">
-                <label for="details-id">Developer Id (<code>id</code>)</label>
-                <input type="text" id="details-id" name="details-id"><br>
+            <h3>Get Details</h3>
+            <p>Get details of a specific {{ testType.lower() }}.</p>
+            <div>
+                <div class="parameter">
+                    <label for="details-id">Developer Id (<code>id</code>)</label>
+                    <input type="text" id="details-id" name="details-id"><br>
+                </div>
+                <button id="get-list-button" onclick="getDetails();">Run Test</button>
             </div>
-            <button id="get-list-button" onclick="getDetails();">Run Test</button>
+        </div>
+        <div>
+            <h4>Response</h4>
+            <div id="get-details-response"></div>
         </div>
     </div>
-    <div>
-        <h4>Response</h4>
-        <div id="get-details-response"></div>
+{% endblock %}
+{% block classTests %}
+    <div id="get-list-class" class="class-test test-colours">
+        <div>
+            <h3>Get List</h3>
+            <p>Get a list of all the {{ testType.lower() }}s.</p>
+            <div>
+                <div>
+                    <label for="all-page-class">Page Number (<code>page</code>)</label>
+                    <input type="number" id="all-page-class" name="all-page-class" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="all-page-size-class">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="all-page-size-class" name="all-page-size-class" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+            <button id="get-list-class-button" onclick="getListClass();">Run Test</button>
+        </div>
     </div>
-</div>
+    <div id="get-details" class="class-test test-colours">
+        <div>
+            <h3>Get Details</h3>
+            <p>Get details of one specific {{ testType.lower() }}.</p>
+            <div>
+                <div class="parameter">
+                    <label for="details-id-class">{{ testType.title() }} Id (<code>id</code>)</label>
+                    <input type="text" id="details-id-class" name="details-id-class"><br>
+                </div>
+                <button id="get-list-button-class" onclick="getDetailsClass();">Run Test</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -10,10 +10,8 @@
     display: inline-grid;
     grid-template-columns: 1fr 1fr;
     width: 100%;
-    border-radius: 10px;
     padding: 0.3em 1em 1em;
     outline: none;
-    background-color: var(--yellow-1);
     max-height: 50vh;
     overflow: scroll;
     overflow-x: hidden;
@@ -21,9 +19,23 @@
     scrollbar-width: none;
 }
 
-.test code, pre {
+.test-colours {
+    background-color: var(--yellow-1);
+    color: var(--text-black);
+    border-radius: 10px;
+}
+
+.test-colours code, pre {
     /* Fix the background to be --yellow-code */
     background-color: var(--code-yellow);
+}
+
+.test-colours .result {
+    background-color: var(--yellow-2);
+}
+
+.test-colours .result a {
+    color: var(--text-black);
 }
 
 .horizontal-list {
@@ -37,11 +49,9 @@
     align-items: center;
     margin: 0.5em 0;
     width: 100%;
-    background-color: var(--yellow-2);
 }
 
 .result a {
-    color: black;
     text-decoration: none;
     margin-left: 6vw;
 }
@@ -75,7 +85,6 @@
     border-radius: 10px;
     padding: 0.3em 1em 1em;
     outline: none;
-    background-color: var(--yellow-1);
     max-height: 50vh;
     overflow: scroll;
     overflow-x: hidden;
