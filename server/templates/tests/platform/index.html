@@ -2,7 +2,7 @@
 
 {% block scripts %}
     {{ super() }}
-    <script defer src="{{ url_for("static", filename="js/tests/genre.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/tests/platform.js") }}"></script>
 {% endblock %}
 
 {% block apiTests %}
@@ -35,6 +35,37 @@
         <div class="horizontal-list">
             <h4>Response</h4>
             <div id="get-list-response"></div>
+        </div>
+    </div>
+    <div id="get-parents" class="test test-colours">
+        <div>
+            <h3>Get Parents</h3>
+            <p>Get a list of parent {{ testType.lower() }}s.</p>
+            <div>
+                <div>
+                    <label for="list-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="list-page" name="list-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="list-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
+                </div>
+                <div>
+                    <label for="list-ordering">Ordering (<code>ordering</code>)</label>
+                    <select id="list-ordering" name="list-ordering">
+                        <option value="id" selected>id</option>
+                        <option value="name">name</option>
+                        <option value="slug">slug</option>
+                        <option value="games_count">games_count</option>
+                        <option value="image_background">image_background</option>
+                    </select>
+                </div>
+                <button id="get-list-button" onclick="getParents();">Run Test</button>
+            </div>
+        </div>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-parents-response"></div>
         </div>
     </div>
     <div id="get-details" class="test test-colours">
@@ -71,6 +102,33 @@
                 </div>
             </div>
             <button id="get-list-class-button" onclick="getListClass();">Run Test</button>
+        </div>
+    </div>
+    <div id="get-parents-class">
+        <div>
+            <h3>Get Parents</h3>
+            <p>Get a list of parent {{ testType.lower() }}s.</p>
+            <div>
+                <div>
+                    <label for="parents-page-class">Page Number (<code>page</code>)</label>
+                    <input type="number" id="parents-page-class" name="parents-page-class" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="parents-page-size-class">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="parents-page-size-class" name="parents-page-size-class" value="5" min="1" max="25"><br>
+                </div>
+                <div>
+                    <label for="parents-ordering-class">Ordering (<code>ordering</code>)</label>
+                    <select id="parents-ordering-class" name="parents-ordering-class">
+                        <option value="id" selected>id</option>
+                        <option value="name">name</option>
+                        <option value="slug">slug</option>
+                        <option value="games_count">games_count</option>
+                        <option value="image_background">image_background</option>
+                    </select>
+                </div>
+            </div>
+            <button id="get-parents-button-class" onclick="getParentsClass();">Run Test</button>
         </div>
     </div>
     <div id="get-details-class" class="class-test test-colours">

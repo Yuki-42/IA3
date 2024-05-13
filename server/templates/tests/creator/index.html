@@ -9,7 +9,7 @@
     <div id="get-list" class="test test-colours">
         <div>
             <h3>Get List</h3>
-            <p>Get a list of all the creators.</p>
+            <p>Get a list of all the {{ testType.lower() }}ss.</p>
             <div>
                 <div>
                     <label for="list-page">Page Number (<code>page</code>)</label>
@@ -30,10 +30,10 @@
     <div id="get-details" class="test test-colours">
         <div>
             <h3>Get Details</h3>
-            <p>Get details of one specific creator.</p>
+            <p>Get details of one specific {{ testType.lower() }}.</p>
             <div>
                 <div class="parameter">
-                    <label for="details-id">Creator Id (<code>id</code>)</label>
+                    <label for="details-id">{{ testType.title() }} Id (<code>id</code>)</label>
                     <input type="text" id="details-id" name="details-id"><br>
                 </div>
                 <button id="get-list-button" onclick="getDetails();">Run Test</button>
@@ -50,7 +50,7 @@
     <div id="get-list-class" class="class-test test-colours">
         <div>
             <h3>Get List</h3>
-            <p>Get a list of all the creators.</p>
+            <p>Get a list of all the {{ testType.lower() }}s.</p>
             <div>
                 <div>
                     <label for="all-page-class">Page Number (<code>page</code>)</label>
@@ -67,10 +67,10 @@
     <div id="get-details" class="class-test test-colours">
         <div>
             <h3>Get Details</h3>
-            <p>Get details of one specific creator.</p>
+            <p>Get details of one specific {{ testType.lower() }}.</p>
             <div>
                 <div class="parameter">
-                    <label for="details-id-class">Creator Id (<code>id</code>)</label>
+                    <label for="details-id-class">{{ testType.title() }} Id (<code>id</code>)</label>
                     <input type="text" id="details-id-class" name="details-id-class"><br>
                 </div>
                 <button id="get-list-button-class" onclick="getDetailsClass();">Run Test</button>
