@@ -127,7 +127,7 @@ def teardownRequest(
     Returns:
         None
     """
-    logger.logResponse(request, exception)
+    # logger.logResponse(request, exception)
 
 
 def configureDependencies(

@@ -139,6 +139,7 @@ class ColourCodedFormatter(Formatter):
         return super().format(record)
 
 
+# TODO: Remove this if it is not used
 class RequestFormatter(Formatter):
     """
     A formatter that adds colour coding to the log messages and includes the request information.
@@ -178,75 +179,6 @@ class RequestFormatter(Formatter):
         except KeyError:
             pass
         return super().format(record)
-
-
-# TODO: Make an audit logs handler that logs all information to an sqlite database and periodically removes logs older than
-#  one week. https://stackoverflow.com/questions/67693767/how-do-i-create-an-sqlite-3-database-handler-for-my-python-logger
-
-# Custom log record that includes the request information
-class RequestLogRecord(LogRecord):
-    """
-    A log record that includes the request information.
-    """
-    __slots__ = ("request",)
-
-    def __init__(
-            self,
-            _request: Request,
-            record: LogRecord
-    ) -> None:
-        """
-        Initializes the log record.
-
-        Args:
-            _request (Request): The request to log.
-            record (LogRecord): The log record to log.
-        """
-        print(dir(record))
-        super().__init__(
-            record.name,
-            record.levelno,
-            record.pathname,
-            record.lineno,
-            record.msg,
-            record.args,
-            record.exc_info,
-            record.funcName,
-            record.stack_info
-        )
-        self.request = _request
-
-
-class ResponseLogRecord(LogRecord):
-    """
-    A log record that includes the response information.
-    """
-    __slots__ = ("response",)
-
-    def __init__(
-            self,
-            _response: Response,
-            record: LogRecord
-    ) -> None:
-        """
-        Initializes the log record.
-
-        Args:
-            _response (Request): The response to log.
-            record (LogRecord): The log record to log.
-        """
-        super().__init__(
-            record.name,
-            record.levelno,
-            record.pathname,
-            record.lineno,
-            record.msg,
-            record.args,
-            record.exc_info,
-            record.funcName,
-            record.stack_info
-        )
-        self.response = _response
 
 
 class DatabaseLogHandler(Handler):
