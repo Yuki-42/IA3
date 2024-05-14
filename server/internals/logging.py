@@ -7,12 +7,11 @@ from os import getcwd, mkdir, path
 from pathlib import Path
 from sqlite3 import connect, Cursor
 from sys import stdout
-from types import TracebackType
-from typing import Literal, Tuple, Type
-from threading import Lock, Thread
+from threading import Lock
+from typing import Literal, Type
 
 # External imports
-from flask import Request, has_request_context, request
+from flask import Request, has_request_context, request, Response, g
 
 # Constants
 databaseLock: Lock = Lock()
@@ -193,49 +192,66 @@ class RequestLogRecord(LogRecord):
 
     def __init__(
             self,
-            request: Request,
-            name: str,
-            level: int,
-            pathname: str,
-            lineno: int,
-            msg: str,
-            args: tuple,
-            exc_info: Tuple[Type[BaseException], BaseException, TracebackType | None],
-            func: str,
-            sinfo: str
+            _request: Request,
+            record: LogRecord
     ) -> None:
         """
         Initializes the log record.
 
         Args:
-            request
-            name (str): The name of the logger.
-            level (int): The level of the log message.
-            pathname (str): The path of the file.
-            lineno (int): The line number.
-            msg (str): The log message.
-            args (tuple): Additional arguments.
-            exc_info (tuple): Exception information.
-            func (str): The function name.
-            sinfo (str): The stack information.
+            _request (Request): The request to log.
+            record (LogRecord): The log record to log.
+        """
+        print(dir(record))
+        super().__init__(
+            record.name,
+            record.levelno,
+            record.pathname,
+            record.lineno,
+            record.msg,
+            record.args,
+            record.exc_info,
+            record.funcName,
+            record.stack_info
+        )
+        self.request = _request
+
+
+class ResponseLogRecord(LogRecord):
+    """
+    A log record that includes the response information.
+    """
+    __slots__ = ("response",)
+
+    def __init__(
+            self,
+            _response: Response,
+            record: LogRecord
+    ) -> None:
+        """
+        Initializes the log record.
+
+        Args:
+            _response (Request): The response to log.
+            record (LogRecord): The log record to log.
         """
         super().__init__(
-            name,
-            level,
-            pathname,
-            lineno,
-            msg,
-            args,
-            exc_info,
-            func,
-            sinfo
+            record.name,
+            record.levelno,
+            record.pathname,
+            record.lineno,
+            record.msg,
+            record.args,
+            record.exc_info,
+            record.funcName,
+            record.stack_info
         )
-        self.request = request
+        self.response = _response
 
 
-class AuditLogsHandler(Handler):
+class DatabaseLogHandler(Handler):
     """
-    A handler that logs all information to an sqlite database and periodically removes logs older than one week.
+    A handler that logs all information to a sqlite database and periodically removes logs older than one week.
     """
     __slots__ = ("file", "connection", "cursor")
 
@@ -259,10 +275,20 @@ class AuditLogsHandler(Handler):
         )
         self.cursor: Cursor = self.connection.cursor()
 
+        self.cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS interactions (
+                id VARCHAR(36) PRIMARY KEY,
+                timestamp TEXT,
+                level TEXT,
+                message TEXT
+            );
+            """
+        )
         # Check if the logs table exists
         self.cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS logs (
+            CREATE TABLE IF NOT EXISTS weblogs (
                 id INTEGER PRIMARY KEY,
                 timestamp TEXT,
                 level TEXT,
@@ -276,22 +302,76 @@ class AuditLogsHandler(Handler):
             );
             """
         )
+        # self.cursor.execute(
+        #     """
+        #     CREATE
+        #     """
+        # )
 
-    def emit(
+        # Close the cursor
+        self.cursor.close()
+
+    def emit(  # TODO: Convert this to use the request object, and e object to log the request information.
             self,
             record: LogRecord
     ) -> None:
         """
-        A black hole emit method that does nothing.
+        Emits the log record to the sqlite database.
+
+        Planning:
+            Theoretically, this should have access to the request object, so it can log the request information.
 
         Args:
-            record (LogRecord):
+            record (LogRecord): The log record to emit.
 
         Returns:
             None
         """
 
-    def dbEmit(
+    def logRequest(
+            self,
+            record: RequestLogRecord
+    ) -> None:
+        """
+        Emits the log record to the sqlite database.
+
+        Args:
+            record (LogRecord): The log record to emit.
+        """
+        try:
+            databaseLock.acquire()
+            self.cursor.execute(
+                """
+                INSERT INTO logs (
+                    timestamp,
+                    level,
+                    message,
+                    url,
+                    method,
+                    remote_address,
+                    user_agent,
+                    cookies,
+                    headers
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """,
+                (
+                    record.created,
+                    record.levelname,
+                    record.getMessage(),
+                    record.request.url,
+                    record.request.method,
+                    record.request.remote_addr,
+                    record.request.user_agent.string,
+                    record.request.cookies.__str__(),
+                    record.request.headers.__str__()
+                )
+            )
+
+            self.connection.commit()
+        finally:
+            databaseLock.release()
+
+    def logResponse(
             self,
             record: RequestLogRecord
     ) -> None:
@@ -451,12 +531,53 @@ class EndpointLoggerAdapter(LoggerAdapter):
 
         self.log(
             INFO,
-            f"Request from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
+            f"Request [{g.uuid}] from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
         )
         if self.logger.hasHandlers():
             # Get the index of the handler
             for index, handler in enumerate(self.logger.handlers):
-                if isinstance(handler, AuditLogsHandler):
+                if isinstance(handler, DatabaseLogHandler):
+                    handler.logRequest(
+                        RequestLogRecord(
+                            _request=_request,
+                            record=self.logger.makeRecord(
+                                self.logger.name,
+                                INFO,
+                                "",
+                                0,
+                                f"Request from {request.remote_addr} to {request.path} with method {request.method} "
+                                f"and headers {headers} from user agent {request.user_agent}",
+                                (),
+                                None,
+                                "",
+                                ""
+                            )
+                        )
+                    )
+                    break
+
+    def logResponse(
+            self,
+            _request: Request
+    ) -> None:
+        """
+        Logs the response to the endpoint.
+
+        Args:
+            _request (Request): The request to log.
+        """
+        headers: str = ""
+        for key, value in request.headers:
+            headers += f"{key}: {value}  "
+
+        self.log(
+            INFO,
+            f"Response from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
+        )
+        if self.logger.hasHandlers():
+            # Get the index of the handler
+            for index, handler in enumerate(self.logger.handlers):
+                if isinstance(handler, DatabaseLogHandler):
                     handler.dbEmit(
                         RequestLogRecord(
                             request=_request,
@@ -464,7 +585,7 @@ class EndpointLoggerAdapter(LoggerAdapter):
                             level=INFO,
                             pathname="",
                             lineno=0,
-                            msg=f"Request from {request.remote_addr} to {request.path} with method {request.method} "
+                            msg=f"Response from {request.remote_addr} to {request.path} with method {request.method} "
                                 f"and headers {headers} from user agent {request.user_agent}",
                             args=(),
                             exc_info=None,
@@ -537,7 +658,7 @@ def createLogger(
     formatter: Formatter = Formatter(formatString)
 
     if adapterMode == EndpointLoggerAdapter:
-        handlers.append(AuditLogsHandler())
+        handlers.append(DatabaseLogHandler())
 
     for handler in handlers:
         if not doColour or isinstance(handler, FileHandler):

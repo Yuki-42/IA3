@@ -5,9 +5,10 @@ Main file for IA3 Project.
 # Standard Library Imports
 from base64 import b64decode
 from os import getcwd, chdir
+from uuid import uuid4
 
 # Third Party Imports
-from flask import Flask, request, Request
+from flask import Flask, request, g
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 from werkzeug import Response
@@ -59,6 +60,8 @@ def beforeRequest() -> Response | None:
     Returns:
         None
     """
+    # Set request uuid
+    g.uuid = uuid4()
     logger.logRequest(request)
 
     # Check if the request is for static
@@ -103,11 +106,28 @@ def afterRequest(
     Returns:
         Response: The response.
     """
+    logger.logResponse(request)
     # Add a theme cookie to the response if the user doesn't have one
     if "theme" not in request.cookies:
         response.set_cookie("theme", config.server.defaultTheme)
 
     return response
+
+
+@app.teardown_request
+def teardownRequest(
+        exception: Exception | None
+) -> None:
+    """
+    Runs after each request. Logs the response and deals with cookies.
+
+    Args:
+        exception (Exception | None): The exception that occurred.
+
+    Returns:
+        None
+    """
+    logger.logResponse(request, exception)
 
 
 def configureDependencies(
