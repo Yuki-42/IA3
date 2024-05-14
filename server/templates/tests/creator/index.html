@@ -2,14 +2,14 @@
 
 {% block scripts %}
     {{ super() }}
-    <script defer src="{{ url_for("static", filename="js/tests/creator.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/tests/creatorDeveloper.js") }}"></script>
 {% endblock %}
 
 {% block apiTests %}
     <div id="get-list" class="test test-colours">
         <div>
             <h3>Get List</h3>
-            <p>Get a list of all the {{ testType.lower() }}ss.</p>
+            <p>Get a list of all the {{ testType.lower() }}s.</p>
             <div>
                 <div>
                     <label for="list-page">Page Number (<code>page</code>)</label>
@@ -19,7 +19,7 @@
                     <label for="list-page-size">Page Size (<code>page_size</code>)</label>
                     <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
                 </div>
-                <button id="get-list-button" onclick="getList();">Run Test</button>
+                <button onclick="getList('{{ testType.lower() }}');">Run Test</button>
             </div>
         </div>
         <div class="horizontal-list">
@@ -36,7 +36,7 @@
                     <label for="details-id">{{ testType.title() }} Id (<code>id</code>)</label>
                     <input type="text" id="details-id" name="details-id"><br>
                 </div>
-                <button id="get-list-button" onclick="getDetails();">Run Test</button>
+                <button onclick="getDetails('{{ testType.lower() }}');">Run Test</button>
             </div>
         </div>
         <div>
@@ -53,15 +53,15 @@
             <p>Get a list of all the {{ testType.lower() }}s.</p>
             <div>
                 <div>
-                    <label for="all-page-class">Page Number (<code>page</code>)</label>
-                    <input type="number" id="all-page-class" name="all-page-class" value="1" min="1"><br>
+                    <label for="list-page-class">Page Number (<code>page</code>)</label>
+                    <input type="number" id="list-page-class" name="list-page-class" value="1" min="1"><br>
                 </div>
                 <div>
-                    <label for="all-page-size-class">Page Size (<code>page_size</code>)</label>
-                    <input type="number" id="all-page-size-class" name="all-page-size-class" value="5" min="1" max="25"><br>
+                    <label for="list-page-size-class">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="list-page-size-class" name="list-page-size-class" value="5" min="1" max="25"><br>
                 </div>
             </div>
-            <button id="get-list-class-button" onclick="getListClass();">Run Test</button>
+            <button onclick="getListClass('{{ testType.lower() }}');">Run Test</button>
         </div>
     </div>
     <div id="get-details" class="class-test test-colours">
@@ -73,7 +73,7 @@
                     <label for="details-id-class">{{ testType.title() }} Id (<code>id</code>)</label>
                     <input type="text" id="details-id-class" name="details-id-class"><br>
                 </div>
-                <button id="get-list-button-class" onclick="getDetailsClass();">Run Test</button>
+                <button onclick="getDetailsClass('{{ testType.lower() }}');">Run Test</button>
             </div>
         </div>
     </div>
