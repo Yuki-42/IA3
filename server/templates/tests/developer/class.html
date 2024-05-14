@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+
+{% block title %}Class Test - developer - {{ type }}{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/tests.css") }}">
+{% endblock %}
+
+{% block content %}
+    <section class="grid-margins">
+        <div id="left"></div>
+        <div id="centre">
+            <h1>Class Test - developer - {{ type }}</h1>
+            {% if type == "list" %}
+                <p>List of developers. Data:</p>
+                {% for developer in developers %}
+                    <div class="result">
+                        <div class="developer">
+                            <a href="/developer/{{ developer.id }}">{{ developer.name }}</a>
+                            <img src="{{ developer.image_background }}" alt="Background image for {{ developer.name }}">
+                        </div>
+                        <div>
+                            <p>Data:</p>
+                            <ul>
+                                {% for key, value in developer %}
+                                    <li><code>{{ key }}</code>: <code>{{ value }}</code></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% elif type == "details" %}
+                <p>Details of one developer.</p>
+                {{ developer }}
+            {% else %}
+                <p>Error: Invalid type provided. Expected: "list" | "details" => Actual = {{ type }}</p>
+            {% endif %}
+        </div>
+        <div id="right"></div>
+    </section>
+{% endblock %}

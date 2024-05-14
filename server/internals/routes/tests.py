@@ -1,6 +1,8 @@
 """
 Contains testBlueprint routes. Has urlPrefix of /tests.
 """
+from typing import Any, Tuple, List, Dict
+
 from flask import request
 # Standard Library Imports
 
@@ -14,6 +16,33 @@ from ..wrapper import API, Response
 
 # Constants
 testsBlueprint: Blueprint = Blueprint("tests", __name__, url_prefix="/tests")
+
+
+class PageException(Exception):  # TODO: Move this to custom exceptions
+    """
+    Raised when a page related value is invalid.
+    """
+
+    def __init__(
+            self,
+            message: str
+    ) -> None:
+        """
+        Initializes the PageException.
+
+        Args:
+            message (str): The message of the exception.
+        """
+        self.message: str = message
+
+    def __str__(self) -> str:
+        """
+        Returns the message of the exception.
+
+        Returns:
+            str: The message of the exception.
+        """
+        return self.message
 
 
 def renderTemplate(template: str, **kwargs) -> str:
@@ -34,6 +63,69 @@ def renderTemplate(template: str, **kwargs) -> str:
         testType=path,
         **kwargs
     )
+
+
+def pageAndPageSizeChecks(
+        page: Any,
+        pageSize: Any
+) -> Tuple[int, int] | PageException:
+    """
+    Checks if the page and pageSize are valid.
+
+    Args:
+        page (Any): The page to check.
+        pageSize (Any): The pageSize to check.
+
+    Returns:
+        Tuple[bool, Tuple[int, int] | None]: A tuple containing a boolean and a tuple of integers.
+    """
+    if page is None or pageSize is None:
+        return PageException("`page` and `pageSize` are required.")
+
+    # Convert the page and pageSize to integers.
+    try:
+        page: int = int(page)
+        pageSize: int = int(pageSize)
+    except ValueError:
+        return PageException("`page` and `pageSize` must be integers.")
+
+    if page < 1 or pageSize < 1:
+        return PageException("`page` and `pageSize` must be greater than 0.")
+
+    if pageSize >= 25:
+        return PageException("<code>pageSize</code> must be less than or equal to 25.")
+
+    return page, pageSize
+
+
+def getRequestArguments(
+        keys: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Gets the request arguments from the keys and attempts to parse them into desired types.
+
+    Args:
+        keys (List[Tuple[str, Any]]): The names of the request variables and their desired types.
+
+    Returns:
+        Dict[str, Any]: The request arguments.
+
+    Raises:
+        ValueError: If the request argument is not of the desired type.
+    """
+    # Get the request arguments.
+    requestArguments: Dict[str, Any] = {}
+    for key, type_ in keys:
+        value: Any = request.args.get(key)
+        if value is None:
+            requestArguments[key] = None
+
+        try:
+            requestArguments[key]: type_ = type_(value)
+        except ValueError:
+            raise ValueError(f"`{key}` must be of type {type_}.")
+
+    return requestArguments
 
 
 # Routes
@@ -87,33 +179,13 @@ def creatorClass(
 
     # If the test type is list, check if the page and pageSize are valid.
     if testType == "list":
-        if page is None or pageSize is None:
-            return renderTemplate(
-                "creator/index.html",
-                error="`page` and `pageSize` are required."
-            )
+        # Perform page checks.
+        pageAndPageSize: Tuple[int, int] | PageException = pageAndPageSizeChecks(page, pageSize)
 
-        # Convert the page and pageSize to integers.
-        try:
-            page: int = int(page)
-            pageSize: int = int(pageSize)
-        except ValueError:
-            return renderTemplate(
-                "creator/index.html",
-                error="`page` and `pageSize` must be integers."
-            )
+        if isinstance(pageAndPageSize, PageException):
+            return renderTemplate("creator/index.html", error=pageAndPageSize.message)
 
-        if page < 1 or pageSize < 1:
-            return renderTemplate(
-                "creator/index.html",
-                error="`page` and `pageSize` must be greater than 0."
-            )
-
-        if pageSize >= 25:
-            return renderTemplate(
-                "creator/index.html",
-                error="<code>pageSize</code> must be less than or equal to 25."
-            )
+        page, pageSize = pageAndPageSize
 
         # Get the creators from the API.
         response: Response = api.creator.list(page=page, pageSize=pageSize)
@@ -165,33 +237,13 @@ def developerClass(
 
     # If the test type is list, check if the page and pageSize are valid.
     if testType == "list":
-        if page is None or pageSize is None:
-            return renderTemplate(
-                "developer/index.html",
-                error="`page` and `pageSize` are required."
-            )
+        # Perform page checks.
+        pageAndPageSize: Tuple[int, int] | PageException = pageAndPageSizeChecks(page, pageSize)
 
-        # Convert the page and pageSize to integers.
-        try:
-            page: int = int(page)
-            pageSize: int = int(pageSize)
-        except ValueError:
-            return renderTemplate(
-                "developer/index.html",
-                error="`page` and `pageSize` must be integers."
-            )
+        if isinstance(pageAndPageSize, PageException):
+            return renderTemplate("developer/index.html", error=pageAndPageSize.message)
 
-        if page < 1 or pageSize < 1:
-            return renderTemplate(
-                "developer/index.html",
-                error="`page` and `pageSize` must be greater than 0."
-            )
-
-        if pageSize >= 25:
-            return renderTemplate(
-                "developer/index.html",
-                error="<code>pageSize</code> must be less than or equal to 25."
-            )
+        page, pageSize = pageAndPageSize
 
         # Get the developers from the API.
         response: Response = api.developer.list(page=page, pageSize=pageSize)
@@ -233,7 +285,83 @@ def gameClass(
     Returns:
         str: The rendered game class tests page.
     """
-    raise NotImplementedError("Game tests are not implemented yet.")
+    match testType:
+        case "list":
+            # Get request parameters
+            page: str = request.args.get("page")
+            pageSize: str = request.args.get("pageSize")
+
+            # Perform page checks.
+            pageAndPageSize: Tuple[int, int] | PageException = pageAndPageSizeChecks(page, pageSize)
+
+            if isinstance(pageAndPageSize, PageException):
+                return renderTemplate("game/index.html", error=pageAndPageSize.message)
+
+            # Get other request arguments.
+            requestArguments: Dict[str, Any] = getRequestArguments({
+                "search": str,
+                "searchPrecise": bool,
+                "searchExact": bool,
+                "parentPlatforms": List[str],
+                "platforms": List[str],
+                "stores": List[str],
+                "developers": List[str],
+                "publishers": List[str],
+                "genres": List[str],
+                "tags": List[str],
+                "creators": List[str],
+                "dates": List[str],
+                "updated": str,
+                "platformsCount": int,
+                "metacritic": List[int],
+                "excludeCollection": int,
+                "excludeAdditions": bool,
+                "excludeParents": bool,
+                "excludeGameSeries": bool,
+                "excludeStores": List[str],
+                "ordering": str
+            })
+
+            # Get the games from the API.
+            response: Response = api.game.list(**requestArguments, page=page, pageSize=pageSize)
+
+            return renderTemplate("game/class.html", type=testType, games=response.results)
+
+        case "dlcs":
+            page: str = request.args.get("page")
+            pageSize: str = request.args.get("pageSize")
+
+            # Perform page checks.
+            pageAndPageSize: Tuple[int, int] | PageException = pageAndPageSizeChecks(page, pageSize)
+
+            if isinstance(pageAndPageSize, PageException):
+                return renderTemplate("game/index.html", error=pageAndPageSize.message)
+
+            page, pageSize = pageAndPageSize
+
+            # Get the other request arguments.
+            requestArguments: Dict[str, Any] = getRequestArguments({
+                "id": str,
+            })
+
+            # Get the dlcs from the API.
+            response: Response = api.game.dlcs(requestArguments["id"], page=page, pageSize=pageSize)
+
+            return renderTemplate("game/class.html", type=testType, dlcs=response.results)
+
+        case "teams":
+            id: str = request.args.get("id")
+            page: str = request.args.get("page")
+            pageSize: str = request.args.get("pageSize")
+            ordering: str = request.args.get("ordering")
+
+            if any([id is None, page is None, pageSize is None, ordering is None]):
+                return renderTemplate("game/index.html", error="`id`, `page`, `pageSize`, and `ordering` are required.")
+
+            # Perform page checks.
+
+        case _:
+            return renderTemplate("game/index.html", error="Invalid test type.")
 
 
 @testsBlueprint.get("/genre")
