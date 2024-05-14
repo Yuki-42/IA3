@@ -35,9 +35,9 @@ The `program_logs` table is used to store logs from the program unrelated to web
 | thread_name  | TEXT        | The name of the thread that created the log.                                     | Yes      | No  | No | No  |
 | task_name    | TEXT        | The name of the task that created the log.                                       | Yes      | No  | No | No  |
 
-#### `web`
+#### `requests`
 
-The `web` table is used to store logs from web requests. The table has the following columns:
+The `requests` table is used to store logs from web requests. The table has the following columns:
 
 | Column Name       | Data Type   | Description                                                                                                  | Nullable | PK  | FK  | Gen |
 |-------------------|-------------|--------------------------------------------------------------------------------------------------------------|----------|-----|-----|-----|
@@ -62,3 +62,19 @@ The `web` table is used to store logs from web requests. The table has the follo
 | method            | TEXT        | The request method.                                                                                          | Yes      | No  | No  | No  |
 | headers           | TEXT        | The headers that were passed in the request.                                                                 | Yes      | No  | No  | No  |
 | remote_addr       | TEXT        | The remote address of the request.                                                                           | Yes      | No  | No  | No  |
+
+
+#### `responses`
+
+The `responses` table is used to store logs from web responses. The table has the following columns:
+
+| Column Name | Data Type   | Description                                                                                                                                                                      | Nullable | PK  | FK  | Gen |
+|-------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-----|-----|-----|
+| id          | VARCHAR(36) | Primary key of the log record. This is a UUID generated when the response is created.                                                                                            | No       | Yes | No  | No  |
+| log_id      | VARCHAR(36) | The ID of the log record in the `program_logs` table that this response is related to.                                                                                           | No       | No  | Yes | No  |
+| expires     | TIMESTAMP   | The time the response expires.                                                                                                                                                   | Yes      | No  | No  | No  |
+| location    | TEXT        | The Location response-header field is used to redirect the recipient to a location other than the Request-URI for completion of the request or identification of a new resource. | Yes      | No  | No  | No  |
+| status      | TEXT        | The status code of the response.                                                                                                                                                 | Yes      | No  | No  | No  |
+| status_code | INT         | The status code of the response.                                                                                                                                                 | Yes      | No  | No  | No  |
+| headers     | TEXT        | The headers that were passed in the response.                                                                                                                                    | Yes      | No  | No  | No  |
+| response    | TEXT        | The response data.                                                                                                                                                               | Yes      | No  | No  | No  |
