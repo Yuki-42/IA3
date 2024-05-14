@@ -17,6 +17,48 @@ The database has 4 tables, `program_logs`, `web`, `requests`, and `responses`.
 
 The `program_logs` table is used to store logs from the program unrelated to web requests. The table has the following columns:
 
-| Column Name | Data Type   | Description                    | Nullable | PK  | FK |
-|-------------|-------------|--------------------------------|----------|-----|----|
-| id          | VARCHAR(36) | Primary key of the log record. | No       | Yes | No |
+| Column Name  | Data Type   | Description                                                                      | Nullable | PK  | FK | Gen | 
+|--------------|-------------|----------------------------------------------------------------------------------|----------|-----|----|-----|
+| id           | VARCHAR(36) | Primary key of the log record. This is a UUID generated when the log is created. | No       | Yes | No | No  |
+| timestamp    | TIMESTAMP   | The time the log was created.                                                    | No       | No  | No | No  |
+| level        | INT         | The log level. This is an integer value.                                         | No       | No  | No | No  |
+| filename     | TEXT        | The name of the file that the log was created in.                                | No       | No  | No | No  |
+| funcname     | TEXT        | The name of the function that the log was created in.                            | No       | No  | No | No  |
+| lineno       | INT         | The line number that the log was created on.                                     | No       | No  | No | No  |
+| message      | TEXT        | The log message.                                                                 | No       | No  | No | No  |
+| module       | TEXT        | The module that the log was created in.                                          | No       | No  | No | No  |
+| name         | TEXT        | The name of the logger that created the log.                                     | No       | No  | No | No  |
+| pathname     | TEXT        | The full path to the file that the log was created in.                           | No       | No  | No | No  |
+| process      | INT         | The process ID of the program that created the log.                              | No       | No  | No | No  |
+| process_name | TEXT        | The name of the process that created the log.                                    | No       | No  | No | No  |
+| thread       | INT         | The thread ID of the thread that created the log.                                | Yes      | No  | No | No  |
+| thread_name  | TEXT        | The name of the thread that created the log.                                     | Yes      | No  | No | No  |
+| task_name    | TEXT        | The name of the task that created the log.                                       | Yes      | No  | No | No  |
+
+#### `web`
+
+The `web` table is used to store logs from web requests. The table has the following columns:
+
+| Column Name       | Data Type   | Description                                                                                                  | Nullable | PK  | FK  | Gen |
+|-------------------|-------------|--------------------------------------------------------------------------------------------------------------|----------|-----|-----|-----|
+| id                | VARCHAR(36) | Primary key of the log record. This is a UUID generated when the request is created.                         | No       | Yes | No  | No  |
+| log_id            | VARCHAR(36) | The ID of the log record in the `program_logs` table that this request is related to.                        | No       | No  | Yes | No  |
+| view_args         | TEXT        | The view arguments that were passed to the view function.                                                    | Yes      | No  | No  | No  |
+| routing_exception | TEXT        | The routing exception that occurred during the request.                                                      | Yes      | No  | No  | No  |
+| endpoint          | TEXT        | The endpoint that the request was made to.                                                                   | Yes      | No  | No  | No  |
+| blueprint         | TEXT        | The blueprint that the endpoint is in.                                                                       | Yes      | No  | No  | No  |
+| blueprints        | TEXT        | The blueprints that the endpoint is in.                                                                      | Yes      | No  | No  | No  |
+| accept_languages  | TEXT        | The accept languages that were passed in the request.                                                        | Yes      | No  | No  | No  |
+| accept_mimetypes  | TEXT        | The accept mimetypes that were passed in the request.                                                        | Yes      | No  | No  | No  |
+| access_route      | TEXT        | If a forwarded header exists this is a list of all ip addresses from the client ip to the last proxy server. | Yes      | No  | No  | No  |
+| args              | TEXT        | The url parameters.                                                                                          | Yes      | No  | No  | No  |
+| authorization     | TEXT        | The authorization header.                                                                                    | Yes      | No  | No  | No  |
+| base_url          | TEXT        | The base url of the request.                                                                                 | Yes      | No  | No  | No  |
+| cookies           | TEXT        | The cookies that were passed in the request.                                                                 | Yes      | No  | No  | No  |
+| full_path         | TEXT        | The full path of the request.                                                                                | Yes      | No  | No  | No  |
+| host              | TEXT        | The host the request was made to.                                                                            | Yes      | No  | No  | No  |
+| host_url          | TEXT        | The host url of the request.                                                                                 | Yes      | No  | No  | No  |
+| url               | TEXT        | The full url of the request.                                                                                 | Yes      | No  | No  | No  |
+| method            | TEXT        | The request method.                                                                                          | Yes      | No  | No  | No  |
+| headers           | TEXT        | The headers that were passed in the request.                                                                 | Yes      | No  | No  | No  |
+| remote_addr       | TEXT        | The remote address of the request.                                                                           | Yes      | No  | No  | No  |
