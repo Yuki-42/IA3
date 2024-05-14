@@ -4,18 +4,18 @@ Main file for IA3 Project.
 
 # Standard Library Imports
 from base64 import b64decode
-from os import getcwd, chdir
+from os import chdir, getcwd
 from uuid import uuid4
 
 # Third Party Imports
-from flask import Flask, request, g
+from flask import Flask, g, request
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 from werkzeug import Response
 
 # Local Imports
 from internals.config import Config
-from internals.logging import createLogger, SuppressedLoggerAdapter
+from internals.logging import SuppressedLoggerAdapter, createLogger
 from internals.routes import *
 from internals.wrapper.api import API
 
@@ -64,7 +64,8 @@ def beforeRequest() -> Response | None:
     g.uuid = uuid4()
     g.completed = False
     logger.info(
-        f"Request [{g.uuid}] from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}")
+        f"Request [{g.uuid}] from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
+    )
 
     # Check if the request is for static
     if request.path == "/static/css/_colours.css" and request.method == "GET":

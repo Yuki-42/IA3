@@ -3,15 +3,16 @@ Contains the Platform handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Platform
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class PlatformHandler:
@@ -52,10 +53,12 @@ class PlatformHandler:
         Returns:
             List[Platform]: A list of platforms.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         platforms: List[Platform] = [
             Platform(**platform) for platform in response["results"]
@@ -99,10 +102,12 @@ class PlatformHandler:
         Returns:
             Response: A list of parent platforms.
         """
-        response: Dict = self.requester.get(f"{self.baseUrl}/lists/parents", {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/lists/parents", {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         platforms: List[Platform] = [
             Platform(**platform) for platform in response["results"]

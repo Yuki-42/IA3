@@ -1,18 +1,19 @@
 """
 Contains testBlueprint routes. Has urlPrefix of /tests.
 """
-from typing import Any, Tuple, List, Dict
-
-from flask import request
 # Standard Library Imports
+from typing import Any, Dict, List, Tuple
 
 # Third Party Imports
+from flask import request
 from flask.blueprints import Blueprint
 from flask_injector import inject
 
 # Internal Imports
 from ..helpers import renderTemplate as helpersRenderTemplate
 from ..wrapper import API, Response
+
+# Standard Library Imports
 
 # Constants
 testsBlueprint: Blueprint = Blueprint("tests", __name__, url_prefix="/tests")
@@ -298,29 +299,31 @@ def gameClass(
                 return renderTemplate("game/index.html", error=pageAndPageSize.message)
 
             # Get other request arguments.
-            requestArguments: Dict[str, Any] = getRequestArguments({
-                "search": str,
-                "searchPrecise": bool,
-                "searchExact": bool,
-                "parentPlatforms": List[str],
-                "platforms": List[str],
-                "stores": List[str],
-                "developers": List[str],
-                "publishers": List[str],
-                "genres": List[str],
-                "tags": List[str],
-                "creators": List[str],
-                "dates": List[str],
-                "updated": str,
-                "platformsCount": int,
-                "metacritic": List[int],
-                "excludeCollection": int,
-                "excludeAdditions": bool,
-                "excludeParents": bool,
-                "excludeGameSeries": bool,
-                "excludeStores": List[str],
-                "ordering": str
-            })
+            requestArguments: Dict[str, Any] = getRequestArguments(
+                {
+                    "search": str,
+                    "searchPrecise": bool,
+                    "searchExact": bool,
+                    "parentPlatforms": List[str],
+                    "platforms": List[str],
+                    "stores": List[str],
+                    "developers": List[str],
+                    "publishers": List[str],
+                    "genres": List[str],
+                    "tags": List[str],
+                    "creators": List[str],
+                    "dates": List[str],
+                    "updated": str,
+                    "platformsCount": int,
+                    "metacritic": List[int],
+                    "excludeCollection": int,
+                    "excludeAdditions": bool,
+                    "excludeParents": bool,
+                    "excludeGameSeries": bool,
+                    "excludeStores": List[str],
+                    "ordering": str
+                }
+            )
 
             # Get the games from the API.
             response: Response = api.game.list(**requestArguments, page=page, pageSize=pageSize)
@@ -340,9 +343,11 @@ def gameClass(
             page, pageSize = pageAndPageSize
 
             # Get the other request arguments.
-            requestArguments: Dict[str, Any] = getRequestArguments({
-                "id": str,
-            })
+            requestArguments: Dict[str, Any] = getRequestArguments(
+                {
+                    "id": str,
+                }
+            )
 
             # Get the dlcs from the API.
             response: Response = api.game.dlcs(requestArguments["id"], page=page, pageSize=pageSize)

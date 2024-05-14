@@ -3,15 +3,16 @@ Contains the Store handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Store
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class StoreHandler:
@@ -52,10 +53,12 @@ class StoreHandler:
         Returns:
             List[Store]: A list of stores.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         stores: List[Store] = [
             Store(**store) for store in response["results"]

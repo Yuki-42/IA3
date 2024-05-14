@@ -3,15 +3,16 @@ Contains the Developer handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Developer
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class DeveloperHandler:
@@ -52,10 +53,12 @@ class DeveloperHandler:
         Returns:
             List[Developer]: A list of developers.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         developers: List[Developer] = [
             Developer(**developer) for developer in response["results"]

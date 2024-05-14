@@ -3,15 +3,16 @@ Contains the Creator handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Creator
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class CreatorHandler:
@@ -52,10 +53,12 @@ class CreatorHandler:
         Returns:
             List[Creator]: A list of creators.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         creators: List[Creator] = [
             Creator(**creator) for creator in response["results"]

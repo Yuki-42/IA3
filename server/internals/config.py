@@ -2,8 +2,8 @@
 Contains classes representing config data.
 """
 # Standard Library Imports
+from logging import DEBUG, ERROR, INFO, WARNING
 from os import environ
-from logging import INFO, DEBUG, WARNING, ERROR
 
 # Third Party Imports
 from dotenv import load_dotenv as loadEnv

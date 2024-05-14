@@ -3,8 +3,6 @@ Contains apiBlueprint routes. Has urlPrefix of /api. Soley for forwarding reques
 """
 from typing import Dict
 
-# Standard Library Imports
-
 # Third Party Imports
 from flask import request
 from flask.blueprints import Blueprint
@@ -12,8 +10,10 @@ from flask_injector import inject
 from werkzeug.exceptions import Unauthorized
 
 # Internal Imports
-from .. import Config
+from ..config import Config
 from ..wrapper import API
+
+# Standard Library Imports
 
 apiBlueprint: Blueprint = Blueprint("api", __name__, url_prefix="/api")
 

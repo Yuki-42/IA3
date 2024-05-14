@@ -34,4 +34,3 @@ def about() -> str:
         str: The rendered about page.
     """
     return renderTemplate("info/about.html")
-

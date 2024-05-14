@@ -19,4 +19,3 @@ class Publisher(BaseModel):
     games_count: Optional[int] = None
     image_background: str
     description: Optional[str] = None
-    

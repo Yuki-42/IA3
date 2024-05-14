@@ -4,8 +4,6 @@ Contains custom formatters for the logging module.
 from logging import Formatter, LogRecord
 from typing import Literal
 
-from flask import has_request_context
-
 
 def _getEscapeCode(
         baseColour: str,

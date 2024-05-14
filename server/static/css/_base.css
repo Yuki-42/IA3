@@ -68,7 +68,7 @@ footer {
     justify-content: center;
     gap: 4em;
     text-align: center;
-    padding: 2em 0;  /* top right bottom left */
+    padding: 2em 0; /* top right bottom left */
     max-height: min-content;
     min-height: 8vh;
 }
@@ -130,7 +130,7 @@ code, pre {
 
 .grid-margins {
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;  /* 3 columns, left and right are for shoulder space, middle is main */
+    grid-template-columns: 1fr 4fr 1fr; /* 3 columns, left and right are for shoulder space, middle is main */
 }
 
 .centre {
@@ -155,7 +155,7 @@ code, pre {
     height: 40px;
     border-radius: 20px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.7s ease;
 }
 
@@ -170,8 +170,9 @@ code, pre {
     transform: scale(0.8);
     transition: all 0.7s ease;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
 #theme-selector input:checked::before {
     background-color: #fff;
     left: 82px;

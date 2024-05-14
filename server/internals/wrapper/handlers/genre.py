@@ -3,15 +3,16 @@ Contains the Genre handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Genre
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class GenreHandler:
@@ -52,10 +53,12 @@ class GenreHandler:
         Returns:
             List[Genre]: A list of genres.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         genres: List[Genre] = [
             Genre(**genre) for genre in response["results"]

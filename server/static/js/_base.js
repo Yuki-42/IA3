@@ -15,7 +15,7 @@ function toggleTheme() {
     let theme = getCookie("theme");
 
     // Set the theme to the opposite of the current theme
-    if(theme === "dark") {
+    if (theme === "dark") {
         setCookie("theme", "light");
     } else {
         setCookie("theme", "dark");
@@ -45,7 +45,7 @@ function _get(url, parameters = {}) {
     });
 }
 
-function reloadColours(){
+function reloadColours() {
     let colours = document.getElementById("colours");
 
     colours.href = colours.href.replace(/\?.*|$/, "?reload=" + new Date().getTime());

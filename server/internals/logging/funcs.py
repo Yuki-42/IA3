@@ -2,8 +2,8 @@
 Funcs module.
 """
 # Standard Library Imports
-from logging import INFO, Handler, getLogger, Logger, FileHandler, StreamHandler, Formatter
-from os import mkdir, path, getcwd
+from logging import FileHandler, Formatter, Handler, INFO, Logger, StreamHandler, getLogger
+from os import getcwd, mkdir, path
 from pathlib import Path
 from sys import stdout
 

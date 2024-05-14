@@ -10,8 +10,8 @@ from typing import Any, Dict
 from flask import render_template as flaskRenderTemplate
 from pydantic import BaseModel
 
+
 # Internal Imports
-from .config import Config
 
 
 def renderTemplate(template: str, **kwargs) -> str:

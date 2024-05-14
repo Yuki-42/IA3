@@ -6,8 +6,8 @@
 
 ## Logs
 
-The logging for this project makes use of an SQLite database. The database is created in the `logs` directory and 
-is named `logs.db`. 
+The logging for this project makes use of an SQLite database. The database is created in the `logs` directory and
+is named `logs.db`.
 
 ### Schema
 
@@ -15,7 +15,8 @@ The database has 4 tables, `program_logs`, `web`, `requests`, and `responses`.
 
 #### `program_logs`
 
-The `program_logs` table is used to store logs from the program unrelated to web requests. The table has the following columns:
+The `program_logs` table is used to store logs from the program unrelated to web requests. The table has the following
+columns:
 
 | Column Name  | Data Type   | Description                                                                      | Nullable | PK  | FK | Gen | 
 |--------------|-------------|----------------------------------------------------------------------------------|----------|-----|----|-----|
@@ -62,7 +63,6 @@ The `requests` table is used to store logs from web requests. The table has the 
 | method            | TEXT        | The request method.                                                                                          | Yes      | No  | No  | No  |
 | headers           | TEXT        | The headers that were passed in the request.                                                                 | Yes      | No  | No  | No  |
 | remote_addr       | TEXT        | The remote address of the request.                                                                           | Yes      | No  | No  | No  |
-
 
 #### `responses`
 

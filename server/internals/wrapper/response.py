@@ -3,13 +3,13 @@ Contains the Response class.
 """
 
 # Standard Library Imports
-from typing import List, Optional, Dict
-
-# Third Party Imports
-from pydantic import BaseModel
+from typing import Dict, List, Optional
 
 # Internal Imports
 from .types import *
+
+
+# Third Party Imports
 
 
 class Response:

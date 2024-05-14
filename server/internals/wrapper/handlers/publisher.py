@@ -3,15 +3,16 @@ Contains the Publisher handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Publisher
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class PublisherHandler:
@@ -52,10 +53,12 @@ class PublisherHandler:
         Returns:
             List[Publisher]: A list of publishers.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         publishers: List[Publisher] = [
             Publisher(**publisher) for publisher in response["results"]

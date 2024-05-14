@@ -5,13 +5,13 @@ Handlers for the logging system.
 from logging import Handler, LogRecord
 from os import getcwd
 from pathlib import Path
-from sqlite3 import connect, Cursor
+from sqlite3 import Cursor, connect
 from threading import Lock
 from typing import List
 from uuid import uuid4
 
 # External Imports
-from flask import request, g, has_request_context, Request, Response
+from flask import Request, Response, g, has_request_context, request
 
 # Constants
 databaseLock: Lock = Lock()

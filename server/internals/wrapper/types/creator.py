@@ -1,13 +1,15 @@
 """
 Contains the Creator class.
 """
-
 # Standard Library Imports
-from typing import List, Dict, Optional
 from datetime import datetime
+from typing import Optional
 
 # Third Party Imports
 from pydantic import BaseModel
+
+
+# Local Imports
 
 
 class Creator(BaseModel):

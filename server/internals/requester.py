@@ -3,12 +3,11 @@ Contains the Requester class.
 """
 
 # Standard Library Imports
-from typing import Any, Dict, Optional, Callable
+from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
-from json import loads
 
 # Third Party Imports
-from requests import get, post, put, delete, Response
+from requests import Response, delete, get, post, put
 
 # Internal Imports
 from .config import Config
@@ -183,7 +182,9 @@ class Requester:
         # Set the URL
         url = f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url
 
-        self.logger.info(f"{requestId} - {method.__name__.upper()} request to {url} with params {params} and kwargs {kwargs}")
+        self.logger.info(
+            f"{requestId} - {method.__name__.upper()} request to {url} with params {params} and kwargs {kwargs}"
+        )
 
         # if url == "https://api.rawg.io/api/creators":
         #     return loads(

@@ -12,30 +12,30 @@
 {% endblock %}
 
 {% block content %}
-<section id="main" class="grid-margins">
-    <div id="left"></div>
-    <div id="centre">
-        <h1>{{ testType.title() }} Tests</h1>
-        <p>Test <code>{{ testType.lower() }}</code> endpoints.</p>
-        {% if error %}
-        <h2>An error occurred:</h2>
-        <div class="error">{{ error }}</div>
-        {% endif %}
-        <div id="tests">
-            <div id="direct-api-tests" class="tests-group">
-                <h2>Direct API Tests</h2>
-                <div>
-                    {% block apiTests %}{% endblock %}
+    <section id="main" class="grid-margins">
+        <div id="left"></div>
+        <div id="centre">
+            <h1>{{ testType.title() }} Tests</h1>
+            <p>Test <code>{{ testType.lower() }}</code> endpoints.</p>
+            {% if error %}
+                <h2>An error occurred:</h2>
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            <div id="tests">
+                <div id="direct-api-tests" class="tests-group">
+                    <h2>Direct API Tests</h2>
+                    <div>
+                        {% block apiTests %}{% endblock %}
+                    </div>
                 </div>
-            </div>
-            <div id="api-class-tests" class="class-test-group">
-                <h2>API Class Tests</h2>
-                <div class="grid">
-                    {% block classTests %}{% endblock %}
+                <div id="api-class-tests" class="class-test-group">
+                    <h2>API Class Tests</h2>
+                    <div class="grid">
+                        {% block classTests %}{% endblock %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="right"></div>
-</section>
+        <div id="right"></div>
+    </section>
 {% endblock %}

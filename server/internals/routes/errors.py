@@ -3,12 +3,10 @@ Contains errors routes.
 """
 
 # Standard Library Imports
-from datetime import datetime
 
 # Third Party Imports
-from flask import request, jsonify
 from flask.blueprints import Blueprint
-from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, NotFound
+from werkzeug.exceptions import BadRequest, Forbidden, NotFound, Unauthorized
 
 # Internal Imports
 from ..helpers import renderTemplate
@@ -111,4 +109,3 @@ def internalServerError(
         "error.html",
         error=error
     )
-

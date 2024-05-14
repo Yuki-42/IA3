@@ -3,15 +3,16 @@ Contains the Tag handler.
 """
 
 # Standard Library Imports
-from typing import List, Dict
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Tag
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class TagHandler:
@@ -52,10 +53,12 @@ class TagHandler:
         Returns:
             List[Tag]: A list of tags.
         """
-        response: Dict = self.requester.get(self.baseUrl, {
-            "page": page,
-            "page_size": pageSize
-        })
+        response: Dict = self.requester.get(
+            self.baseUrl, {
+                "page": page,
+                "page_size": pageSize
+            }
+            )
 
         tags: List[Tag] = [
             Tag(**tag) for tag in response["results"]

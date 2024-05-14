@@ -1,19 +1,19 @@
 """
 Contains the Creator handler.
 """
-
 # Standard Library Imports
-from typing import List, Dict
 from datetime import datetime as Datetime
-
-# Third Party Imports
+from typing import Dict, List
 
 # Local Imports
 from ..response import Response
-from ..types import Game, Platform, Store, Developer, Publisher, Genre, Tag
+from ..types import Developer, Game, Genre, Platform, Publisher, Store, Tag
 from ...helpers import addParameters
 from ...logging import SuppressedLoggerAdapter
 from ...requester import Requester
+
+
+# Third Party Imports
 
 
 class GameHandler:
@@ -103,29 +103,31 @@ class GameHandler:
         }
 
         # Add parameters
-        parameters = addParameters(parameters, {  # This is almost definitely going to throw an error
-            "search": search,
-            "search_precise": searchPrecise,
-            "search_exact": searchExact,
-            "parent_platforms": parentPlatforms,
-            "platforms": platforms,
-            "stores": stores,
-            "developers": developers,
-            "publishers": publishers,
-            "genres": genres,
-            "tags": tags,
-            "creators": creators,
-            "dates": dates,
-            "updated": updated,
-            "platforms_count": platformsCount,
-            "metacritic": metacritic,
-            "exclude_collection": excludeCollection,
-            "exclude_additions": excludeAdditions,
-            "exclude_parents": excludeParents,
-            "exclude_game_series": excludeGameSeries,
-            "exclude_stores": excludeStores,
-            "ordering": ordering
-        })
+        parameters = addParameters(
+            parameters, {  # This is almost definitely going to throw an error
+                "search": search,
+                "search_precise": searchPrecise,
+                "search_exact": searchExact,
+                "parent_platforms": parentPlatforms,
+                "platforms": platforms,
+                "stores": stores,
+                "developers": developers,
+                "publishers": publishers,
+                "genres": genres,
+                "tags": tags,
+                "creators": creators,
+                "dates": dates,
+                "updated": updated,
+                "platforms_count": platformsCount,
+                "metacritic": metacritic,
+                "exclude_collection": excludeCollection,
+                "exclude_additions": excludeAdditions,
+                "exclude_parents": excludeParents,
+                "exclude_game_series": excludeGameSeries,
+                "exclude_stores": excludeStores,
+                "ordering": ordering
+            }
+            )
 
         response: Dict = self.requester.get(
             self.baseUrl,
