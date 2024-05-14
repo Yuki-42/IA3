@@ -15,7 +15,7 @@ from werkzeug import Response
 
 # Local Imports
 from internals.config import Config
-from internals.logging import createLogger, EndpointLoggerAdapter
+from internals.logging import createLogger, SuppressedLoggerAdapter
 from internals.routes import *
 from internals.wrapper.api import API
 
@@ -27,7 +27,7 @@ if not getcwd().endswith("server"):
 config: Config = Config()
 
 # Create the logger
-logger: EndpointLoggerAdapter = createLogger("endpoints", level=config.logging.level, adapterMode=EndpointLoggerAdapter)
+logger: SuppressedLoggerAdapter = createLogger("endpoints", level=config.logging.level, includeRequest=True)
 
 # Connect to the API
 api: API = API(config)
@@ -62,7 +62,9 @@ def beforeRequest() -> Response | None:
     """
     # Set request uuid
     g.uuid = uuid4()
-    logger.logRequest(request)
+    g.completed = False
+    logger.info(
+        f"Request [{g.uuid}] from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}")
 
     # Check if the request is for static
     if request.path == "/static/css/_colours.css" and request.method == "GET":
@@ -106,7 +108,9 @@ def afterRequest(
     Returns:
         Response: The response.
     """
-    logger.logResponse(request)
+    g.completed = True
+    g.response = response
+    logger.info(f"Response to request {g.uuid} with status {response.status_code}")
     # Add a theme cookie to the response if the user doesn't have one
     if "theme" not in request.cookies:
         response.set_cookie("theme", config.server.defaultTheme)
