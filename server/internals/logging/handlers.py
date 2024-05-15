@@ -6,7 +6,6 @@ from datetime import datetime
 from logging import Handler, LogRecord
 from os import getcwd
 from pathlib import Path
-from uuid import uuid4
 
 # External Imports
 from flask import Request, Response, g, has_request_context, request
@@ -89,45 +88,39 @@ class DatabaseLogHandler(Handler):
         Returns:
             None
         """
-        # First log the base record to the database.
 
-        # Generate a uuid for the log record as a string
-        recordId: str = str(uuid4())
-        self._logRecord(recordId, record)
+        # Add the record to the database and get the id
+        recordId = self._logRecord(record)
 
         if not has_request_context() or not self.includeRequest:
             return
 
         # Check what state the request is in
-        if not g.completed:
-            self._logRequest(recordId, request)
-
-        else:
+        if g.completed:
             self._logResponse(recordId, g.response)
+        else:
+            self._logRequest(recordId, request)
 
         self.connection.commit()
 
     def _logRecord(
             self,
-            recordId: str,
             record: LogRecord
-    ) -> None:
+    ) -> str:
         """
         Logs the record to the database.
 
         Args:
-            recordId (str): The id of the record to log.
             record (LogRecord): The record to log.
 
         Returns:
-            None
+            str: The id of the record.
         """
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor: RealDictCursor
             cursor.execute(
                 """
                 INSERT INTO ia3.program_logs (
-                    id,
                     timestamp,
                     level,
                     filename,
@@ -142,11 +135,10 @@ class DatabaseLogHandler(Handler):
                     thread,
                     thread_name
                 ) VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-                )
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                ) RETURNING id;
                 """,
                 (
-                    recordId,
                     datetime.fromtimestamp(record.created),
                     record.levelno,
                     record.filename,
@@ -163,6 +155,8 @@ class DatabaseLogHandler(Handler):
                 )
             )
             self.connection.commit()
+
+            return cursor.fetchone()["id"]
 
     def _logRequest(
             self,

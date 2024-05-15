@@ -4,21 +4,24 @@ Initialise logs database. More detailed database layout can be found in [docs/da
 LANG=PGSQL
 */
 
+/* Activate the UUID Extension if it is not already active */
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 /* Create tables */
 CREATE TABLE IF NOT EXISTS ia3.program_logs
 (
-    id           VARCHAR(36) NOT NULL PRIMARY KEY,
-    timestamp    TIMESTAMP   NOT NULL,
-    level        INT         NOT NULL,
-    filename     TEXT        NOT NULL,
-    funcname     TEXT        NOT NULL,
-    lineno       TEXT        NOT NULL,
-    message      TEXT        NOT NULL,
-    module       TEXT        NOT NULL,
-    name         TEXT        NOT NULL,
-    pathname     TEXT        NOT NULL,
-    process      TEXT        NOT NULL,
-    process_name TEXT        NOT NULL,
+    id           uuid      NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    timestamp    TIMESTAMP NOT NULL,
+    level        INT       NOT NULL,
+    filename     TEXT      NOT NULL,
+    funcname     TEXT      NOT NULL,
+    lineno       TEXT      NOT NULL,
+    message      TEXT      NOT NULL,
+    module       TEXT      NOT NULL,
+    name         TEXT      NOT NULL,
+    pathname     TEXT      NOT NULL,
+    process      TEXT      NOT NULL,
+    process_name TEXT      NOT NULL,
     thread       TEXT,
     thread_name  TEXT
 );
@@ -26,7 +29,7 @@ CREATE TABLE IF NOT EXISTS ia3.program_logs
 CREATE TABLE IF NOT EXISTS ia3.requests
 (
     id                VARCHAR(36) NOT NULL PRIMARY KEY,
-    log_id            VARCHAR(36) NOT NULL,
+    log_id            uuid NOT NULL,
     view_args         TEXT,
     routing_exception TEXT,
     endpoint          TEXT,
@@ -77,10 +80,7 @@ CREATE INDEX responses_request_id ON ia3.responses (request_id);
 CREATE INDEX responses_status_code ON ia3.responses (status_code);
 
 /* Create foreign keys */
-ALTER TABLE ia3.requests
-    ADD CONSTRAINT fk_requests_log_id FOREIGN KEY (log_id) REFERENCES ia3.program_logs (id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ia3.responses
-    ADD CONSTRAINT fk_responses_request_id FOREIGN KEY (request_id) REFERENCES ia3.requests (id) ON UPDATE CASCADE ON DELETE CASCADE;
+/* YEAH NO. THIS FOR SOME REASON BREAKS THE DATABASE. */
 
 /* Give all permissions to the loghandler user */
 GRANT ALL ON ALL TABLES IN SCHEMA ia3 TO loghandler;
