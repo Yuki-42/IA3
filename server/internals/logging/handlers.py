@@ -7,12 +7,14 @@ from logging import Handler, LogRecord
 from os import getcwd
 from pathlib import Path
 from threading import Lock
+from time import sleep
 from uuid import uuid4
 
 # External Imports
 from flask import Request, Response, g, has_request_context, request
 from psycopg2 import connect as pgConnect
 from psycopg2.extras import RealDictConnection, RealDictCursor
+from psycopg2 import ProgrammingError
 
 # Local Imports
 from ..config import Config
@@ -124,44 +126,50 @@ class DatabaseLogHandler(Handler):
             None
         """
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(
-                """
-                INSERT INTO ia3.program_logs (
-                    id,
-                    timestamp,
-                    level,
-                    filename,
-                    funcname,
-                    lineno,
-                    message,
-                    module,
-                    name,
-                    pathname,
-                    process,
-                    process_name,
-                    thread,
-                    thread_name
-                ) VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+            cursor: RealDictCursor
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO ia3.program_logs (
+                        id,
+                        timestamp,
+                        level,
+                        filename,
+                        funcname,
+                        lineno,
+                        message,
+                        module,
+                        name,
+                        pathname,
+                        process,
+                        process_name,
+                        thread,
+                        thread_name
+                    ) VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                    )
+                    """,
+                    (
+                        recordId,
+                        datetime.fromtimestamp(record.created),
+                        record.levelno,
+                        record.filename,
+                        record.funcName,
+                        record.lineno,
+                        record.msg,
+                        record.module,
+                        record.name,
+                        record.pathname,
+                        record.process,
+                        record.processName,
+                        record.thread,
+                        record.threadName
+                    )
                 )
-                """,
-                (
-                    recordId,
-                    datetime.fromtimestamp(record.created),
-                    record.levelno,
-                    record.filename,
-                    record.funcName,
-                    record.lineno,
-                    record.msg,
-                    record.module,
-                    record.name,
-                    record.pathname,
-                    record.process,
-                    record.processName,
-                    record.thread,
-                    record.threadName
-                )
-            )
+            except ProgrammingError as e:
+                print(e)
+                sleep(5)
+                self.connection.rollback()
 
     def _logRequest(
             self,
