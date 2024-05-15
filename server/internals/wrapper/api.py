@@ -38,7 +38,7 @@ class API:
             config (Config): The configuration to use.
         """
         self.config = config.api
-        self.logger = createLogger("API", level=config.logging.level)
+        self.logger = createLogger("API", level=config.logging.level, config=config)
 
         self.requester: Requester = Requester(config)  # Create a requester object to use
 

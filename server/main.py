@@ -34,7 +34,8 @@ config: Config = Config()
 logger: SuppressedLoggerAdapter = createLogger(
     "endpoints",
     level=config.logging.level,
-    includeRequest=True
+    includeRequest=True,
+    config=config
 )
 
 # Kill the standard werkzeug logger

@@ -12,7 +12,7 @@ from typing import Dict, List
 from . import SuppressedLoggerAdapter
 from .formatters import ColourCodedFormatter
 from .handlers import DatabaseLogHandler
-
+from ..config import Config
 
 # Used for storing what loggers have been created to prevent duplicate request handlers
 createdLoggers: Dict[str, bool] = {}
@@ -27,7 +27,7 @@ def createLogger(
         colourCoding: Dict[str, str] = None,
         doDb: bool = True,
         includeRequest: bool = False,
-        dbFile: Path | str = Path(f"{getcwd()}/Logs/logs.db")
+        config: Config = None
 ) -> SuppressedLoggerAdapter:
     """
     Creates a logger with the specified name, logging path, level, and formatter.
@@ -42,7 +42,7 @@ def createLogger(
             function.
         doDb (bool): Whether to log to a database.
         includeRequest (bool): Whether to include the request information in the log.
-        dbFile (Path | str): The file to log to.
+        config (Config): The config object to use.
 
     Returns:
         logger (Logger): The logger object.
@@ -55,6 +55,9 @@ def createLogger(
 
     if includeRequest and True in createdLoggers.values():
         includeRequest = False
+
+    if doDb and config is None:
+        raise ValueError("Config object must be provided if logging to a database.")
 
     # Check if the logging directory exists, if not, create it
     if not path.exists(Path(f"{getcwd()}/Logs/{loggingDirectory}")):
@@ -81,7 +84,7 @@ def createLogger(
         ]
 
     if doDb:
-        handler: DatabaseLogHandler = DatabaseLogHandler(dbFile)
+        handler: DatabaseLogHandler = DatabaseLogHandler(config)
         handler.includeRequest = includeRequest
         handlers.append(handler)
 
