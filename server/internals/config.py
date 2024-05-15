@@ -95,6 +95,7 @@ class Database:
     name: str
     username: str
     password: str
+    schema: str
 
     def __init__(
             self
@@ -110,6 +111,7 @@ class Database:
         self.name = environ.get("LOGGING_DB_NAME")
         self.username = environ.get("LOGGING_DB_USER")
         self.password = environ.get("LOGGING_DB_PASS")
+        self.schema = environ.get("LOGGING_DB_SCHEMA")
 
 
 class Logging:
