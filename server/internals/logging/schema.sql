@@ -12,14 +12,14 @@ CREATE TABLE IF NOT EXISTS ia3.program_logs
     level        INT         NOT NULL,
     filename     TEXT        NOT NULL,
     funcname     TEXT        NOT NULL,
-    lineno       INT         NOT NULL,
+    lineno       TEXT        NOT NULL,
     message      TEXT        NOT NULL,
     module       TEXT        NOT NULL,
     name         TEXT        NOT NULL,
     pathname     TEXT        NOT NULL,
-    process      INT         NOT NULL,
+    process      TEXT        NOT NULL,
     process_name TEXT        NOT NULL,
-    thread       INT,
+    thread       TEXT,
     thread_name  TEXT
 );
 
@@ -77,8 +77,10 @@ CREATE INDEX responses_request_id ON ia3.responses (request_id);
 CREATE INDEX responses_status_code ON ia3.responses (status_code);
 
 /* Create foreign keys */
-ALTER TABLE ia3.requests ADD CONSTRAINT fk_requests_log_id FOREIGN KEY (log_id) REFERENCES ia3.program_logs (id);
-ALTER TABLE ia3.responses ADD CONSTRAINT fk_responses_request_id FOREIGN KEY (request_id) REFERENCES ia3.requests (id);
+ALTER TABLE ia3.requests
+    ADD CONSTRAINT fk_requests_log_id FOREIGN KEY (log_id) REFERENCES ia3.program_logs (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ia3.responses
+    ADD CONSTRAINT fk_responses_request_id FOREIGN KEY (request_id) REFERENCES ia3.requests (id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /* Give all permissions to the loghandler user */
 GRANT ALL ON ALL TABLES IN SCHEMA ia3 TO loghandler;
