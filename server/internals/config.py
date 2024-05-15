@@ -58,6 +58,7 @@ class Server:
     host: str
     port: int
     publicHost: str
+    serverLocal: str
     debug: bool
     username: str
     password: str
@@ -80,6 +81,7 @@ class Server:
         self.username = environ.get("SERVER_USER")
         self.password = environ.get("SERVER_PASSWORD")
         self.defaultTheme = environ.get("SERVER_DEFAULT_THEME")
+        self.serverLocal = environ.get("SERVER_LOCAL") if environ.get("SERVER_LOCAL") else "localhost"
         self.ssl = SSL()
         self.owner = Owner()
 

@@ -162,7 +162,7 @@ def getHosts(names: List[str]) -> List[str]:
     Returns:
         List[str]: A list of all the hostnames of the machine.
     """
-    return [f"{"https" if config.server.ssl else "http"}://{name}:{config.server.port}" for name in names]
+    return [f"{"https" if config.server.ssl else "http"}://{name}:{config.server.port}" for name in names if name is not None and name != ""]
 
 
 # Add dependencies
@@ -171,7 +171,7 @@ FlaskInjector(app=app, modules=[configureDependencies])
 # Run the app
 if __name__ == "__main__":
     # Construct a list of host addresses
-    ips: List[str] = [config.server.publicHost, config.server.host]
+    ips: List[str] = [config.server.publicHost, config.server.serverLocal]
     hostAddresses: List[str] = getHosts(ips)
     # Log the start of the server including what address and port it is running on
     logger.info(f"Server started on following addresses: {", \n".join(hostAddresses)}")
