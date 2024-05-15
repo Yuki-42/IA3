@@ -57,6 +57,7 @@ class Server:
     """
     host: str
     port: int
+    publicHost: str
     debug: bool
     username: str
     password: str
@@ -74,6 +75,7 @@ class Server:
         """
         self.host = environ.get("SERVER_HOST")
         self.port = int(environ.get("SERVER_PORT"))
+        self.publicHost = environ.get("SERVER_PUBLIC_HOST")
         self.debug = environ.get("SERVER_DEBUG") == "True"
         self.username = environ.get("SERVER_USER")
         self.password = environ.get("SERVER_PASSWORD")
@@ -88,6 +90,7 @@ class Logging:
     """
     level: int
     writeToFile: bool
+    disableWerkzeug: bool
 
     def __init__(
             self
@@ -99,6 +102,7 @@ class Logging:
             None
         """
         self.writeToFile = environ.get("LOGGING_WRITE_TO_FILE") == "True"
+        self.disableWerkzeug = environ.get("LOGGING_DISABLE_WERKZEUG") == "True"
 
         match environ.get("LOGGING_LEVEL").lower():
             case "info":

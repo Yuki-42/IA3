@@ -6,6 +6,7 @@ from logging import FileHandler, Formatter, Handler, INFO, Logger, StreamHandler
 from os import getcwd, mkdir, path
 from pathlib import Path
 from sys import stdout
+from typing import Dict, List
 
 # Local Imports
 from . import SuppressedLoggerAdapter
@@ -13,13 +14,17 @@ from .formatters import ColourCodedFormatter
 from .handlers import DatabaseLogHandler
 
 
+# Used for storing what loggers have been created to prevent duplicate request handlers
+createdLoggers: Dict[str, bool] = {}
+
+
 def createLogger(
         name: str,
         level: int = INFO,
         formatString: str = "[%(asctime)s] [%(loggername)s] [%(levelname)s] %(message)s",
-        handlers: list[Handler] = None,
+        handlers: List[Handler] = None,
         doColour: bool = True,
-        colourCoding: dict[str, str] = None,
+        colourCoding: Dict[str, str] = None,
         doDb: bool = True,
         includeRequest: bool = False,
         dbFile: Path | str = Path(f"{getcwd()}/Logs/logs.db")
@@ -31,9 +36,9 @@ def createLogger(
         name (str): The name of the logger.
         level (str): The level of the logger.
         formatString (str): The format string for the logger.
-        handlers (list): Additional handlers for the logger.
+        handlers (List): Additional handlers for the logger.
         doColour (bool): Whether to use colour coding in the logger for logging outputs.
-        colourCoding (dict): The colour coding for the logger. Defaults to the default colour coding defined in the
+        colourCoding (Dict): The colour coding for the logger. Defaults to the default colour coding defined in the
             function.
         doDb (bool): Whether to log to a database.
         includeRequest (bool): Whether to include the request information in the log.
@@ -41,13 +46,15 @@ def createLogger(
 
     Returns:
         logger (Logger): The logger object.
-
     """
     if not path.exists(Path(f"{getcwd()}/Logs/")):
         mkdir(Path(f"{getcwd()}/Logs/"))
 
     loggingDirectory: str = name
     logFileName: str = name + "_"
+
+    if includeRequest and True in createdLoggers.values():
+        includeRequest = False
 
     # Check if the logging directory exists, if not, create it
     if not path.exists(Path(f"{getcwd()}/Logs/{loggingDirectory}")):
@@ -61,7 +68,7 @@ def createLogger(
         logger.handlers.clear()
 
     if handlers is None:
-        handlers: list[Handler] = [
+        handlers: List[Handler] = [
             FileHandler(
                 Path(
                     f"{getcwd()}/Logs/{loggingDirectory}/{logFileName}.log"
@@ -73,20 +80,34 @@ def createLogger(
             )
         ]
 
+    if doDb:
+        handler: DatabaseLogHandler = DatabaseLogHandler(dbFile)
+        handler.includeRequest = includeRequest
+        handlers.append(handler)
+
     colourFormatter: ColourCodedFormatter = ColourCodedFormatter(formatString, colourCoding=colourCoding)
     formatter: Formatter = Formatter(formatString)
+    requestFormatter: Formatter = Formatter("[%(asctime)s] [Requests] [%(levelname)s] %(message)s")
 
-    if doDb:
-        handlers.append(DatabaseLogHandler(dbFile))
-
+    # Add the handlers to the logger
     for handler in handlers:
-        if not doColour or isinstance(handler, FileHandler):
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            pass
-        else:
+        # Only add colour coding to the stream handler
+        if doColour and (not isinstance(handler, DatabaseLogHandler) and not isinstance(handler, FileHandler)):
             handler.setFormatter(colourFormatter)
             logger.addHandler(handler)
+            continue
 
-    # This works for some reason
+        # If the handler is a database log handler, set the formatter to the request formatter
+        if isinstance(handler, DatabaseLogHandler) and includeRequest:
+            handler.setFormatter(requestFormatter)
+            logger.addHandler(handler)
+            continue
+
+        # Otherwise, set the formatter to the formatter
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
+    # Add the logger to the createdLoggers dictionary
+    createdLoggers[name] = includeRequest
+
     return SuppressedLoggerAdapter(logger, extra={"loggername": name})

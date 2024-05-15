@@ -21,7 +21,7 @@ class DatabaseLogHandler(Handler):
     """
     A handler that logs all information to a sqlite database and periodically removes logs older than one week.
     """
-    __slots__ = ("file", "connection")
+    __slots__ = ("file", "connection", "includeRequest")
 
     def __init__(
             self,
@@ -65,6 +65,9 @@ class DatabaseLogHandler(Handler):
 
         # Close the cursor
         cursor.close()
+
+        # Set includeRequest to False by default
+        self.includeRequest = False
 
     def __del__(self):
         """
@@ -121,7 +124,7 @@ class DatabaseLogHandler(Handler):
             recordId: str = str(uuid4())
             self._logRecord(recordId, record)
 
-            if not has_request_context():
+            if not has_request_context() or not self.includeRequest:
                 return
 
             # Check what state the request is in

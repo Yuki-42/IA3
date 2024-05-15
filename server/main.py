@@ -5,19 +5,24 @@ Main file for IA3 Project.
 # Standard Library Imports
 from base64 import b64decode
 from os import chdir, getcwd
+from typing import List
 from uuid import uuid4
+from logging import getLogger
 
 # Third Party Imports
-from flask import Flask, g, request
+from flask import Flask, g, request, Response
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
-from werkzeug import Response
+from netifaces import interfaces, ifaddresses, AF_INET
 
 # Local Imports
 from internals.config import Config
 from internals.logging import SuppressedLoggerAdapter, createLogger
 from internals.routes import *
 from internals.wrapper.api import API
+
+# Constants
+EXPECTED_COOKIES: List[str] = ["theme"]
 
 # Before we do anything, check if the working directory is correct. This is a fix for running the server from parent directory using the start script.
 if not getcwd().endswith("server"):
@@ -27,7 +32,15 @@ if not getcwd().endswith("server"):
 config: Config = Config()
 
 # Create the logger
-logger: SuppressedLoggerAdapter = createLogger("endpoints", level=config.logging.level, includeRequest=True)
+logger: SuppressedLoggerAdapter = createLogger(
+    "endpoints",
+    level=config.logging.level,
+    includeRequest=True
+)
+
+# Kill the standard werkzeug logger
+werkzeugLogger = getLogger("werkzeug")
+werkzeugLogger.disabled = config.logging.disableWerkzeug
 
 # Connect to the API
 api: API = API(config)
@@ -63,8 +76,8 @@ def beforeRequest() -> Response | None:
     # Set request uuid
     g.uuid = uuid4()
     g.completed = False
-    logger.info(
-        f"Request [{g.uuid}] from {request.remote_addr} to {request.path} with method {request.method} from user agent {request.user_agent} with cookies {request.cookies}"
+    logger.info(  # 2 spaces here to match the indentation of the response log
+        f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.remote_addr} with user agent {request.user_agent} with cookies {request.cookies}"
     )
 
     # Check if the request is for static
@@ -111,28 +124,17 @@ def afterRequest(
     """
     g.completed = True
     g.response = response
-    logger.info(f"Response to request {g.uuid} with status {response.status_code}")
+    logger.info(f"Response [{g.uuid}] [{response.status_code}]")
     # Add a theme cookie to the response if the user doesn't have one
     if "theme" not in request.cookies:
         response.set_cookie("theme", config.server.defaultTheme)
 
+    # Purge any cookies that are not expected
+    for cookie in request.cookies:
+        if cookie not in EXPECTED_COOKIES:
+            response.delete_cookie(cookie)
+
     return response
-
-
-@app.teardown_request
-def teardownRequest(
-        exception: Exception | None
-) -> None:
-    """
-    Runs after each request. Logs the response and deals with cookies.
-
-    Args:
-        exception (Exception | None): The exception that occurred.
-
-    Returns:
-        None
-    """
-    # logger.logResponse(request, exception)
 
 
 def configureDependencies(
@@ -151,11 +153,44 @@ def configureDependencies(
     binder.bind(API, api, scope=singleton)
 
 
+def getIps() -> List[str]:
+    """
+    Gets a list of all the IPv4 addresses of the machine.
+
+    Returns:
+        List[str]: A list of all the IP addresses of the machine.
+    """
+    addresses: List[str] = []
+    for interface in interfaces():
+        for link in ifaddresses(interface).get(AF_INET, []):
+            addresses.append(link["addr"])
+    return addresses
+
+
+def getHosts(names: List[str]) -> List[str]:
+    """
+    Converts a list of IP addresses and domains to valid urls.
+
+    Args:
+        names (List[str]): A list of IP addresses and domains to convert to urls.
+
+    Returns:
+        List[str]: A list of all the hostnames of the machine.
+    """
+    return [f"{"https" if config.server.ssl else "http"}://{name}:{config.server.port}" for name in names]
+
+
 # Add dependencies
 FlaskInjector(app=app, modules=[configureDependencies])
 
 # Run the app
 if __name__ == "__main__":
+    # Construct a list of host addresses
+    ips: List[str] = getIps() + [config.server.publicHost]
+    hostAddresses: List[str] = getHosts(ips)
+    # Log the start of the server including what address and port it is running on
+    logger.info(f"Server started on following addresses: {", \n".join(hostAddresses)}")
+
     app.run(
         host=config.server.host,
         port=config.server.port,

@@ -3,3 +3,4 @@ flask~=3.0.3
 requests~=2.31.0
 pydantic~=2.7.1
 flask-injector~=0.15.0
+netifaces~=0.10.8
