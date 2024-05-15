@@ -10,7 +10,7 @@ from pathlib import Path
 # External Imports
 from flask import Request, Response, g, has_request_context, request
 from psycopg2 import connect as pgConnect
-from psycopg2.extras import RealDictConnection, RealDictCursor
+from psycopg2.extras import RealDictConnection, RealDictCursor, Json
 
 # Local Imports
 from ..config import Config
@@ -212,18 +212,18 @@ class DatabaseLogHandler(Handler):
                 (
                     recordId,
                     str(g.uuid),
-                    _request.view_args.__str__() if _request.view_args is not None else None,
+                    Json(_request.view_args) if _request.view_args is not None else None,
                     _request.routing_exception.__str__() if _request.routing_exception is not None else None,
                     _request.endpoint if _request.endpoint is not None else None,
                     _request.blueprint if _request.blueprint is not None else None,
                     _request.blueprints.__str__() if _request.blueprints is not None else None,
                     _request.accept_languages.__str__() if _request.accept_languages is not None else None,
                     _request.accept_mimetypes.__str__() if _request.accept_mimetypes is not None else None,
-                    _request.access_route.__str__() if _request.access_route is not None else None,
-                    _request.args.__str__() if _request.args is not None else None,
+                    _request.access_route if _request.access_route is not None else None,
+                    Json(_request.args.to_dict()) if _request.args is not None else None,
                     _request.authorization.__str__() if _request.authorization is not None else None,
                     _request.base_url if _request.base_url is not None else None,
-                    _request.cookies.__str__() if _request.cookies is not None else None,
+                    Json(_request.cookies.to_dict()) if _request.cookies is not None else None,
                     _request.full_path if _request.full_path is not None else None,
                     _request.host if _request.host is not None else None,
                     _request.host_url if _request.host_url is not None else None,
