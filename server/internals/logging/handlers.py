@@ -1,20 +1,17 @@
 """
 Handlers for the logging system.
 """
-from datetime import datetime
 # Standard Library Imports
+from datetime import datetime
 from logging import Handler, LogRecord
 from os import getcwd
 from pathlib import Path
-from threading import Lock
-from time import sleep
 from uuid import uuid4
 
 # External Imports
 from flask import Request, Response, g, has_request_context, request
 from psycopg2 import connect as pgConnect
 from psycopg2.extras import RealDictConnection, RealDictCursor
-from psycopg2 import ProgrammingError
 
 # Local Imports
 from ..config import Config
@@ -208,7 +205,7 @@ class DatabaseLogHandler(Handler):
                     headers, 
                     remote_addr
                 ) VALUES (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ?
                 )
                 """,
                 (
@@ -265,7 +262,7 @@ class DatabaseLogHandler(Handler):
                     headers, 
                     response
                 ) VALUES  (
-                    ?, ?, ?, ?, ?, ?, ?, ?
+                    %s, %s, %s, %s, %s, %s, %s, ?
                 );
                 """,
                 (
