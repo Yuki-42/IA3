@@ -5,10 +5,10 @@ LANG=SQLITE
 */
 
 /* Create tables */
-CREATE TABLE program_logs
+CREATE TABLE IF NOT EXISTS program_logs
 (
     id           VARCHAR(36) NOT NULL PRIMARY KEY,
-    timestamp    DATETIME    NOT NULL,
+    timestamp    TIMESTAMP    NOT NULL,
     level        INT         NOT NULL,
     filename     TEXT        NOT NULL,
     funcname     TEXT        NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE requests
     accept_mimetypes  TEXT,
     access_route      TEXT,
     args              TEXT,
-    authorization     TEXT,
+    "authorization"     TEXT,
     base_url          TEXT,
     cookies           TEXT,
     full_path         TEXT,

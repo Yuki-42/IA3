@@ -86,6 +86,32 @@ class Server:
         self.owner = Owner()
 
 
+class Database:
+    """
+    Contains logging db related config data.
+    """
+    host: str
+    port: int
+    name: str
+    username: str
+    password: str
+
+    def __init__(
+            self
+    ) -> None:
+        """
+        Initializes the Database object.
+
+        Returns:
+            None
+        """
+        self.host = environ.get("LOGGING_DB_HOST")
+        self.port = int(environ.get("LOGGING_DB_PORT"))
+        self.name = environ.get("LOGGING_DB_NAME")
+        self.username = environ.get("LOGGING_DB_USER")
+        self.password = environ.get("LOGGING_DB_PASS")
+
+
 class Logging:
     """
     Contains logging related config data.
@@ -93,6 +119,7 @@ class Logging:
     level: int
     writeToFile: bool
     disableWerkzeug: bool
+    db: Database
 
     def __init__(
             self
@@ -105,6 +132,8 @@ class Logging:
         """
         self.writeToFile = environ.get("LOGGING_WRITE_TO_FILE") == "True"
         self.disableWerkzeug = environ.get("LOGGING_DISABLE_WERKZEUG") == "True"
+
+        self.db = Database()
 
         match environ.get("LOGGING_LEVEL").lower():
             case "info":
