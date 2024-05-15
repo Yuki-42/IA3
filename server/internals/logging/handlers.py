@@ -185,7 +185,7 @@ class DatabaseLogHandler(Handler):
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(
                 """
-                INSERT INTO requests (
+                INSERT INTO ia3.requests (
                     id, 
                     log_id, 
                     view_args, 
@@ -255,7 +255,7 @@ class DatabaseLogHandler(Handler):
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(
                 """
-                INSERT INTO responses (
+                INSERT INTO ia3.responses (
                     id, 
                     request_id, 
                     expires, 
