@@ -174,6 +174,12 @@ class DatabaseLogHandler(Handler):
         Returns:
             None
         """
+        # Check if the X-Forwarded-For header is present
+        if "X-Forwarded-For" in _request.headers:
+            remoteAddr = _request.headers["X-Forwarded-For"]
+        else:
+            remoteAddr = _request.remote_addr
+
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(
                 """
@@ -224,7 +230,7 @@ class DatabaseLogHandler(Handler):
                     _request.url if _request.url is not None else None,
                     _request.method if _request.method is not None else None,
                     _request.headers.__str__() if _request.headers is not None else None,
-                    _request.remote_addr  # This will always be present
+                    remoteAddr  # This will never be None
                 )
             )
             self.connection.commit()
