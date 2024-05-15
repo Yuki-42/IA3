@@ -262,7 +262,7 @@ class DatabaseLogHandler(Handler):
                     headers, 
                     response
                 ) VALUES  (
-                    %s, %s, %s, %s, %s, %s, %s, ?
+                    %s, %s, %s, %s, %s, %s, %s, %s
                 );
                 """,
                 (
