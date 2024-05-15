@@ -162,6 +162,7 @@ class DatabaseLogHandler(Handler):
                     record.threadName
                 )
             )
+            self.connection.commit()
 
     def _logRequest(
             self,
@@ -232,6 +233,7 @@ class DatabaseLogHandler(Handler):
                     _request.remote_addr  # This will always be present
                 )
             )
+            self.connection.commit()
 
     def _logResponse(
             self,
@@ -276,3 +278,4 @@ class DatabaseLogHandler(Handler):
                     response.response.__str__() if response.response is not None else None
                 )
             )
+            self.connection.commit()
