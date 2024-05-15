@@ -118,7 +118,7 @@ class DatabaseLogHandler(Handler):
         First log the base record to the database.
         """
         try:
-            databaseLock.acquire()
+            databaseLock.acquire(True, timeout=5)
 
             # Generate a uuid for the log record as a string
             recordId: str = str(uuid4())
