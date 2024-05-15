@@ -166,7 +166,6 @@ class DatabaseLogHandler(Handler):
                 )
             )
 
-
     def _logRequest(
             self,
             recordId: str,
@@ -198,7 +197,7 @@ class DatabaseLogHandler(Handler):
                     accept_mimetypes, 
                     access_route, 
                     args, 
-                    authorization, 
+                    "authorization", 
                     base_url, 
                     cookies, 
                     full_path, 
@@ -236,7 +235,6 @@ class DatabaseLogHandler(Handler):
                     _request.remote_addr  # This will always be present
                 )
             )
-
 
     def _logResponse(
             self,
@@ -281,4 +279,3 @@ class DatabaseLogHandler(Handler):
                     response.response.__str__() if response.response is not None else None
                 )
             )
-
