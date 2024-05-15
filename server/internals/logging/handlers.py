@@ -188,58 +188,63 @@ class DatabaseLogHandler(Handler):
             None
         """
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(
-                """
-                INSERT INTO requests (
-                    id, 
-                    log_id, 
-                    view_args, 
-                    routing_exception, 
-                    endpoint, 
-                    blueprint, 
-                    blueprints,
-                    accept_languages, 
-                    accept_mimetypes, 
-                    access_route, 
-                    args, 
-                    authorization, 
-                    base_url, 
-                    cookies, 
-                    full_path, 
-                    host, 
-                    host_url, 
-                    url, 
-                    method, 
-                    headers, 
-                    remote_addr
-                ) VALUES (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO requests (
+                        id, 
+                        log_id, 
+                        view_args, 
+                        routing_exception, 
+                        endpoint, 
+                        blueprint, 
+                        blueprints,
+                        accept_languages, 
+                        accept_mimetypes, 
+                        access_route, 
+                        args, 
+                        authorization, 
+                        base_url, 
+                        cookies, 
+                        full_path, 
+                        host, 
+                        host_url, 
+                        url, 
+                        method, 
+                        headers, 
+                        remote_addr
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                    )
+                    """,
+                    (
+                        recordId,
+                        str(g.uuid),
+                        _request.view_args.__str__() if _request.view_args is not None else None,
+                        _request.routing_exception.__str__() if _request.routing_exception is not None else None,
+                        _request.endpoint if _request.endpoint is not None else None,
+                        _request.blueprint if _request.blueprint is not None else None,
+                        _request.blueprints.__str__() if _request.blueprints is not None else None,
+                        _request.accept_languages.__str__() if _request.accept_languages is not None else None,
+                        _request.accept_mimetypes.__str__() if _request.accept_mimetypes is not None else None,
+                        _request.access_route.__str__() if _request.access_route is not None else None,
+                        _request.args.__str__() if _request.args is not None else None,
+                        _request.authorization.__str__() if _request.authorization is not None else None,
+                        _request.base_url if _request.base_url is not None else None,
+                        _request.cookies.__str__() if _request.cookies is not None else None,
+                        _request.full_path if _request.full_path is not None else None,
+                        _request.host if _request.host is not None else None,
+                        _request.host_url if _request.host_url is not None else None,
+                        _request.url if _request.url is not None else None,
+                        _request.method if _request.method is not None else None,
+                        _request.headers.__str__() if _request.headers is not None else None,
+                        _request.remote_addr  # This will always be present
+                    )
                 )
-                """,
-                (
-                    recordId,
-                    str(g.uuid),
-                    _request.view_args.__str__() if _request.view_args is not None else None,
-                    _request.routing_exception.__str__() if _request.routing_exception is not None else None,
-                    _request.endpoint if _request.endpoint is not None else None,
-                    _request.blueprint if _request.blueprint is not None else None,
-                    _request.blueprints.__str__() if _request.blueprints is not None else None,
-                    _request.accept_languages.__str__() if _request.accept_languages is not None else None,
-                    _request.accept_mimetypes.__str__() if _request.accept_mimetypes is not None else None,
-                    _request.access_route.__str__() if _request.access_route is not None else None,
-                    _request.args.__str__() if _request.args is not None else None,
-                    _request.authorization.__str__() if _request.authorization is not None else None,
-                    _request.base_url if _request.base_url is not None else None,
-                    _request.cookies.__str__() if _request.cookies is not None else None,
-                    _request.full_path if _request.full_path is not None else None,
-                    _request.host if _request.host is not None else None,
-                    _request.host_url if _request.host_url is not None else None,
-                    _request.url if _request.url is not None else None,
-                    _request.method if _request.method is not None else None,
-                    _request.headers.__str__() if _request.headers is not None else None,
-                    _request.remote_addr  # This will always be present
-                )
-            )
+            except ProgrammingError as e:
+                print(e)
+                sleep(5)
+                self.connection.rollback()
 
     def _logResponse(
             self,
@@ -258,29 +263,34 @@ class DatabaseLogHandler(Handler):
             None
         """
         with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(
-                """
-                INSERT INTO responses (
-                    id, 
-                    request_id, 
-                    expires, 
-                    location, 
-                    status, 
-                    status_code, 
-                    headers, 
-                    response
-                ) VALUES  (
-                    ?, ?, ?, ?, ?, ?, ?, ?
-                );
-                """,
-                (
-                    recordId,
-                    str(g.uuid),
-                    response.expires if response.expires is not None else None,
-                    response.location if response.location is not None else None,
-                    response.status if response.status is not None else None,
-                    response.status_code if response.status_code is not None else None,
-                    response.headers.__str__() if response.headers is not None else None,
-                    response.response.__str__() if response.response is not None else None
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO responses (
+                        id, 
+                        request_id, 
+                        expires, 
+                        location, 
+                        status, 
+                        status_code, 
+                        headers, 
+                        response
+                    ) VALUES  (
+                        ?, ?, ?, ?, ?, ?, ?, ?
+                    );
+                    """,
+                    (
+                        recordId,
+                        str(g.uuid),
+                        response.expires if response.expires is not None else None,
+                        response.location if response.location is not None else None,
+                        response.status if response.status is not None else None,
+                        response.status_code if response.status_code is not None else None,
+                        response.headers.__str__() if response.headers is not None else None,
+                        response.response.__str__() if response.response is not None else None
+                    )
                 )
-            )
+            except ProgrammingError as e:
+                print(e)
+                sleep(5)
+                self.connection.rollback()
