@@ -13,7 +13,6 @@ from logging import getLogger
 from flask import Flask, g, request, Response
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
-from netifaces import interfaces, ifaddresses, AF_INET
 
 # Local Imports
 from internals.config import Config
@@ -153,20 +152,6 @@ def configureDependencies(
     binder.bind(API, api, scope=singleton)
 
 
-def getIps() -> List[str]:
-    """
-    Gets a list of all the IPv4 addresses of the machine.
-
-    Returns:
-        List[str]: A list of all the IP addresses of the machine.
-    """
-    addresses: List[str] = []
-    for interface in interfaces():
-        for link in ifaddresses(interface).get(AF_INET, []):
-            addresses.append(link["addr"])
-    return addresses
-
-
 def getHosts(names: List[str]) -> List[str]:
     """
     Converts a list of IP addresses and domains to valid urls.
@@ -186,7 +171,7 @@ FlaskInjector(app=app, modules=[configureDependencies])
 # Run the app
 if __name__ == "__main__":
     # Construct a list of host addresses
-    ips: List[str] = getIps() + [config.server.publicHost]
+    ips: List[str] = [config.server.publicHost, config.server.host]
     hostAddresses: List[str] = getHosts(ips)
     # Log the start of the server including what address and port it is running on
     logger.info(f"Server started on following addresses: {", \n".join(hostAddresses)}")
