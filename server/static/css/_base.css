@@ -68,9 +68,9 @@ footer {
     justify-content: center;
     gap: 4em;
     text-align: center;
-    padding: 2em 0; /* top right bottom left */
+    padding: 1em 0; /* top right bottom left */
     max-height: min-content;
-    min-height: 8vh;
+    min-height: 4vh;
 }
 
 footer #site-info {
@@ -83,9 +83,9 @@ footer #site-info {
 
 footer img {
     width: 15vw;
-    height: 15vh;
+    height: min-content;
     padding: 0 0;
-    margin: -6vh 0 -3vh;
+    margin: 0 0 0 0;
     border: none;
 }
 
