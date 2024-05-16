@@ -5,6 +5,8 @@ Adapters module for custom logging system.
 # Standard Library Imports
 from logging import Logger, LoggerAdapter
 
+from flask import has_request_context
+
 
 # Custom LoggerAdapter that can be disabled
 class SuppressedLoggerAdapter(LoggerAdapter):
@@ -59,5 +61,6 @@ class SuppressedLoggerAdapter(LoggerAdapter):
             *args: Additional arguments.
             **kwargs: Additional keyword arguments.
         """
+        # This does have request context
         if not self.suppressed:
             super().log(level, msg, *args, **kwargs)

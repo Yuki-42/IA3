@@ -6,6 +6,7 @@ Contains the Requester class.
 from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
 
+from flask import has_request_context
 # Third Party Imports
 from requests import Response, delete, get, post, put
 
@@ -180,8 +181,9 @@ class Requester:
         requestId: str = str(uuid4())
 
         # Set the URL
-        url = f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url
+        url: str = f"{self.config.api.base}{"/" if not url.startswith("/") and not self.config.api.base.endswith("/") else ""}{url}" if not overwriteUrl else url
 
+        # Yes this does have request context
         self.logger.info(
             f"{requestId} - {method.__name__.upper()} request to {url} with params {params} and kwargs {kwargs}"
         )
