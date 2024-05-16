@@ -15,6 +15,7 @@ This document details all important web resources used for this project.
 ## Nginx
 
 This project is designed to be hosted on nginx. The resources used can be found here:
+* [Deploying with Gunicorn - Simple Example](https://gunicorn.org/#deployment)
 * [Deploying with Gunicorn](https://docs.gunicorn.org/en/latest/deploy.html)
 * [HTTPS Setup](http://nginx.org/en/docs/http/configuring_https_servers.html)
 
