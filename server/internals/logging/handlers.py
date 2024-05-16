@@ -216,7 +216,7 @@ class DatabaseLogHandler(Handler):
                     _request.routing_exception.__str__() if _request.routing_exception is not None else None,
                     _request.endpoint if _request.endpoint is not None else None,
                     _request.blueprint if _request.blueprint is not None else None,
-                    _request.blueprints.__str__() if _request.blueprints is not None else None,
+                    _request.blueprints if _request.blueprints is not None else None,
                     _request.accept_languages.__str__() if _request.accept_languages is not None else None,
                     _request.accept_mimetypes.__str__() if _request.accept_mimetypes is not None else None,
                     _request.access_route if _request.access_route is not None else None,
