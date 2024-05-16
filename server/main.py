@@ -77,7 +77,8 @@ def beforeRequest() -> Response | None:
     g.uuid = uuid4()
     g.completed = False
     logger.info(  # 2 spaces here to match the indentation of the response log
-        f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.headers["X-Forwarded-For"] if "X-Forwarded-For" in request.headers else request.remote_addr} with user agent {request.user_agent} with cookies {request.cookies}"
+        f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.headers["X-Forwarded-For"] if "X-Forwarded-For" in request.headers else request.remote_addr} with "
+        f"user agent {request.user_agent.browser} with cookies {request.cookies.to_dict()}"
     )
 
     # Check if the request is for static
