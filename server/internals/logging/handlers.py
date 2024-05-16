@@ -88,9 +88,17 @@ class DatabaseLogHandler(Handler):
         Returns:
             None
         """
+        # Log where the record is coming from
+        print(f"Logging record from {record.filename}:{record.lineno}")
+        # Testing code
+        if has_request_context() and not self.includeRequest:
+            raise ValueError("Request information was logged without a request context.")
+
+        if ("request" in record.message or "response" in record.message) and (not has_request_context() or not self.includeRequest):
+            raise ValueError("Request or response information was logged without a request context.")
 
         # Add the record to the database and get the id
-        recordId = self._logRecord(record)
+        recordId: str = self._logRecord(record)
 
         if not has_request_context() or not self.includeRequest:
             return

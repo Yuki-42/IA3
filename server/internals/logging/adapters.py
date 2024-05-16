@@ -14,11 +14,15 @@ class SuppressedLoggerAdapter(LoggerAdapter):
     # Type hints
     suppressed: bool
 
-    def __init__(self, logger: Logger, extra: dict[str, str] | None = None):
+    def __init__(
+            self,
+            logger: Logger,
+            extra: dict[str, str] | None = None
+    ) -> None:
         super().__init__(logger, extra)
         self.suppressed = False
 
-    def __del__(self):
+    def __del__(self) -> None:
         """
         This method is called when the object is deleted.
 
@@ -27,19 +31,25 @@ class SuppressedLoggerAdapter(LoggerAdapter):
         """
         del self
 
-    def suppress(self):
+    def suppress(self) -> None:
         """
         Suppresses the logger.
         """
         self.suppressed = True
 
-    def unsuppress(self):
+    def unsuppress(self) -> None:
         """
         Unsuppresses the logger.
         """
         self.suppressed = False
 
-    def log(self, level: int, msg: str, *args, **kwargs):
+    def log(
+            self,
+            level: int,
+            msg: str,
+            *args,
+            **kwargs
+    ) -> None:
         """
         Logs the message to the logger.
 

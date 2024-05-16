@@ -31,7 +31,7 @@ class Requester:
             config (Config): The configuration object.
         """
         self.config = config
-        self.logger = createLogger("Requester", level=config.logging.level, config=config)
+        self.logger = createLogger("Requester", level=config.logging.level, config=config, includeRequest=False)
 
     def get(
             self,

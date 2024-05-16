@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS ia3.requests
 
 CREATE TABLE IF NOT EXISTS ia3.responses
 (
-    id          VARCHAR(36) NOT NULL PRIMARY KEY,
-    request_id  VARCHAR(36) NOT NULL,
+    id          uuid NOT NULL PRIMARY KEY,
+    request_id  uuid NOT NULL,
     expires     TIMESTAMP,
     location    TEXT,
     status      TEXT,
@@ -84,3 +84,61 @@ CREATE INDEX responses_status_code ON ia3.responses (status_code);
 
 /* Give all permissions to the loghandler user */
 GRANT ALL ON ALL TABLES IN SCHEMA ia3 TO loghandler;
+
+/* Create views */
+DROP VIEW IF EXISTS ia3.web_logs;
+DROP VIEW IF EXISTS ia3.simple_requests;
+DROP VIEW IF EXISTS ia3.simple_responses;
+
+/* View joins program_logs, requests, and responses. More columns will be manually added */
+CREATE VIEW ia3.web_logs(timestamp, method, remote_addr, path, status) AS
+SELECT
+    program_logs.timestamp,
+    requests.method,
+    requests.remote_addr,
+    requests.full_path,
+    responses.status_code
+FROM ia3.program_logs
+JOIN
+    ia3.requests ON program_logs.id = requests.log_id
+JOIN
+    ia3.responses ON requests.id = responses.request_id;
+
+
+
+comment on view ia3.web_logs is 'Used for viewing unified web logs.';
+
+alter view ia3.web_logs
+    owner to loghandler;
+
+create view ia3.simple_requests(method, remote_addr, full_path, cookies, args, view_args, id, log_id) as
+SELECT requests.method,
+       requests.remote_addr,
+       requests.full_path,
+       requests.cookies,
+       requests.args,
+       requests.view_args,
+       requests.id,
+       requests.log_id
+FROM ia3.requests;
+
+comment on view ia3.simple_requests is 'Used to view requests in a more logical order and format.';
+
+alter table ia3.simple_requests
+    owner to loghandler;
+
+
+create view ia3.simple_responses(status, status_code, request_id, headers, response) as
+SELECT response.status,
+       response.status_code,
+       response.request_id,
+       response.headers,
+       response.response
+FROM ia3.responses response;
+
+comment on view ia3.simple_responses is 'Used to view responses in a more logical order and format.';
+
+alter table ia3.simple_responses
+    owner to loghandler;
+
+
