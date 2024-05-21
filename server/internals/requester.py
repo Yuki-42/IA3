@@ -216,5 +216,16 @@ class Requester:
 
         response.raise_for_status()
 
-        self.logger.info(f"{requestId} - Response: {response.json()}")
-        return response.json()
+        self.logger.debug(f"{requestId} - Response: {response.json()}")
+
+        # Get the response data
+        data: dict = response.json()
+
+        # Edit the data to remove the API key from the next and previous URLs
+        if "next" in data and data["next"] is not None:
+            data["next"] = data["next"].replace(self.config.api.key, "KEY")
+
+        if "previous" in data and data["previous"] is not None:
+            data["previous"] = data["previous"].replace(self.config.api.key, "KEY")
+
+        return data
