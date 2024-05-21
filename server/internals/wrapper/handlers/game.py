@@ -9,7 +9,7 @@ from typing import Dict, List
 from ..response import Response
 from ..types import Developer, Game, Genre, Platform, Publisher, Store, Tag
 from ...helpers import addParameters
-from ...logging import SuppressedLoggerAdapter
+from ...clogging import SuppressedLoggerAdapter
 from ...requester import Requester
 
 

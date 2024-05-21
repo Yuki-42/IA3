@@ -16,7 +16,7 @@ from injector import Binder, singleton
 
 # Local Imports
 from internals.config import Config
-from internals.logging import SuppressedLoggerAdapter, createLogger
+from internals.clogging import SuppressedLoggerAdapter, createLogger
 from internals.routes import *
 from internals.wrapper.api import API
 
@@ -40,7 +40,7 @@ logger: SuppressedLoggerAdapter = createLogger(
 
 # Kill the standard werkzeug logger
 werkzeugLogger = getLogger("werkzeug")
-werkzeugLogger.disabled = config.logging.disableWerkzeug
+werkzeugLogger.disabled = True
 
 # Connect to the API
 api: API = API(config)
@@ -154,29 +154,13 @@ def configureDependencies(
     binder.bind(API, api, scope=singleton)
 
 
-def getHosts(names: List[str]) -> List[str]:
-    """
-    Converts a list of IP addresses and domains to valid urls.
-
-    Args:
-        names (List[str]): A list of IP addresses and domains to convert to urls.
-
-    Returns:
-        List[str]: A list of all the hostnames of the machine.
-    """
-    return [f"{"https" if config.server.ssl else "http"}://{name}:{config.server.port}" for name in names if name is not None and name != ""]
-
-
 # Add dependencies
 FlaskInjector(app=app, modules=[configureDependencies])
 
 # Run the app
 if __name__ == "__main__":
-    # Construct a list of host addresses
-    ips: List[str] = [config.server.publicHost, config.server.serverLocal]
-    hostAddresses: List[str] = getHosts(ips)
     # Log the start of the server including what address and port it is running on
-    logger.info(f"Server started on following addresses: {", \n".join(hostAddresses)}")
+    logger.info(f"Server started on following addresses: {f"{"https" if config.server.ssl else "http"}://{config.server.host}:{config.server.port}"}")
 
     app.run(
         host=config.server.host,

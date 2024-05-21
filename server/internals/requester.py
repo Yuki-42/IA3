@@ -12,7 +12,7 @@ from requests import Response, delete, get, post, put
 
 # Internal Imports
 from .config import Config
-from .logging import createLogger
+from .clogging import createLogger
 
 
 class Requester:

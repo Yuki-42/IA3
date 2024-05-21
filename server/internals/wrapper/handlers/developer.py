@@ -8,7 +8,7 @@ from typing import Dict, List
 # Local Imports
 from ..response import Response
 from ..types import Developer
-from ...logging import SuppressedLoggerAdapter
+from ...clogging import SuppressedLoggerAdapter
 from ...requester import Requester
 
 

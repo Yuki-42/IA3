@@ -71,19 +71,22 @@ def createLogger(
         logger.handlers.clear()
 
     if handlers is None:
-        handlers: List[Handler] = [
+        handlers: list[Handler] = []
+
+    if "file" in config.logging.handlers:
+        handlers.append(
             FileHandler(
                 Path(
                     f"{getcwd()}/Logs/{loggingDirectory}/{logFileName}.log"
                 ),
                 encoding="utf-8",
-            ),
-            StreamHandler(
-                stdout
             )
-        ]
+        )
 
-    if doDb:
+    if "console" in config.logging.handlers:
+        handlers.append(StreamHandler(stdout))
+
+    if "db" in config.logging.handlers:
         handler: DatabaseLogHandler = DatabaseLogHandler(config)
         handler.includeRequest = includeRequest
         handlers.append(handler)

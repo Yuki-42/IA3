@@ -9,7 +9,7 @@ Contains the API class.
 # Local Imports
 from .handlers import *
 from ..config import Config
-from ..logging import createLogger
+from ..clogging import createLogger
 from ..requester import Requester
 
 
