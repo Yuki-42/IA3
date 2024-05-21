@@ -1,1 +1,1 @@
-authbind --deep python3.12 wsgi.py
+authbind --deep gunicorn -w 4 wsgi:app
