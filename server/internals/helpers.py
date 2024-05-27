@@ -10,11 +10,17 @@ from typing import Any, Dict
 from flask import render_template as flaskRenderTemplate
 from pydantic import BaseModel
 
-
 # Internal Imports
+from .config import Config
+
+# Constants
+config: Config = Config()
 
 
-def renderTemplate(template: str, **kwargs) -> str:
+def renderTemplate(
+        template: str,
+        **kwargs
+) -> str:
     """
     Renders a template using Flask's render_template function while injecting items needed for `_base.html`.
 
@@ -28,6 +34,7 @@ def renderTemplate(template: str, **kwargs) -> str:
     return flaskRenderTemplate(
         template,
         year=datetime.now().year,
+        reCapchaSiteKey=config.server.recaptcha.siteKey,
         **kwargs
     )
 

@@ -51,6 +51,26 @@ class SSL:
         self.enabled = environ.get("SERVER_SSL_ENABLED") == "True"
 
 
+class ReCapcha:
+    """
+    Contains ReCapcha related config data.
+    """
+    siteKey: str
+    secretKey: str
+
+    def __init__(
+            self
+    ) -> None:
+        """
+        Initializes the ReCapcha object.
+
+        Returns:
+            None
+        """
+        self.siteKey = environ.get("SERVER_CAPTCHA_PUBLIC")
+        self.secretKey = environ.get("SERVER_CAPTCHA_SECRET")
+
+
 class Server:
     """
     Contains server related config data.
@@ -64,6 +84,7 @@ class Server:
     password: str
     ssl: SSL
     owner: Owner
+    recaptcha: ReCapcha
 
     def __init__(
             self
@@ -84,6 +105,7 @@ class Server:
         self.serverLocal = environ.get("SERVER_LOCAL") if environ.get("SERVER_LOCAL") else "localhost"
         self.ssl = SSL()
         self.owner = Owner()
+        self.recaptcha = ReCapcha()
 
 
 class Database:

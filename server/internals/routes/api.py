@@ -37,8 +37,8 @@ def index(
     Returns:
         str: The response from the RAWG API.
     """
-    if request.remote_addr != config.server.host and config.server.debug is False:
-        raise Unauthorized("Requests to the API must come from the server itself.")
+    # if request.remote_addr != config.server.host and config.server.debug is False:  # This was an oversight. It does not work
+    #     raise Unauthorized("Requests to the API must come from the server itself.")
 
     # Get the data
     return api.requester.get(url)
