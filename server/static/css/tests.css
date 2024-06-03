@@ -12,7 +12,6 @@
     width: 100%;
     padding: 0.3em 1em 1em;
     outline: none;
-    max-height: 50vh;
     overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 2vh;
@@ -49,6 +48,7 @@
     align-items: center;
     margin: 0.5em 0;
     width: 100%;
+    max-height: 75vh;
 }
 
 .result a {
