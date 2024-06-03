@@ -26,14 +26,15 @@ class Config:
     Adapter and logic processing class for the settings object.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes the Config object.
         """
-        self.server = self.server()
-        self.logging = self.logging()
+        self.server = self.Server()
+        self.logging = self.Logging()
+        self.api = self.Api()
 
-    class server:
+    class Server:
         """
         Contains server related config data.
         """
@@ -41,10 +42,13 @@ class Config:
             "host",
             "port",
             "debug",
-            "secretKey"
+            "secretKey",
+            "owner",
+            "auth",
+            "ssl"
         ]
 
-        def __init__(self):
+        def __init__(self) -> None:
             """
             Initializes the server object.
             """
@@ -53,23 +57,27 @@ class Config:
             self.debug: bool = settings.server.debug == "True"
             self.secretKey: str = settings.server.secretKey if settings.server.secretKey != "auto" else tokenUrlsafe(32)
 
-        class owner:
+            self.owner = self.Owner()
+            self.auth = self.Auth()
+            self.ssl = self.Ssl()
+
+        class Owner:
             """
             Contains owner related config data.
             """
             __slots__ = [
                 "name",
-                "contact"
+                "email"
             ]
 
-            def __init__(self):
+            def __init__(self) -> None:
                 """
                 Initializes the owner object.
                 """
                 self.name: str = settings.server.owner.name
-                self.contact: str = settings.server.owner.contact
+                self.email: str = settings.server.owner.email  # This is throwing an error
 
-        class auth:
+        class Auth:
             """
             Contains auth related config data.
             """
@@ -78,7 +86,7 @@ class Config:
                 "password"
             ]
 
-            def __init__(self):
+            def __init__(self) -> None:
                 """
                 Initializes the auth object.
                 """
@@ -94,127 +102,79 @@ class Config:
                 self.username = username
                 self.password = password
 
-        class ssl:
+        class Ssl:
             """
             Contains SSL related config data.
             """
             __slots__ = [
                 "cert",
                 "key",
-                "enabled",
+                "active",
             ]
 
-    def __init__(
-            self
-    ) -> None:
-        """
-        Initializes the SSL object.
+            def __init__(self) -> None:
+                """
+                Initializes the ssl object.
+                """
+                self.cert: str = settings.server.ssl.cert
+                self.key: str = settings.server.ssl.key
+                self.active: bool = settings.server.ssl.active == "True"
 
-        Returns:
-            None
-        """
-        self.cert = environ.get("SERVER_SSL_CERT")
-        self.key = environ.get("SERVER_SSL_KEY")
-        self.enabled = environ.get("SERVER_SSL_ENABLED") == "True"
-
-
-class Server:
-    """
-    Contains server related config data.
-    """
-    host: str
-    port: int
-    publicHost: str
-    serverLocal: str
-    debug: bool
-    username: str
-    password: str
-    ssl: SSL
-    owner: Owner
-
-    def __init__(
-            self
-    ) -> None:
-        """
-        Initializes the Server object.
-
-        Returns:
-            None
-        """
-        self.host = environ.get("SERVER_HOST")
-        self.port = int(environ.get("SERVER_PORT"))
-        self.publicHost = environ.get("SERVER_PUBLIC_HOST")
-        self.debug = environ.get("SERVER_DEBUG") == "True"
-        self.username = environ.get("SERVER_USER")
-        self.password = environ.get("SERVER_PASSWORD")
-        self.defaultTheme = environ.get("SERVER_DEFAULT_THEME")
-        self.serverLocal = environ.get("SERVER_LOCAL") if environ.get("SERVER_LOCAL") else "localhost"
-        self.ssl = SSL()
-        self.owner = Owner()
-
-
-    class logging:
+    class Logging:
         """
         Contains logging related config data.
         """
+        __slots__ = [
+            "handlers",
+            "level",
+            "db"
+        ]
 
-        def __init__(self):
+        def __init__(self) -> None:
             """
             Initializes the logging object.
             """
-            self.level: int = settings.logging.level
             self.handlers: list[str] = settings.logging.handlers
-            self.db = self.db() if "db" in settings.logging.handlers else None
+            self.level: str = settings.logging.level
 
-        class db:
+            # Only initialize the db object if the db handler is in the handlers list
+            if "db" in self.handlers:
+                self.db = self.Db()
+
+        class Db:
             """
-            Contains logging database related config information.
+            Contains logging database related config data.
             """
             __slots__ = [
                 "host",
                 "port",
-                "username",
-                "password",
-                "database"
+                "name",
+                "user",
+                "password"
             ]
 
-            def __init__(self):
+            def __init__(self) -> None:
                 """
                 Initializes the db object.
                 """
                 self.host: str = settings.logging.db.host
                 self.port: int = settings.logging.db.port
-                self.username: str = settings.logging.db.username
+                self.name: str = settings.logging.db.name
+                self.user: str = settings.logging.db.user
                 self.password: str = settings.logging.db.password
-                self.database: str = settings.logging.db.database
 
-    class api:
+    class Api:
         """
         Contains API related config data.
         """
+        __slots__ = [
+            "key",
+            "base"
+        ]
 
-        def __init__(self):
+        def __init__(self) -> None:
             """
             Initializes the API object.
             """
-            self.host: str = settings.api.host
-            self.port: int = settings.api.port
-            self.ssl: bool = settings.api.ssl == "True"
-            self.secretKey: str = settings.api.secretKey if settings.api.secretKey != "auto" else tokenUrlsafe(32)
-            self.auth = self.auth()
-
-        class auth:
-            """
-            Contains auth related config data.
-            """
-            __slots__ = [
-                "username",
-                "password"
-            ]
-
-            def __init__(self):
-                """
-                Initializes the auth object.
-                """
-                username: str = settings.api.auth.username
-                password: str = settings.api.auth.password
+            self.key: str = settings.api.key
+            self.base: str = settings.api.base
