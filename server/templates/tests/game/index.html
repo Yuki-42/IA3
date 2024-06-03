@@ -114,6 +114,8 @@
                         <option value="rating">rating</option>
                         <option value="metacritic">metacritic</option>
                     </select>
+                </div>
+                <div>
                     <label for="list-ordering-reverse">Reverse the selected ordering</label>
                     <input type="checkbox" id="list-ordering-reverse" name="list-ordering-reverse">
                 </div>
@@ -123,6 +125,164 @@
         <div class="horizontal-list">
             <h4>Response</h4>
             <div id="get-list-response"></div>
+        </div>
+    </div>
+    <div id="get-additions">
+        <div>
+            <h3>Get Additions</h3>
+            <p>Get a list of DLC's for the game, GOTY and other editions, companion apps, etc.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="additions-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="additions-id" name="additions-id" required><br>
+                </div>
+                <div>
+                    <label for="additions-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="additions-page" name="additions-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="additions-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="additions-page-size" name="additions-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+            <button onclick="getAdditions();">Run Test</button>
+        </div>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-additions-response"></div>
+        </div>
+    </div>
+    <div id="get-creators">
+        <div>
+            <h3>Get Creators</h3>
+            <p>Get a list of individual creators that were part of the development team.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="creators-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="creators-id" name="creators-id" required><br>
+                </div>
+                <div>
+                    <label for="creators-ordering">Ordering (<code>ordering</code>)</label>
+                    <input type="text" id="creators-ordering" name="creators-ordering"><br>
+                </div>
+                <div>
+                    <label for="creators-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="creators-page" name="creators-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="creators-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="creators-page-size" name="creators-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getCreators();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-creators-response"></div>
+        </div>
+    </div>
+    <div id="get-series">
+        <div>
+            <h3>Get Series</h3>
+            <p>Get a list of games that are part of the same series.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="series-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="series-id" name="series-id" required><br>
+                </div>
+                <div>
+                    <label for="series-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="series-page" name="series-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="series-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="series-page-size" name="series-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getSeries();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-series-response"></div>
+        </div>
+    </div>
+    <div id="get-parents">
+        <div>
+            <h3>Get Parents</h3>
+            <p>Get a list of parent games for DLC's and editions.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="parents-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="parents-id" name="parents-id" required><br>
+                </div>
+                <div>
+                    <label for="parents-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="parents-page" name="parents-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="parents-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="parents-page-size" name="parents-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getParents();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-parents-response"></div>
+        </div>
+    </div>
+    <div id="get-screenshots">
+        <div>
+            <h3>Get Screenshots</h3>
+            <p>Get a list of screenshots for the game.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="screenshots-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="screenshots-id" name="screenshots-id" required><br>
+                </div>
+                <div>
+                    <label for="screenshots-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="screenshots-page" name="screenshots-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="screenshots-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="screenshots-page-size" name="screenshots-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getScreenshots();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-screenshots-response"></div>
+        </div>
+    </div>
+    <div id="get-stores">
+        <div>
+            <h3>Get Stores</h3>
+            <p>Get a list of stores where the game is available.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="stores-id">Game Id (<code>game_pk</code>) <span class="required">Required</span></label>
+                    <input type="text" id="stores-id" name="stores-id" required><br>
+                </div>
+                <div>
+                    <label for="stores-ordering">Ordering (<code>ordering</code>)</label>
+                    <input type="text" id="stores-ordering" name="stores-ordering"><br>
+                </div>
+                <div>
+                    <label for="stores-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="stores-page" name="stores-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="stores-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="stores-page-size" name="stores-page-size" value="5" min="1" max="25"><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getStores();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-stores-response"></div>
         </div>
     </div>
     <div id="get-details" class="test test-colours">
@@ -140,6 +300,57 @@
         <div>
             <h4>Response</h4>
             <div id="get-details-response"></div>
+        </div>
+    </div>
+    <div id="get-achievements">
+        <div>
+            <h3>Get Achievements</h3>
+            <p>Get a list of achievements for the game.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="achievements-id">Game Id (<code>id</code>) <span class="required">Required</span></label>
+                    <input type="text" id="achievements-id" name="achievements-id" required><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getAchievements();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-achievements-response"></div>
+        </div>
+    </div>
+    <div id="get-trailers">
+        <div>
+            <h3>Get Trailers</h3>
+            <p>Get a list of trailers for the game.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="trailers-id">Game Id (<code>id</code>) <span class="required">Required</span></label>
+                    <input type="text" id="trailers-id" name="trailers-id" required><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getTrailers();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-trailers-response"></div>
+        </div>
+    </div>
+    <div id="get-reddit">
+        <div>
+            <h3>Get Reddit</h3>
+            <p>Get a list of reddit posts for the game.</p>
+            <div class="test-inputs">
+                <div>
+                    <label for="reddit-id">Game Id (<code>id</code>) <span class="required">Required</span></label>
+                    <input type="text" id="reddit-id" name="reddit-id" required><br>
+                </div>
+            </div>
+        </div>
+        <button onclick="getReddit();">Run Test</button>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-reddit-response"></div>
         </div>
     </div>
 {% endblock %}
