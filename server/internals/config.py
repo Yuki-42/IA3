@@ -11,7 +11,7 @@ from dynaconf import Dynaconf
 # Load the settings object
 settings: Dynaconf = Dynaconf(
     envvar_prefix="DYNACONF",
-    settings_files=["config.yaml"],
+    settings_files=["config.yaml", ".env"],
     load_dotenv=True,
     environments=True,
     env_switcher="DYNACONF_ENV",
@@ -43,6 +43,7 @@ class Config:
             "port",
             "debug",
             "secretKey",
+            "theme",
             "owner",
             "auth",
             "ssl",
@@ -57,6 +58,7 @@ class Config:
             self.port: int = settings.server.port
             self.debug: bool = settings.server.debug == "True"
             self.secretKey: str = settings.server.secretKey if settings.server.secretKey != "auto" else tokenUrlsafe(32)
+            self.theme: str = settings.server.theme
 
             self.owner = self.Owner()
             self.auth = self.Auth()

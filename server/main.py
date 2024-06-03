@@ -84,7 +84,7 @@ def beforeRequest() -> Response | None:
     # Check if the request is for static
     if request.path == "/static/css/_colours.css" and request.method == "GET":
         # Return the correct colour css file based on the theme
-        return app.send_static_file(f"css/{request.cookies.get("theme", config.server.defaultTheme)}_colours.css")
+        return app.send_static_file(f"css/{request.cookies.get("theme", config.server.theme)}_colours.css")
 
     # Check if the request is coming from the server or is from one of the development machines
     if request.remote_addr == config.server.host or (request.remote_addr in ["192.168.0.223"] and config.server.debug):
@@ -104,7 +104,7 @@ def beforeRequest() -> Response | None:
 
     username, password = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")
 
-    if password != config.server.password or username != config.server.username:
+    if password != config.server.auth.password or username != config.server.auth.username:
         return fail
 
     pass
@@ -156,6 +156,8 @@ def configureDependencies(
 
 # Add dependencies
 FlaskInjector(app=app, modules=[configureDependencies])
+
+print(f"Server starting with username {config.server.auth.username} and password {config.server.auth.password}")
 
 # Run the app
 if __name__ == "__main__":
