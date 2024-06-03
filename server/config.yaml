@@ -16,12 +16,14 @@ default: &default
         owner:
             name: John Doe
             email: example@example.com
+
     logging:
         handlers: ["console"]
         level: "DEBUG"
 
     api:
         base: https://api.rawg.io/api/
+        key: KEY HERE
 
 development:
     <<: *default
@@ -46,4 +48,6 @@ production:
             host: 127.0.0.1
             port: 5432
             name: logs
+            user: logs
+            password: logs
 
