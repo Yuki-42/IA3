@@ -104,13 +104,54 @@ class Config:
                 "enabled",
             ]
 
-            def __init__(self):
-                """
-                Initializes the SSL object.
-                """
-                self.cert: str = settings.server.ssl.cert
-                self.key: str = settings.server.ssl.key
-                self.enabled: bool = settings.server.ssl.enabled == "True"
+    def __init__(
+            self
+    ) -> None:
+        """
+        Initializes the SSL object.
+
+        Returns:
+            None
+        """
+        self.cert = environ.get("SERVER_SSL_CERT")
+        self.key = environ.get("SERVER_SSL_KEY")
+        self.enabled = environ.get("SERVER_SSL_ENABLED") == "True"
+
+
+class Server:
+    """
+    Contains server related config data.
+    """
+    host: str
+    port: int
+    publicHost: str
+    serverLocal: str
+    debug: bool
+    username: str
+    password: str
+    ssl: SSL
+    owner: Owner
+
+    def __init__(
+            self
+    ) -> None:
+        """
+        Initializes the Server object.
+
+        Returns:
+            None
+        """
+        self.host = environ.get("SERVER_HOST")
+        self.port = int(environ.get("SERVER_PORT"))
+        self.publicHost = environ.get("SERVER_PUBLIC_HOST")
+        self.debug = environ.get("SERVER_DEBUG") == "True"
+        self.username = environ.get("SERVER_USER")
+        self.password = environ.get("SERVER_PASSWORD")
+        self.defaultTheme = environ.get("SERVER_DEFAULT_THEME")
+        self.serverLocal = environ.get("SERVER_LOCAL") if environ.get("SERVER_LOCAL") else "localhost"
+        self.ssl = SSL()
+        self.owner = Owner()
+
 
     class logging:
         """

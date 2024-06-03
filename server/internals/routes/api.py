@@ -37,17 +37,8 @@ def index(
     Returns:
         str: The response from the RAWG API.
     """
-    if request.remote_addr != config.server.host and config.server.debug is False:
-        raise Unauthorized("Requests to the API must come from the server itself.")
+    # if request.remote_addr != config.server.host and config.server.debug is False:  # This was an oversight. It does not work
+    #     raise Unauthorized("Requests to the API must come from the server itself.")
 
     # Get the data
-    data: Dict = api.requester.get(url)
-
-    # Edit the data to remove the API key from the next and previous URLs
-    if "next" in data:
-        data["next"] = data["next"].replace(config.api.key, "KEY")
-
-    if "previous" in data and data["previous"] is not None:
-        data["previous"] = data["previous"].replace(config.api.key, "KEY")
-
-    return data
+    return api.requester.get(url)
