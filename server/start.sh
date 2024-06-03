@@ -1,1 +1,1 @@
-authbind --deep gunicorn -w 1 wsgi:app
+authbind --deep gunicorn -w 8 wsgi:app
