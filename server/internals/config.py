@@ -45,7 +45,8 @@ class Config:
             "secretKey",
             "owner",
             "auth",
-            "ssl"
+            "ssl",
+            "recaptcha"
         ]
 
         def __init__(self) -> None:
@@ -60,6 +61,7 @@ class Config:
             self.owner = self.Owner()
             self.auth = self.Auth()
             self.ssl = self.Ssl()
+            self.recaptcha = self.Recaptcha()
 
         class Owner:
             """
@@ -119,6 +121,22 @@ class Config:
                 self.cert: str = settings.server.ssl.cert
                 self.key: str = settings.server.ssl.key
                 self.active: bool = settings.server.ssl.active == "True"
+
+        class Recaptcha:
+            """
+            Contains recaptcha related config data.
+            """
+            __slots__ = [
+                "siteKey",
+                "secretKey"
+            ]
+
+            def __init__(self) -> None:
+                """
+                Initializes the recaptcha object.
+                """
+                self.siteKey: str = settings.server.recaptcha.siteKey
+                self.secretKey: str = settings.server.recaptcha.secretKey
 
     class Logging:
         """
