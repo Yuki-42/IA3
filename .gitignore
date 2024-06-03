@@ -2,6 +2,8 @@
 .env
 server/certs/
 server/config*
+config.yaml
+server/config.yaml
 
 ### Python template
 # Byte-compiled / optimized / DLL files
