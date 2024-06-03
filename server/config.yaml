@@ -38,7 +38,7 @@ production:
             password: auto
         theme: light
         ssl:
-            active: true
+            active: false
     logging:
         handlers: ["db"]
         level: "INFO"
