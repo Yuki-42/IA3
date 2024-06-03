@@ -18,6 +18,10 @@
     scrollbar-width: none;
 }
 
+.test-inputs input {
+    float: right;
+}
+
 .test-colours {
     background-color: var(--yellow-1);
     color: var(--text-black);
