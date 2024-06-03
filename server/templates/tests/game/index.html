@@ -1,0 +1,149 @@
+{% extends "tests/_tests_base.html" %}
+
+{% block scripts %}
+    {{ super() }}
+    <script defer src="{{ url_for("static", filename="js/tests/game.js") }}"></script>
+{% endblock %}
+
+{% block apiTests %}
+    <div id="get-list" class="test test-colours">
+        <div>
+            <h3>Get List</h3>
+            <p>Get a list of all the {{ testType.lower() }}s.</p>
+            <div>
+                <div>
+                    <label for="list-page">Page Number (<code>page</code>)</label>
+                    <input type="number" id="list-page" name="list-page" value="1" min="1"><br>
+                </div>
+                <div>
+                    <label for="list-page-size">Page Size (<code>page_size</code>)</label>
+                    <input type="number" id="list-page-size" name="list-page-size" value="5" min="1" max="25"><br>
+                </div>
+                <div>
+                    <label for="list-search">Search Query (<code>search</code>)</label>
+                    <input type="text" id="list-search" name="list-search"><br>
+                </div>
+                <div>
+                    <label for="list-search-precise">Disable fuzziness for the search query. (<code>search_precise</code>)</label>
+                    <input type="checkbox" id="list-search-precise" name="list-search-precise"><br>
+                </div>
+                <div>
+                    <label for="list-search-exact">Mark the search query as exact. (<code>search_exact</code>)</label>
+                    <input type="checkbox" id="list-search-exact" name="list-search-exact"><br>
+                </div>
+                <div>
+                    <label for="list-parent-platforms">Filter by parent platforms (<code>parent_platforms</code>)</label>
+                    <input type="text" id="list-parent-platforms" name="list-parent-platforms"><br>
+                </div>
+                <div>
+                    <label for="list-platforms">Filter by platforms (<code>platforms</code>)</label>
+                    <input type="text" id="list-platforms" name="list-platforms"><br>
+                </div>
+                <div>
+                    <label for="list-platforms">Filter by platforms (<code>platforms</code>)</label>
+                    <input type="text" id="list-platforms" name="list-platforms"><br>
+                </div>
+                <div>
+                    <label for="list-stores">Filter by stores (<code>stores</code>)</label>
+                    <input type="text" id="list-stores" name="list-stores"><br>
+                </div>
+                <div>
+                    <label for="list-developers">Filter by developers (<code>developers</code>)</label>
+                    <input type="text" id="list-developers" name="list-developers"><br>
+                </div>
+                <div>
+                    <label for="list-publishers">Filter by publishers (<code>publishers</code>)</label>
+                    <input type="text" id="list-publishers" name="list-publishers"><br>
+                </div>
+                <div>
+                    <label for="list-genres">Filter by genres (<code>genres</code>)</label>
+                    <input type="text" id="list-genres" name="list-genres"><br>
+                </div>
+                <div>
+                    <label for="list-tags">Filter by tags (<code>tags</code>)</label>
+                    <input type="text" id="list-tags" name="list-tags"><br>
+                </div>
+                <div>
+                    <label for="list-creators">Filter by creators (<code>creators</code>)</label>
+                    <input type="text" id="list-creators" name="list-creators"><br>
+                </div>
+                <div>
+                    <label for="list-dates">Filter by dates (<code>dates</code>)</label>
+                    <input type="text" id="list-dates" name="list-dates"><br>
+                </div>
+                <div>
+                    <label for="list-updated">Filter by updated (<code>updated</code>)</label>
+                    <input type="text" id="list-updated" name="list-updated"><br>
+                </div>
+                <div>
+                    <label for="list-platforms-count">Filter by platforms count (<code>platforms_count</code>)</label>
+                    <input type="number" id="list-platforms-count" name="list-platforms-count"><br>
+                </div>
+                <div>
+                    <label for="list-metacritic">Filter by a metacritic rating (<code>metacritic</code>)</label>
+                    <input type="text" id="list-metacritic" name="list-metacritic">
+                </div>
+                <div>
+                    <label for="list-exclude-collection">Exclude collection (<code>exclude_collection</code>)</label>
+                    <input type="number" id="list-exclude-collection" name="list-exclude-collection">
+                </div>
+                <div>
+                    <label for="list-exclude-additions">Exclude additions (<code>exclude_additions</code>)</label>
+                    <input type="checkbox" id="list-exclude-additions" name="list-exclude-additions">
+                </div>
+                <div>
+                    <label for="list-exclude-parents">Exclude games which have additions (<code>exclude_parents</code>)</label>
+                    <input type="checkbox" id="list-exclude-parents" name="list-exclude-parents">
+                </div>
+                <div>
+                    <label for="list-exclude-game-series">Exclude games which are part of a series (<code>exclude_game_series</code>)</label>
+                    <input type="checkbox" id="list-exclude-game-series" name="list-exclude-game-series">
+                </div>
+                <div>
+                    <label for="list-exclude-stores">Exclude stores (<code>exclude_stores</code>)</label>
+                    <input type="text" id="list-exclude-stores" name="list-exclude-stores">
+                </div>
+                <div>
+                    <label for="list-ordering">Ordering (<code>ordering</code>)</label>
+                    <select id="list-ordering" name="list-ordering">
+                        <option value="name" selected>name</option>
+                        <option value="released">released</option>
+                        <option value="added">added</option>
+                        <option value="created">created</option>
+                        <option value="updated">updated</option>
+                        <option value="rating">rating</option>
+                        <option value="metacritic">metacritic</option>
+                    </select>
+                    <label for="list-ordering-reverse">Reverse the selected ordering</label>
+                    <input type="checkbox" id="list-ordering-reverse" name="list-ordering-reverse">
+                </div>
+                <button onclick="getList('{{ testType.lower() }}');">Run Test</button>
+            </div>
+        </div>
+        <div class="horizontal-list">
+            <h4>Response</h4>
+            <div id="get-list-response"></div>
+        </div>
+    </div>
+    <div id="get-details" class="test test-colours">
+        <div>
+            <h3>Get Details</h3>
+            <p>Get details of one specific {{ testType.lower() }}.</p>
+            <div>
+                <div class="parameter">
+                    <label for="details-id">{{ testType.title() }} Id (<code>id</code>)</label>
+                    <input type="text" id="details-id" name="details-id"><br>
+                </div>
+                <button onclick="getDetails('{{ testType.lower() }}');">Run Test</button>
+            </div>
+        </div>
+        <div>
+            <h4>Response</h4>
+            <div id="get-details-response"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block classTests %}
+
+{% endblock %}
