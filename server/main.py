@@ -128,7 +128,7 @@ def afterRequest(
     logger.info(f"Response [{g.uuid}] [{response.status_code}]")
     # Add a theme cookie to the response if the user doesn't have one
     if "theme" not in request.cookies:
-        response.set_cookie("theme", config.server.defaultTheme)
+        response.set_cookie("theme", config.server.theme)
 
     # Purge any cookies that are not expected
     for cookie in request.cookies:
