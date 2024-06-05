@@ -185,6 +185,7 @@ class Requester:
             params: Optional[Dict[str, Any]] = None,
             overwriteUrl: bool = False,
             headers: Dict[str, Any] = None,
+            skipCache: bool = False,
             **kwargs
     ) -> Any:
         """
@@ -196,6 +197,7 @@ class Requester:
             params (Optional[Dict[str, Any]]): The parameters to pass to the request.
             overwriteUrl (bool): Whether to use only use the URL or include the base URL.
             headers (Dict[str, Any]): Headers to pass to the request.
+            skipCache (bool): Whether to skip the cache or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
         Returns:
@@ -218,7 +220,7 @@ class Requester:
         # Calculate request hash
         rHash: str = sha512(f"{url}{params}{headers}{kwargs}".encode()).hexdigest()
 
-        if rHash in cache:
+        if rHash in cache and not skipCache:
             self.logger.debug(f"{requestId} - Cache hit")
             # Return the data from the cache without the expires key
             _tempCache: dict = cache[rHash].copy()
