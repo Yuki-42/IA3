@@ -8,6 +8,7 @@
 .test {
     position: relative;
     display: inline-grid;
+    max-height: 150vh;
     grid-template-columns: 1fr 1fr;
     width: 100%;
     padding: 0.3em 1em 1em;

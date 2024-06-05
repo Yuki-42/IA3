@@ -210,3 +210,19 @@ code, pre {
     animation: red-pulse 0.7s 3;
     background-color: inherit;
 }
+
+.back-button {
+    height: 100%;
+    background-color: var(--yellow-1);
+    border-color: var(--yellow-1);
+    border-radius: 5px;
+    padding: 0.5em;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: var(--yellow-2);
+}
