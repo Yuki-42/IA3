@@ -3,8 +3,14 @@ async function getList(endpoint) {
     let page = document.getElementById("list-page").value;
     let pageSize = document.getElementById("list-page-size").value;
 
+    // Create the parameters object
+    let params = {
+        page: page,
+        pageSize: pageSize
+    };
+
     // Get data from the server
-    let data = await _get(`/api/${endpoint}s`);
+    let data = await _get(`/api/${endpoint}s`, params);
     console.log(data);
 
     // Display data using json-view
