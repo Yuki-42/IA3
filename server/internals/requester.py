@@ -206,7 +206,7 @@ class Requester:
 
         # Add the user agent header
         headers["User-Agent"] = f"AHSHS IA3 {self.config.server.owner.name}"
-        headers["From"] = self.config.server.owner.contact
+        headers["From"] = self.config.server.owner.email
 
         response: Response = method(
             url,
