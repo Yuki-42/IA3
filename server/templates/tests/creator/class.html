@@ -10,8 +10,7 @@
     <section class="grid-margins">
         <div id="left"></div>
         <div id="centre">
-            <h1>Class Test - creator - {{ type }}</h1>
-            <button onclick="window.history.back()">List</button>
+            <h1>Class Test - creator - {{ type }} <button class="back-button" onclick="window.history.back()">Back</button></h1>
             {% if type == "list" %}
                 <p>List of creators. Data:</p>
                 {% for creator in creators %}
