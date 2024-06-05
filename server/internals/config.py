@@ -14,7 +14,7 @@ settings: Dynaconf = Dynaconf(
     settings_files=["config.yaml", ".env"],
     load_dotenv=True,
     environments=True,
-    env_switcher="DYNACONF_ENV",
+    env_switcher="development",
     lowercase_read=True
 )
 
@@ -155,7 +155,19 @@ class Config:
             Initializes the logging object.
             """
             self.handlers: list[str] = settings.logging.handlers
-            self.level: str = settings.logging.level
+            match settings.logging.level:
+                case "DEBUG":
+                    self.level: int = 10
+                case "INFO":
+                    self.level: int = 20
+                case "WARNING":
+                    self.level: int = 30
+                case "ERROR":
+                    self.level: int = 40
+                case "CRITICAL":
+                    self.level: int = 50
+                case _:
+                    self.level: int = 20
 
             # Only initialize the db object if the db handler is in the handlers list
             if "db" in self.handlers:
@@ -189,7 +201,8 @@ class Config:
         """
         __slots__ = [
             "key",
-            "base"
+            "base",
+            "cacheExpiry",
         ]
 
         def __init__(self) -> None:
@@ -198,3 +211,4 @@ class Config:
             """
             self.key: str = settings.api.key
             self.base: str = settings.api.base
+            self.cacheExpiry: int = settings.api.cacheExpiry

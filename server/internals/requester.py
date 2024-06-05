@@ -5,14 +5,38 @@ Contains the Requester class.
 # Standard Library Imports
 from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
+from time import time
+from hashlib import sha512
 
-from flask import has_request_context
 # Third Party Imports
+from flask import has_request_context
 from requests import Response, delete, get, post, put
 
 # Internal Imports
 from .config import Config
 from .clogging import createLogger
+
+# Cache for the requests made
+cache: dict[str, Any] = {}
+cacheLastChecked: float = time()
+
+
+def checkCache() -> None:
+    """
+    Checks the cache to see if any requests have expired.
+    """
+    global cacheLastChecked
+
+    # Check if the cache needs to be checked
+    if time() - cacheLastChecked < 60:
+        return
+
+    # Check the cache
+    for rhash in cache:
+        if cache[rhash]["expires"] >= time():  # If the cache has not expired, skip it
+            continue
+
+        del cache[rhash]
 
 
 class Requester:
@@ -188,6 +212,19 @@ class Requester:
             f"{requestId} - {method.__name__.upper()} request to {url} with params {params} and kwargs {kwargs}"
         )
 
+        # Check the cache
+        checkCache()
+
+        # Calculate request hash
+        rHash: str = sha512(f"{url}{params}{headers}{kwargs}".encode()).hexdigest()
+
+        if rHash in cache:
+            self.logger.debug(f"{requestId} - Cache hit")
+            # Return the data from the cache without the expires key
+            _tempCache: dict = cache[rHash].copy()
+            _tempCache.pop("expires")
+            return _tempCache
+
         # Add the API key to the data
         if params is None:
             params = {}
@@ -210,7 +247,7 @@ class Requester:
 
         response.raise_for_status()
 
-        self.logger.debug(f"{requestId} - Response: {response.json()}")
+        self.logger.debug(f"{requestId} - Cache miss")
 
         # Get the response data
         data: dict = response.json()
@@ -222,4 +259,11 @@ class Requester:
         if "previous" in data and data["previous"] is not None:
             data["previous"] = data["previous"].replace(self.config.api.key, "KEY")
 
+        # Add the data to the cache
+        cache[rHash] = data.copy()
+
+        # Add the expiration time to the cache (current time + config.api.cacheExpiry)
+        cache[rHash]["expires"] = time() + self.config.api.cacheExpiry
+
+        # Return the data
         return data
