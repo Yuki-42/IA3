@@ -2,14 +2,16 @@
 Contains the Game class.
 """
 # Standard Library Imports
-from datetime import datetime
-from typing import Dict, List, Literal, Optional
+from datetime import date, datetime
+from json import dumps
+from typing import Any, Dict, List, Literal, Optional
 
 # Third Party Imports
 from pydantic import BaseModel
 
-
 # Internal Imports
+from .store import Store
+from .tag import Tag
 
 
 class MetacriticPlatform(BaseModel):
@@ -41,14 +43,82 @@ class Platform(BaseModel):
     """
     Represents a platform.
     """
-    platform: Dict
-    released_at: Optional[datetime] = None
-    requirements: Optional[Requirement]  # TODO: Get the details of this
+
+    class PlatformType(BaseModel):
+        id: int
+        name: str
+        slug: str
+        image: Optional[str | None] = None
+        year_end: Optional[int | None] = None
+        year_start: Optional[int | None] = None
+        games_count: Optional[int | None] = None
+        image_background: Optional[str | None] = None
+
+    platform: PlatformType
+    released_at: Optional[date | None] = None
+    requirements_en: Optional[Requirement | None] = None
+    requirements_ru: Optional[Requirement | None] = None
+
+
+class GStore(BaseModel):
+    """
+    Represents a store as returned from a game.
+    """
+    id: int
+    store: Store
+
+
+class GShortScreenshot(BaseModel):
+    """
+    Represents a short screenshot.
+    """
+    id: int
+    image: str
 
 
 class Game(BaseModel):
     """
-    Represents a game.
+    Represents a game returned from a search.
+    """
+    id: int
+    slug: str
+    name: str
+    released: datetime | None
+    tba: bool
+    background_image: str | None
+    rating: float
+    rating_top: int
+    ratings: List
+    ratings_count: int
+    reviews_text_count: int
+    added: int
+    added_by_status: Any
+    metacritic: int | None
+    playtime: int
+    suggestions_count: int
+    updated: datetime
+    esrb_rating: EsrbRating | None
+    user_game: Any
+    reviews_count: int
+    community_rating: int
+    saturated_color: str
+    dominant_color: str
+    platforms: List[Platform]
+    parent_platforms: List[Platform] | None
+    genres: List  # TODO: Get more info on this
+    stores: List[GStore]
+    clip: Any
+    tags: List[Tag]
+    short_screenshots: List[GShortScreenshot]
+
+    def __init__(self, **data):
+        print(dumps(data, indent=4))
+        super().__init__(**data)
+
+
+class DetailedGame(BaseModel):
+    """
+    Represents a game returned from a details query.
     """
     slug: str
     name: str

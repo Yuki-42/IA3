@@ -116,6 +116,7 @@ def getRequestArguments(
     """
     # Get the request arguments.
     requestArguments: Dict[str, Any] = {}
+    print(keys)
     for key, type_ in keys:
         value: Any = request.args.get(key)
         if value is None:
@@ -298,35 +299,8 @@ def gameClass(
             if isinstance(pageAndPageSize, PageException):
                 return renderTemplate("game/index.html", error=pageAndPageSize.message)
 
-            # Get other request arguments.
-            requestArguments: Dict[str, Any] = getRequestArguments(
-                {
-                    "search": str,
-                    "searchPrecise": bool,
-                    "searchExact": bool,
-                    "parentPlatforms": List[str],
-                    "platforms": List[str],
-                    "stores": List[str],
-                    "developers": List[str],
-                    "publishers": List[str],
-                    "genres": List[str],
-                    "tags": List[str],
-                    "creators": List[str],
-                    "dates": List[str],
-                    "updated": str,
-                    "platformsCount": int,
-                    "metacritic": List[int],
-                    "excludeCollection": int,
-                    "excludeAdditions": bool,
-                    "excludeParents": bool,
-                    "excludeGameSeries": bool,
-                    "excludeStores": List[str],
-                    "ordering": str
-                }
-            )
-
             # Get the games from the API.
-            response: Response = api.game.list(**requestArguments, page=page, pageSize=pageSize)
+            response: Response = api.game.list(**request.args)
 
             return renderTemplate("game/class.html", type=testType, games=response.results)
 
@@ -353,17 +327,6 @@ def gameClass(
             response: Response = api.game.dlcs(requestArguments["id"], page=page, pageSize=pageSize)
 
             return renderTemplate("game/class.html", type=testType, dlcs=response.results)
-
-        case "teams":
-            id: str = request.args.get("id")
-            page: str = request.args.get("page")
-            pageSize: str = request.args.get("pageSize")
-            ordering: str = request.args.get("ordering")
-
-            if any([id is None, page is None, pageSize is None, ordering is None]):
-                return renderTemplate("game/index.html", error="`id`, `page`, `pageSize`, and `ordering` are required.")
-
-            # Perform page checks.
 
         case _:
             return renderTemplate("game/index.html", error="Invalid test type.")

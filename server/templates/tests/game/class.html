@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+{% block title %}Class Test - game - {{ type }}{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/tests.css") }}">
+{% endblock %}
+
+{% block content %}
+    <section class="grid-margins">
+        <div id="left"></div>
+        <div id="centre">
+            <h1>Class Test - game - {{ type }} <button class="back-button" onclick="window.history.back()">Back</button></h1>
+            {% if type == "list" %}
+                <p>List of games. Data:</p>
+                {% for game in games %}
+                    <div class="result">
+                        <div class="game">
+                            <a href="/game/{{ game.id }}">{{ game.name }}</a>
+                            <img src="{{ game.background_image }}" alt="Background image for {{ game.name }}">
+                        </div>
+                        <div class="class-data">
+                            <p>Data:</p>
+                            <ul>
+                                {% for key, value in game %}
+                                    <li><code>{{ key }}</code>: <code>{{ value }}</code></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <hr>
+                    </div>
+                {% endfor %}
+            {% elif type == "details" %}
+                <p>Details of one game.</p>
+                {{ game }}
+            {% else %}
+                <p>Error: Invalid type provided. Expected: "list" | "details" => Actual = {{ type }}</p>
+            {% endif %}
+        </div>
+        <div id="right"></div>
+    </section>
+{% endblock %}

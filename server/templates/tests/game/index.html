@@ -119,7 +119,8 @@
                     <label for="list-ordering-reverse">Reverse the selected ordering</label>
                     <input type="checkbox" id="list-ordering-reverse" name="list-ordering-reverse">
                 </div>
-                <button onclick="getList('{{ testType.lower() }}');">Run Test</button>
+                <button onclick="getList();">Test Direct API</button>
+                <button onclick="getListClass();">Test Class API</button>
             </div>
         </div>
         <div class="horizontal-list">
@@ -353,8 +354,4 @@
             <div id="get-reddit-response"></div>
         </div>
     </div>
-{% endblock %}
-
-{% block classTests %}
-
 {% endblock %}

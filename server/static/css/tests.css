@@ -61,6 +61,11 @@
     margin-left: 6vw;
 }
 
+.result div img {
+    max-height: 100%;
+    margin-right: 0.5em;
+}
+
 .result .creator {
     display: inline-grid;
     align-items: center;
@@ -95,6 +100,14 @@
     overflow-x: hidden;
     margin-bottom: 2vh;
     scrollbar-width: none;
+}
+.class-data {
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5em 0;
+    max-height: 100vh;
+    overflow-y: scroll;
+    float: right;
 }
 
 .required {

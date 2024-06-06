@@ -1,4 +1,4 @@
-async function getList(){
+function getListParams() {
     // Get parameters
     let page = document.getElementById("list-page").value;
     let pageSize = document.getElementById("list-page-size").value;
@@ -69,10 +69,25 @@ async function getList(){
     if (excludeStores) { params.excludeStores = excludeStores; }
     if (ordering) { params.ordering = ordering; }
 
+    return params;
+}
+
+async function getList(){
+    // Get parameters
+    let params = getListParams();
+
     // Get the list
     let data = await _get("/api/games", params)
 
     // Display data using json-view
     const tree = jsonview.create(data);
-    setResponse(tree, "get-list-response")
+    setResponse(tree, "get-list-response");
+}
+
+async function getListClass(){
+    // Get parameters
+    let params = getListParams();
+
+    // Send the user to the /tests/game/list page
+    window.location.href = "/tests/game/list?" + new URLSearchParams(params).toString();
 }

@@ -3,17 +3,64 @@ Contains the Creator handler.
 """
 # Standard Library Imports
 from datetime import datetime as Datetime
+from json import dumps
 from typing import Dict, List
 
 # Local Imports
 from ..response import Response
 from ..types import Developer, Game, Genre, Platform, Publisher, Store, Tag
+from ..types.game import *
 from ...helpers import addParameters
 from ...clogging import SuppressedLoggerAdapter
 from ...requester import Requester
 
 
 # Third Party Imports
+
+
+def gamesFromData(
+        data: Dict
+) -> List[Game]:
+    """
+    Converts a dictionary of game data to a list of Game objects. This exists because the game model has nested pydantic models.
+
+    Args:
+        data (Dict): The data to convert.
+
+    Returns:
+        List[Game]: The converted data.
+    """  # TODO: Rewrite this, as this is bad code. (I am not coding very well today)
+    for gameData in data:
+        print(dumps(gameData, indent=4))
+        # Make a list of the metacritic platforms
+        metacriticPlatforms: List[MetacriticPlatform] | None = [
+            MetacriticPlatform(**metacriticPlatform) for metacriticPlatform in gameData.get if "metacritic_platforms" in gameData and metacriticPlatform is not None
+        ]
+
+        # Make a list of the esrb ratings
+        esrbRatings: List[EsrbRating] | None = [
+            EsrbRating(**esrbRating) for esrbRating in gameData["esrb_ratings"] if "esrb_ratings" in data and esrbRating is not None
+        ]
+
+        # Make a list of the platforms
+        platforms: List[Platform] = [
+            Platform(
+                platform=platform["platform"],
+                released_at=platform["released_at"],
+                requirements=Requirement(**platform["requirements"])
+            ) for platform in gameData["platforms"]
+        ]
+
+        # Combine the data
+        gameData.update(
+            {
+                "metacritic_platforms": metacriticPlatforms,
+                "esrb_ratings": esrbRatings,
+                "platforms": platforms
+            }
+        )
+
+    return [Game(**game) for game in data]
 
 
 class GameHandler:
@@ -127,20 +174,16 @@ class GameHandler:
                 "exclude_stores": excludeStores,
                 "ordering": ordering
             }
-            )
+        )
 
         response: Dict = self.requester.get(
             self.baseUrl,
             parameters
         )
 
-        games: List[Game] = [
-            Game(**game) for game in response["results"]
-        ]
-
         return Response(
             data=response,
-            results=games
+            results=[Game(**game) for game in response["results"]]
         )
 
     @property
