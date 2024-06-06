@@ -6,6 +6,7 @@
     background-color: var(--primary-background);
     color: var(--text-primary);
     transition: background-color 0.3s, color 0.3s;
+    overflow-x: clip;
 }
 
 /* Background Colour Classes */

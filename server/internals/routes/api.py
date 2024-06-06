@@ -23,8 +23,7 @@ apiBlueprint: Blueprint = Blueprint("api", __name__, url_prefix="/api")
 @inject
 def index(
         url: str,
-        api: API,
-        config: Config
+        api: API
 ) -> Dict:
     """
     The API forwarding route. Requests have to come from the server itself.
@@ -32,7 +31,6 @@ def index(
     Args:
         url (str): The URL to forward to the RAWG API.
         api (API): The API wrapper to use (injected).
-        config (Config): The configuration object (injected).
 
     Returns:
         str: The response from the RAWG API.
@@ -41,4 +39,4 @@ def index(
     #     raise Unauthorized("Requests to the API must come from the server itself.")
 
     # Get the data
-    return api.requester.get(url)
+    return api.requester.get(url, request.args.to_dict())

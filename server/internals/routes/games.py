@@ -10,6 +10,7 @@ from flask_injector import inject
 
 # Internal Imports
 from ..helpers import renderTemplate
+from .api import API
 
 # Constants
 gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
@@ -31,18 +32,20 @@ def index() -> str:
 @gamesBlueprint.get("/<string:gameId>")
 @inject
 def game(
-        gameId: str
+        gameId: str,
+        api: API
 ) -> str:
     """
     The game page.
 
     Args:
         gameId (str): The ID of the game to render.
+        api (API): The API object. (Injected)
 
     Returns:
         str: The rendered game page.
     """
     return renderTemplate(
         "games/game.html",
-        gameId=gameId
+        game=api.game.details(gameId)
     )

@@ -1,0 +1,10 @@
+.banner {
+    display: flex;
+    float: right;
+    max-height: 50vh;
+}
+
+.banner img {
+    /* DO NOT STRETCH THE IMAGE */
+    object-fit: cover;
+}

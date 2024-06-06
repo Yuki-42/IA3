@@ -42,15 +42,15 @@ function getListParams() {
     }
 
     // Create the parameters object
-    let params = {}
+    let params = {};
 
     // Append if not empty
     if (page) { params.page = page; }
-    if (pageSize) { params.pageSize = pageSize; }
+    if (pageSize) { params.page_size = pageSize; }
     if (search) { params.search = search; }
-    if (searchPrecise) { params.searchPrecise = searchPrecise; }
-    if (searchExact) { params.searchExact = searchExact; }
-    if (parentPlatforms) { params.parentPlatforms = parentPlatforms; }
+    if (searchPrecise) { params.search_precise = searchPrecise; }
+    if (searchExact) { params.search_exact = searchExact; }
+    if (parentPlatforms) { params.parent_platforms = parentPlatforms; }
     if (platforms) { params.platforms = platforms; }
     if (stores) { params.stores = stores; }
     if (developers) { params.developers = developers; }
@@ -60,13 +60,13 @@ function getListParams() {
     if (creators) { params.creators = creators; }
     if (dates) { params.dates = dates; }
     if (updated) { params.updated = updated; }
-    if (platformsCount) { params.platformsCount = platformsCount; }
+    if (platformsCount) { params.platforms_count = platformsCount; }
     if (metacritic) { params.metacritic = metacritic; }
-    if (excludeCollection) { params.excludeCollection = excludeCollection; }
-    if (excludeAdditions) { params.excludeAdditions = excludeAdditions; }
-    if (excludeParents) { params.excludeParents = excludeParents; }
-    if (excludeSeries) { params.excludeSeries = excludeSeries; }
-    if (excludeStores) { params.excludeStores = excludeStores; }
+    if (excludeCollection) { params.exclude_collection = excludeCollection; }
+    if (excludeAdditions) { params.exclude_collection = excludeAdditions; }
+    if (excludeParents) { params.exclude_parents = excludeParents; }
+    if (excludeSeries) { params.exclude_game_series = excludeSeries; }
+    if (excludeStores) { params.exclude_stores = excludeStores; }
     if (ordering) { params.ordering = ordering; }
 
     return params;
@@ -76,8 +76,10 @@ async function getList(){
     // Get parameters
     let params = getListParams();
 
+    console.log(params);
+
     // Get the list
-    let data = await _get("/api/games", params)
+    let data = await _get("/api/games", params);
 
     // Display data using json-view
     const tree = jsonview.create(data);

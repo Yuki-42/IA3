@@ -3,5 +3,9 @@
 {% block title %}Games{% endblock %}
 
 {% block content %}
-
+    <form id="game-search" method="get" action="" onsubmit="">
+        <label for="title-query">Search for a game:</label>
+        <input type="text" id="title-query" name="title-query">
+        <button type="submit">Search</button>
+    </form>
 {% endblock %}

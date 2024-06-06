@@ -83,6 +83,7 @@ class Game(BaseModel):
     id: int
     slug: str
     name: str
+    description: Optional[str] = None
     released: datetime | None
     tba: bool
     background_image: str | None
@@ -100,7 +101,7 @@ class Game(BaseModel):
     esrb_rating: EsrbRating | None
     user_game: Any
     reviews_count: int
-    community_rating: int
+    community_rating: Optional[int] = None
     saturated_color: str
     dominant_color: str
     platforms: List[Platform]
@@ -109,7 +110,7 @@ class Game(BaseModel):
     stores: List[GStore]
     clip: Any
     tags: List[Tag]
-    short_screenshots: List[GShortScreenshot]
+    short_screenshots: Optional[List[GShortScreenshot]] = None
 
     def __init__(self, **data):
         print(dumps(data, indent=4))

@@ -2,8 +2,32 @@
 
 {% block title %}{{ game.title }}{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/games.css") }}">
+    <style>
+     /* Set the background image if it exists */
+     main::backdrop {
+         content: url("{{ game.background_image }}");
+         filter: blur(4px);
+     }
+     main {
+         background-repeat: no-repeat;
+         background-size: cover;
+         background-color: transparent;
+     }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <h1>{{ game.title }}</h1>
-    <p>{{ game.description }}</p>
-    <p><a href="{{ url_for("games.games") }}">Back to games</a></p>
+    <div class="banner">
+        <img src="{{ game.background_image }}" alt="<strong>{{ game.title }}</strong> background image">
+    </div>
+    <h1>{{ game.name }}</h1>
+    <div class="details">
+        <ul>
+            <li id="game-id">{{ game.id }} ({{ game.slug }})</li>
+        </ul>
+    </div>
+    {{ game.description|safe }} <!-- For some reason, rawg wraps their game descriptions in p tags. -->
+    <p><a href="{{ url_for("games.index") }}">Back to games</a></p>
 {% endblock %}
