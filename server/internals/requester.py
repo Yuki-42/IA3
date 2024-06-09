@@ -1,24 +1,33 @@
 """
 Contains the Requester class.
 """
-
 # Standard Library Imports
+from hashlib import sha512
+from time import time
 from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
-from time import time
-from hashlib import sha512
 
 # Third Party Imports
-from flask import has_request_context
-from requests import Response, delete, get, post, put
+from requests import Response, delete, get, post, put, HTTPError
 
 # Internal Imports
-from .config import Config
 from .clogging import createLogger
+from .config import Config
 
 # Cache for the requests made
 cache: dict[str, Any] = {}
 cacheLastChecked: float = time()
+
+"""
+Custom errors for Requester calls.
+"""
+
+
+class RBadGateway(HTTPError):
+    """
+    Raised when a 502 Bad Gateway error is returned from the API.
+    """
+
 
 
 def checkCache() -> None:
@@ -247,7 +256,12 @@ class Requester:
             **kwargs
         )
 
-        response.raise_for_status()
+        # Error handling for api
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+            if e.response.status_code == 502:
+                raise RBadGateway(e.strerror.replace(self.config.api.key, "API_KEY"))
 
         self.logger.debug(f"{requestId} - Cache miss")
 
