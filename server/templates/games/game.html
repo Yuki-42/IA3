@@ -29,17 +29,82 @@
                         </ul>
                     </td>
                 </tr>
+                <tr>
+                    <th>Platforms</th>
+                    <td>
+                        <ul>
+                            {% for platform in game.platforms %}
+                                <li>{{ platform.platform.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+
             </table>
+            <div id="age-rating">
+                <table id="appropriate-audiences">
+                    <tr>
+                        <th>Audience</th><th>Appropriate</th>
+                    </tr>
+                    <tr>
+                        <td>Everyone</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" autocomplete="off" onclick="return false;" readonly {{ "checked" if game.esrb_rating.slug == "everyone" }}>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Everyone 10+</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" autocomplete="off" onclick="return false;" readonly {{ "checked" if game.esrb_rating.slug == "everyone-10-plus" }}>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Teen</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" autocomplete="off" onclick="return false;" readonly {{ "checked" if game.esrb_rating.slug == "teen" }}>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mature</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" autocomplete="off" onclick="return false;" readonly {{ "checked" if game.esrb_rating.slug == "mature" }}>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Adults Only</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" autocomplete="off" onclick="return false;" readonly {{ "checked" if game.esrb_rating.slug == "adults-only" }}>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                {% if game.esrb_rating.slug == "rating-pending" %}
+                    <p>
+                        <strong>Rating Pending</strong>
+                        <br>
+                        This game has not yet been rated by the ESRB.
+                    </p>
+                {% endif %}
+            </div>
         </div>
         <div id="centre">
             <h1>{{ game.name }}</h1>
             {{ game.description|safe }} <!-- For some reason, rawg wraps their game descriptions in p tags. -->
             <div id="reviews">
-                <h3>Ratings</h3>
+                <h3>Reviews</h3>
                 <ul>
                     <li>Metacritic: {{ game.metacritic }}</li>
-                    <li>Rating: {{ game.rating }}</li>
-                    <li>Rating count: {{ game.ratings_count }}</li>
+                    <li>Average User Rating: {{ game.rating }}</li>
+                    <li>Review count: {{ game.ratings_count }}</li>
                 </ul>
             </div>
         </div>

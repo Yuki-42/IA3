@@ -113,7 +113,7 @@ class Game(BaseModel):
     short_screenshots: Optional[List[GShortScreenshot]] = None
 
     def __init__(self, **data):
-        print(dumps(data, indent=4))
+        # print(dumps(data, indent=4))
         super().__init__(**data)
 
 
