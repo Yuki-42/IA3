@@ -4,30 +4,49 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for("static", filename="css/games.css") }}">
-    <style>
-     /* Set the background image if it exists */
-     main::backdrop {
-         content: url("{{ game.background_image }}");
-         filter: blur(4px);
-     }
-     main {
-         background-repeat: no-repeat;
-         background-size: cover;
-         background-color: transparent;
-     }
-    </style>
 {% endblock %}
 
 {% block content %}
-    <div class="banner">
-        <img src="{{ game.background_image }}" alt="<strong>{{ game.title }}</strong> background image">
-    </div>
-    <h1>{{ game.name }}</h1>
-    <div class="details">
-        <ul>
-            <li id="game-id">{{ game.id }} ({{ game.slug }})</li>
-        </ul>
-    </div>
-    {{ game.description|safe }} <!-- For some reason, rawg wraps their game descriptions in p tags. -->
-    <p><a href="{{ url_for("games.index") }}">Back to games</a></p>
+    <section id="main" class="grid-margins">
+        <div id="left">
+            <table>
+                <tr>
+                    <th>Keys</th>
+                    <td>
+                        <ul>
+                            <li>Id: {{ game.id }}</li>
+                            <li>Slug: {{ game.slug }}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Genres</th>
+                    <td>
+                        <ul>
+                            {% for genre in game.genres %}
+                                <li>{{ genre.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="centre">
+            <h1>{{ game.name }}</h1>
+            {{ game.description|safe }} <!-- For some reason, rawg wraps their game descriptions in p tags. -->
+            <div id="reviews">
+                <h3>Ratings</h3>
+                <ul>
+                    <li>Metacritic: {{ game.metacritic }}</li>
+                    <li>Rating: {{ game.rating }}</li>
+                    <li>Rating count: {{ game.ratings_count }}</li>
+                </ul>
+            </div>
+        </div>
+        <div id="right">
+            <div class="banner">
+                <img src="{{ game.background_image }}" alt="<strong>{{ game.title }}</strong> background image">
+            </div>
+        </div>
+    </section>
 {% endblock %}
