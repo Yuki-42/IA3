@@ -28,5 +28,13 @@
 }
 
 .gallery-item-details {
+    border-radius: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.gallery-item-details a {
     cursor: pointer;
+    text-decoration: none;
+    text-align: center;
 }

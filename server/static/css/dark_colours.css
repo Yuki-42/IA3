@@ -52,3 +52,12 @@ a {
 .test {
     color: var(--text-secondary);
 }
+
+.gallery-item {
+    background-color: var(--yellow-1);
+}
+
+.gallery-item-details {
+    color: var(--text-primary);
+    background-color: var(--yellow-1);
+}

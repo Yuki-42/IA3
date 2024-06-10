@@ -33,3 +33,12 @@ nav a {
 nav a:hover {
     color: var(--code-yellow);
 }
+
+.gallery-item {
+    background-color: var(--yellow-1);
+}
+
+.gallery-item-details {
+    color: var(--text-primary);
+    background-color: var(--yellow-1);
+}

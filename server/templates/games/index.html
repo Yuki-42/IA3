@@ -23,9 +23,9 @@
                     {% for game in response.results %}
                         <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
                             <div class="gallery-item-details">
-                                <h2>{{ game.name }}</h2>
-                                <p>{{ game.description }}</p>
-                                <a href="{{ url_for("games.game", gameId=game.id) }}">View</a>
+                                <a href="{{ url_for("games.game", gameId=game.id) }}">
+                                    <h2>{{ game.name }}</h2>
+                                </a>
                             </div>
                         </div>
                     {% endfor %}
