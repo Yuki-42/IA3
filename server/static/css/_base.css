@@ -65,6 +65,18 @@ header nav div a {
     text-align: center;
 }
 
+.school-logo {
+    max-height: 8vh;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-left: 4vw;
+}
+
+.school-logo img {
+    height: 7vh;
+}
+
 footer {
     justify-content: center;
     gap: 4em;
