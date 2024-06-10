@@ -18,4 +18,5 @@ class Tag(BaseModel):
     slug: str
     games_count: int
     image_background: Optional[str] = None
+    language: Optional[str] = None
     description: Optional[str] = None

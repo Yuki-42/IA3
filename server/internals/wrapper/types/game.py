@@ -3,31 +3,61 @@ Contains the Game class.
 """
 # Standard Library Imports
 from datetime import date, datetime
-from json import dumps
-from typing import Any, Dict, List, Literal, Optional
 from re import compile
+from typing import Any, List, Literal, Optional
 
 # Third Party Imports
 from pydantic import BaseModel
 
 # Internal Imports
-from .store import Store
-from .tag import Tag
 from .developer import Developer
 from .genre import Genre
+from .platform import Platform
 from .publisher import Publisher
-
+from .store import Store
+from .tag import Tag
 
 # CONSTANTS
 breakTag = compile(r"<\s*br\s*(/)?>")  # Pre-compile the regex for br tags at application startup to save time
+
+
+# Temporary helper function
+# def getJsonDifference(
+#         json1: Dict[str, Any],
+#         json2: Dict[str, Any]
+# ) -> None:
+#     """
+#     Prints any missing keys in json2 compared to json1. Also prints mismatched values. Works recursively on both lists and dictionaries.
+#
+#     Args:
+#         json1 (Dict[str, Any]): The first JSON object. Considered the "correct" JSON object.
+#         json2 (Dict[str, Any]): The second JSON object.
+#     """
+#     for key in json1:
+#         if key not in json2:
+#             print(f"Key {key} is missing from json2")
+#         elif isinstance(json1[key], dict):
+#             getJsonDifference(json1[key], json2[key])
+#         elif json1[key] != json2[key]:
+#             print(f"Key {key} has a mismatched value. Expected:\n {dumps(json1[key], indent=4)} \n Got:\n {json2[key]}")
 
 
 class MetacriticPlatform(BaseModel):
     """
     Represents a metacritic platform.
     """
+
+    class MPlatform(BaseModel):
+        """
+        Represents a metacritic platform.
+        """
+        platform: int
+        name: str
+        slug: str
+
     metascore: Optional[int] = None
     url: str
+    platform: MPlatform
 
 
 class EsrbRating(BaseModel):
@@ -47,25 +77,31 @@ class Requirement(BaseModel):
     recommended: Optional[str] = None
 
 
-class Platform(BaseModel):
+class GPlatform(BaseModel):
     """
     Represents a platform.
     """
+    platform: Platform
+    released_at: Optional[date | None] = None
+    requirements: Optional[Requirement | None] = None
+    requirements_en: Optional[Requirement | None] = None
+    requirements_ru: Optional[Requirement | None] = None
 
-    class PlatformType(BaseModel):
+
+class PPlatform(BaseModel):
+    """
+    Represents a parent platform.
+    """
+
+    class NPlatform(BaseModel):
+        """
+        Represents a nested platform.
+        """
         id: int
         name: str
         slug: str
-        image: Optional[str | None] = None
-        year_end: Optional[int | None] = None
-        year_start: Optional[int | None] = None
-        games_count: Optional[int | None] = None
-        image_background: Optional[str | None] = None
 
-    platform: PlatformType
-    released_at: Optional[date | None] = None
-    requirements_en: Optional[Requirement | None] = None
-    requirements_ru: Optional[Requirement | None] = None
+    platform: NPlatform
 
 
 class GStore(BaseModel):
@@ -73,6 +109,7 @@ class GStore(BaseModel):
     Represents a store as returned from a game.
     """
     id: Optional[int] = None
+    url: Optional[str]
     store: Store
 
 
@@ -84,6 +121,16 @@ class GShortScreenshot(BaseModel):
     image: str
 
 
+class Rating(BaseModel):
+    """
+    Represents a rating.
+    """
+    id: int
+    title: str
+    count: int
+    percent: float
+
+
 class Game(BaseModel):
     """
     Represents a game returned from a search.
@@ -91,29 +138,61 @@ class Game(BaseModel):
     id: int
     slug: str
     name: str
+    name_original: Optional[str] = None
     description: Optional[str] = None
-    released: datetime | None
-    tba: bool
+    metacritic: Optional[int] = None
+    metacritic_platforms: Optional[List[MetacriticPlatform]] = None
+    released: Optional[date] = None
+    tba: Optional[bool] = None
+    updated: Optional[datetime] = None
     background_image: Optional[str] = None
+    background_image_additional: Optional[str] = None
+    website: Optional[str] = None
     rating: float
     rating_top: int
-    ratings: List
+    ratings: List[Rating]
+
+    # This probably goes here
     ratings_count: int
-    reviews_text_count: int
+
+    reactions: Optional[dict[str, int]]  # TODO: Get the details of this
     added: int
-    added_by_status: Any
-    metacritic: Optional[int] = None
-    playtime: int
+    added_by_status: Optional[dict[str, int]]  # TODO: Get the details of this
+    playtime: Optional[int] = None
+    screenshots_count: int
+    movies_count: int
+    creators_count: int
+    achievements_count: int
+    parent_achievements_count: int
+    reddit_url: Optional[str] = None
+    reddit_name: Optional[str] = None
+    reddit_description: Optional[str] = None
+    reddit_logo: Optional[str] = None
+    reddit_count: int
+    twitch_count: int
+    youtube_count: int
+    reviews_text_count: int
+    ratings_count: int
     suggestions_count: int
-    updated: datetime
-    esrb_rating: Optional[EsrbRating] = None
-    user_game: Any
+    alternative_names: List[str]
+    metacritic_url: Optional[str] = None
+    parents_count: int
+    additions_count: int
+    game_series_count: int
+    user_game: Optional[Any] = None  # TODO: Get the details of this
     reviews_count: int
-    community_rating: Optional[int] = None
     saturated_color: str
     dominant_color: str
-    platforms: List[Platform]
-    parent_platforms: Optional[List[Platform]] = None
+
+    parent_platforms: Optional[List[PPlatform]] = None
+    platforms: List[GPlatform]
+    released_at: Optional[date] = None
+    requirements: Optional[Requirement] = None
+
+    suggestions_count: int
+    esrb_rating: Optional[EsrbRating] = None
+    community_rating: Optional[int] = None
+
     genres: Optional[List[Genre]] = None
     stores: Optional[List[GStore]] = None
     clip: Any
@@ -122,49 +201,11 @@ class Game(BaseModel):
     publishers: Optional[List[Publisher]] = None
     short_screenshots: Optional[List[GShortScreenshot]] = None
 
-    def __init__(self, **data):
-        print(dumps(data, indent=4))
-
-        # Remove any newlines from the description
-        if "description" in data:
-            data["description"] = data["description"].replace("\n", " ")
-            data["description"] = breakTag.subn("", data["description"])[0]
-
-        super().__init__(**data)
-
-
-class DetailedGame(BaseModel):
-    """
-    Represents a game returned from a details query.
-    """
-    slug: str
-    name: str
-    name_original: Optional[str] = None
-    description: str
-    metacritic: Optional[int] = None
-    metacritic_platforms: Optional[List[MetacriticPlatform]] = None
-    released: Optional[datetime] = None
-    tba: Optional[bool] = None
-    updated: Optional[datetime] = None
-    background_image: Optional[str] = None
-    background_image_additional: Optional[str] = None
-    website: str
-    rating: float
-    rating_top: int
-    ratings: Optional[List]  # TODO: Get the details of this
-    reactions: Optional[List]  # TODO: Get the details of this
-    added: Optional[int] = None
-    added_by_status: Optional[Dict]  # TODO: Get the details of this
-    playtime: Optional[int] = None
     screenshots_count: Optional[int] = None
     movies_count: Optional[int] = None
     creators_count: Optional[int] = None
     achievements_count: Optional[int] = None
     parent_achievements_count: Optional[int] = None
-    reddit_url: Optional[str] = None
-    reddit_name: Optional[str] = None
-    reddit_description: Optional[str] = None
-    reddit_logo: Optional[str] = None
     reddit_count: Optional[int] = None
     twitch_count: Optional[int] = None
     youtube_count: Optional[int] = None
@@ -172,13 +213,26 @@ class DetailedGame(BaseModel):
     ratings_count: Optional[int] = None
     suggestions_count: Optional[int] = None
     alternative_names: Optional[List[str]] = None
-    metacritic_url: Optional[str] = None
     parents_count: Optional[int] = None
     additions_count: Optional[int] = None
     game_series_count: Optional[int] = None
-    esrb_rating: Optional[EsrbRating] = None
-    platforms: Optional[List[Platform]] = None  # This platform is a different platform to ./platform.py
-    developers: Optional[List] = None  # TODO: Get the details of this
-    genres: Optional[List[Genre]] = None  # TODO: Get the details of this
     tags: Optional[List[Tag]] = None
-    publishers: Optional[List[Publisher]] = None  # TODO: Get the details of this
+    description_raw: Optional[str] = None
+
+    def __init__(
+            self,
+            **data
+    ) -> None:
+        # Remove any newlines from the description
+        if "description" in data:
+            data["description"] = data["description"].replace("\n", " ")
+            data["description"] = breakTag.subn("", data["description"])[0]
+
+        super().__init__(**data)
+        # getJsonDifference(data, self.dict())
+
+
+class DetailedGame(BaseModel):
+    """
+    Represents a game returned from a details query.
+    """
