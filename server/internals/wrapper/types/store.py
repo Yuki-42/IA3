@@ -16,7 +16,7 @@ class Store(BaseModel):
     id: int
     name: str
     slug: str
-    domain: str
-    games_count: int
-    image_background: str
+    domain: Optional[str] = None
+    games_count: Optional[int] = None
+    image_background: Optional[str] = None
     description: Optional[str] = None
