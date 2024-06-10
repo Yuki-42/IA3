@@ -5,6 +5,7 @@ Contains the Game class.
 from datetime import date, datetime
 from json import dumps
 from typing import Any, Dict, List, Literal, Optional
+from re import sub as regReplace
 
 # Third Party Imports
 from pydantic import BaseModel
@@ -12,6 +13,9 @@ from pydantic import BaseModel
 # Internal Imports
 from .store import Store
 from .tag import Tag
+from .developer import Developer
+from .genre import Genre
+from .publisher import Publisher
 
 
 class MetacriticPlatform(BaseModel):
@@ -106,14 +110,22 @@ class Game(BaseModel):
     dominant_color: str
     platforms: List[Platform]
     parent_platforms: List[Platform] | None
-    genres: List  # TODO: Get more info on this
+    genres: Optional[List[Genre]]
     stores: Optional[List[GStore]]
     clip: Any
     tags: List[Tag]
+    developers: Optional[List[Developer]]
+    publishers: Optional[List[Publisher]]
     short_screenshots: Optional[List[GShortScreenshot]] = None
 
     def __init__(self, **data):
         print(dumps(data, indent=4))
+
+        # Remove any newlines from the description
+        if "description" in data:
+            data["description"] = data["description"].replace("\n", "")
+            data["description"] = regReplace(r"\<\s*br\s*(\/)?\>", "", data["description"])
+
         super().__init__(**data)
 
 
@@ -162,3 +174,7 @@ class DetailedGame(BaseModel):
     game_series_count: Optional[int] = None
     esrb_rating: Optional[EsrbRating] = None
     platforms: Optional[List[Platform]] = None  # This platform is a different platform to ./platform.py
+    developers: Optional[List] = None  # TODO: Get the details of this
+    genres: Optional[List[Genre]] = None  # TODO: Get the details of this
+    tags: Optional[List[Tag]] = None
+    publishers: Optional[List[Publisher]] = None  # TODO: Get the details of this
