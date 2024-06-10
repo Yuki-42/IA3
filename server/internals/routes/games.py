@@ -5,12 +5,14 @@ Contains infoBlueprint routes. Has urlPrefix of /games.
 # Standard Library Imports
 
 # Third Party Imports
+from flask import request
 from flask.blueprints import Blueprint
 from flask_injector import inject
 
 # Internal Imports
 from ..helpers import renderTemplate
 from .api import API
+from ..wrapper.response import Response
 
 # Constants
 gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
@@ -27,6 +29,27 @@ def index() -> str:
         str: The rendered games page.
     """
     return renderTemplate("games/index.html")
+
+
+@gamesBlueprint.get("/search")
+@inject
+def search(
+        api: API
+) -> str:
+    """
+    Searches for games matching the query.
+
+    Returns:
+        str: The rendered search page.
+    """
+    args: dict = request.args.to_dict()
+
+    match args.get("type", "list"):
+        case "list":
+            return renderTemplate(
+                "games/index.html",
+                response=api.game.list(**args)
+            )
 
 
 @gamesBlueprint.get("/<string:gameId>")

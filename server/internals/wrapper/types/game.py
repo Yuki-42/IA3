@@ -64,7 +64,7 @@ class GStore(BaseModel):
     """
     Represents a store as returned from a game.
     """
-    id: int
+    id: Optional[int] = None
     store: Store
 
 
@@ -107,13 +107,13 @@ class Game(BaseModel):
     platforms: List[Platform]
     parent_platforms: List[Platform] | None
     genres: List  # TODO: Get more info on this
-    stores: List[GStore]
+    stores: Optional[List[GStore]]
     clip: Any
     tags: List[Tag]
     short_screenshots: Optional[List[GShortScreenshot]] = None
 
     def __init__(self, **data):
-        # print(dumps(data, indent=4))
+        print(dumps(data, indent=4))
         super().__init__(**data)
 
 
