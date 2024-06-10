@@ -16,6 +16,6 @@ class Genre(BaseModel):
     id: int
     name: str
     slug: str
-    games_count: int
-    image_background: str
+    games_count: Optional[int] = None
+    image_background: Optional[str] = None
     description: Optional[str] = None

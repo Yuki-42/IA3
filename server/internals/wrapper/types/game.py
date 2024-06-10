@@ -90,7 +90,7 @@ class Game(BaseModel):
     description: Optional[str] = None
     released: datetime | None
     tba: bool
-    background_image: str | None
+    background_image: Optional[str] = None
     rating: float
     rating_top: int
     ratings: List
@@ -98,7 +98,7 @@ class Game(BaseModel):
     reviews_text_count: int
     added: int
     added_by_status: Any
-    metacritic: int | None
+    metacritic: Optional[int] = None
     playtime: int
     suggestions_count: int
     updated: datetime
@@ -109,13 +109,13 @@ class Game(BaseModel):
     saturated_color: str
     dominant_color: str
     platforms: List[Platform]
-    parent_platforms: List[Platform] | None
-    genres: Optional[List[Genre]]
-    stores: Optional[List[GStore]]
+    parent_platforms: Optional[List[Platform]] = None
+    genres: Optional[List[Genre]] = None
+    stores: Optional[List[GStore]] = None
     clip: Any
     tags: List[Tag]
-    developers: Optional[List[Developer]]
-    publishers: Optional[List[Publisher]]
+    developers: Optional[List[Developer]] = None
+    publishers: Optional[List[Publisher]] = None
     short_screenshots: Optional[List[GShortScreenshot]] = None
 
     def __init__(self, **data):
