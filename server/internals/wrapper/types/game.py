@@ -123,7 +123,7 @@ class Game(BaseModel):
 
         # Remove any newlines from the description
         if "description" in data:
-            data["description"] = data["description"].replace("\n", "")
+            data["description"] = data["description"].replace("\n", " ")
             data["description"] = regReplace(r"\<\s*br\s*(\/)?\>", "", data["description"])
 
         super().__init__(**data)
