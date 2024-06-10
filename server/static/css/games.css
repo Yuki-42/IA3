@@ -16,14 +16,17 @@
 }
 
 .banner {
-    display: flex;
+    display: block;
+    max-height: 20vh;
     float: right;
-    max-height: 50vh;
-    grid-column-start: 2;
-    grid-column-end: 3;
 }
 
 .banner img {
     /* DO NOT STRETCH THE IMAGE */
     object-fit: cover;
+    max-width: 30vw;
+}
+
+.gallery-item-details {
+    cursor: pointer;
 }
