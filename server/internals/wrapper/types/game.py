@@ -128,7 +128,7 @@ class Game(BaseModel):
         # Remove any newlines from the description
         if "description" in data:
             data["description"] = data["description"].replace("\n", " ")
-            data["description"] = breakTag.subn("", data["description"])
+            data["description"] = breakTag.subn("", data["description"])[0]
 
         super().__init__(**data)
 
