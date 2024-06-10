@@ -136,13 +136,29 @@
             </div>
             <div id="see-also">
                 <!-- This is a list of games that this game is a parent of (or child of). -->
+                <h3>See Also</h3>
+                <ul>
+                    {% for game in game.parent_games %}
+                        <li>
+                            <a href="{{ url_for("games.game", slug=game.slug) }}">
+                                {{ game.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {% for game in game.child_games %}
+                        <li>
+                            <a href="{{ url_for("games.game", slug=game.slug) }}">
+                                {{ game.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
             </div>
             <div id="stores">
                 <h3>Stores</h3>
                 <ul>
                     {% for store in game.stores %}
                         <li>
-                            <a href="{{ store.store.domain }}">
+                            <a href="https://{{ store.store.domain }}">
                                 {{ store.store.name }}
                             </a>
                         </li>
