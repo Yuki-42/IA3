@@ -114,6 +114,13 @@
                         This game has not yet been rated by the ESRB.
                     </p>
                 {% endif %}
+                <div id="age-rating-image">
+                    {% if game.esrb_rating %}
+                        <img src="{{ url_for("static", filename="img/ratings/" + game.esrb_rating.slug + ".svg") }}" alt="{{ game.esrb_rating.name }}">
+                    {% else %}
+                        <img src="{{ url_for("static", filename="img/ratings/rating-pending.svg") }}" alt="Rating Pending">
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div id="centre">
@@ -125,6 +132,21 @@
                     <li>Metacritic: {{ game.metacritic }}</li>
                     <li>Average User Rating: {{ game.rating }}</li>
                     <li>Review count: {{ game.ratings_count }}</li>
+                </ul>
+            </div>
+            <div id="see-also">
+                <!-- This is a list of games that this game is a parent of (or child of). -->
+            </div>
+            <div id="stores">
+                <h3>Stores</h3>
+                <ul>
+                    {% for store in game.stores %}
+                        <li>
+                            <a href="{{ store.store.domain }}">
+                                {{ store.store.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
