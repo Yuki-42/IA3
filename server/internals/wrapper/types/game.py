@@ -106,7 +106,7 @@ class Game(BaseModel):
     playtime: int
     suggestions_count: int
     updated: datetime
-    esrb_rating: EsrbRating | None
+    esrb_rating: Optional[EsrbRating] = None
     user_game: Any
     reviews_count: int
     community_rating: Optional[int] = None

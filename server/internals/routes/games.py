@@ -5,12 +5,11 @@ Contains infoBlueprint routes. Has urlPrefix of /games.
 # Standard Library Imports
 
 # Third Party Imports
-from flask import request
+from flask import request, render_template as renderTemplate
 from flask.blueprints import Blueprint
 from flask_injector import inject
 
 # Internal Imports
-from ..helpers import renderTemplate
 from .api import API
 from ..wrapper.response import Response
 

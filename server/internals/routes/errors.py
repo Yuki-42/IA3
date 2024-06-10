@@ -5,11 +5,9 @@ Contains errors routes.
 # Standard Library Imports
 
 # Third Party Imports
+from flask import render_template as renderTemplate
 from flask.blueprints import Blueprint
 from werkzeug.exceptions import BadRequest, Forbidden, NotFound, Unauthorized
-
-# Internal Imports
-from ..helpers import renderTemplate
 
 # Create error blueprint
 errorsBlueprint: Blueprint = Blueprint("errors", __name__, url_prefix="/errors")

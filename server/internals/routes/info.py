@@ -5,10 +5,10 @@ Contains infoBlueprint routes. Has urlPrefix of /.
 # Standard Library Imports
 
 # Third Party Imports
+from flask import render_template as renderTemplate
 from flask.blueprints import Blueprint
 
 # Internal Imports
-from ..helpers import renderTemplate
 
 # Constants
 infoBlueprint: Blueprint = Blueprint("info", __name__, url_prefix="/")

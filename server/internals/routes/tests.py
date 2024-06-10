@@ -5,12 +5,11 @@ Contains testBlueprint routes. Has urlPrefix of /tests.
 from typing import Any, Dict, List, Tuple
 
 # Third Party Imports
-from flask import request
+from flask import request, render_template as flaskRenderTemplate
 from flask.blueprints import Blueprint
 from flask_injector import inject
 
 # Internal Imports
-from ..helpers import renderTemplate as helpersRenderTemplate
 from ..wrapper import API, Response
 
 # Standard Library Imports
@@ -59,7 +58,7 @@ def renderTemplate(template: str, **kwargs) -> str:
     """
     # Extract the parent folder of the template.
     path: str = template.split("/")[0] if "/" in template else None
-    return helpersRenderTemplate(
+    return flaskRenderTemplate(
         f"tests/{template}",
         testType=path,
         **kwargs

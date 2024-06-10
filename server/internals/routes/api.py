@@ -7,10 +7,8 @@ from typing import Dict
 from flask import request
 from flask.blueprints import Blueprint
 from flask_injector import inject
-from werkzeug.exceptions import Unauthorized
 
 # Internal Imports
-from ..config import Config
 from ..wrapper import API
 
 # Standard Library Imports
