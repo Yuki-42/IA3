@@ -261,7 +261,7 @@ class Requester:
             response.raise_for_status()
         except HTTPError as e:
             if e.response.status_code == 502:
-                raise RBadGateway(e.strerror.replace(self.config.api.key, "API_KEY"))
+                raise RBadGateway(e.strerror.replace(self.config.api.key, "API_KEY") if e.strerror is not None else None)
 
         self.logger.debug(f"{requestId} - Cache miss")
 
