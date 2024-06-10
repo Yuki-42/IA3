@@ -5,7 +5,7 @@ Contains the Game class.
 from datetime import date, datetime
 from json import dumps
 from typing import Any, Dict, List, Literal, Optional
-from re import sub as regReplace
+from re import compile
 
 # Third Party Imports
 from pydantic import BaseModel
@@ -16,6 +16,10 @@ from .tag import Tag
 from .developer import Developer
 from .genre import Genre
 from .publisher import Publisher
+
+
+# CONSTANTS
+breakTag = compile(r"<\s*br\s*(/)?>")  # Pre-compile the regex for br tags at application startup to save time
 
 
 class MetacriticPlatform(BaseModel):
@@ -124,7 +128,7 @@ class Game(BaseModel):
         # Remove any newlines from the description
         if "description" in data:
             data["description"] = data["description"].replace("\n", " ")
-            data["description"] = regReplace(r"\<\s*br\s*(\/)?\>", "", data["description"])
+            data["description"] = breakTag.subn("", data["description"])
 
         super().__init__(**data)
 
