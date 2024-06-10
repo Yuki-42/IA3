@@ -4,6 +4,7 @@ Main file for IA3 Project.
 
 # Standard Library Imports
 from base64 import b64decode
+from datetime import datetime
 from os import chdir, getcwd
 from typing import List
 from uuid import uuid4
@@ -108,6 +109,17 @@ def beforeRequest() -> Response | None:
         return fail
 
     pass
+
+
+@app.context_processor
+def processor() -> dict:
+    """
+    Injects site-wide variables into the template context.
+    """
+    return {
+        "year": datetime.now().year,
+        "reCapchaSiteKey": config.server.recaptcha.siteKey
+    }
 
 
 @app.after_request
