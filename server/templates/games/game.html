@@ -9,6 +9,7 @@
 {% block content %}
     <section id="main" class="grid-margins">
         <div id="left">
+            <h1>Details</h1>
             <table>
                 <tr>
                     <th>Keys</th>
@@ -39,7 +40,26 @@
                         </ul>
                     </td>
                 </tr>
-
+                <tr>
+                    <th>Developers</th>
+                    <td>
+                        <ul>
+                            {% for developer in game.developers %}
+                                <li>{{ developer.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Publishers</th>
+                    <td>
+                        <ul>
+                            {% for publisher in game.publishers %}
+                                <li>{{ publisher.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
             </table>
             <div id="age-rating">
                 <table id="appropriate-audiences">
