@@ -21,4 +21,4 @@ class Developer(BaseModel):
     slug: str
     games_count: Optional[int] = None
     image_background: str
-    description: str
+    description: Optional[str] = None
