@@ -11,6 +11,7 @@ from flask_injector import inject
 
 # Internal Imports
 from .api import API
+from ..wrapper import Game
 from ..wrapper.response import Response
 
 # Constants
@@ -67,6 +68,20 @@ def game(
     Returns:
         str: The rendered game page.
     """
+    gameData: Game = api.game.details(gameId)
+
+    try:
+        # Check request cookies for age
+        age: int = request.cookies.get("age", 0, int)
+    except TypeError:
+        age: int = 0
+
+    if gameData.esrb_rating.slug == "adults-only" and age < 18:
+        return renderTemplate("games/age.html", requiredAge=18)
+
+    if gameData.esrb_rating.slug == "mature" and age < 17:
+        return renderTemplate("games/age.html", requiredAge=17)
+
     return renderTemplate(
         "games/game.html",
         game=api.game.details(gameId)

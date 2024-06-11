@@ -109,7 +109,7 @@ class GStore(BaseModel):
     Represents a store as returned from a game.
     """
     id: Optional[int] = None
-    url: Optional[str]
+    url: Optional[str] = None
     store: Store
 
 
@@ -155,9 +155,9 @@ class Game(BaseModel):
     # This probably goes here
     ratings_count: int
 
-    reactions: Optional[dict[str, int]]  # TODO: Get the details of this
+    reactions: Optional[dict[str, int]] = None  # TODO: Get the details of this
     added: int
-    added_by_status: Optional[dict[str, int]]  # TODO: Get the details of this
+    added_by_status: Optional[dict[str, int]] = None  # TODO: Get the details of this
     playtime: Optional[int] = None
     screenshots_count: int
     movies_count: int
