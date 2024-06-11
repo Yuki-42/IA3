@@ -45,6 +45,13 @@
     </div>
 </header>
 <main>
+    <div id="age-modal" class="modal">
+        <div class="modal-content">
+            <p>Before you can access this site, we need to know your age.</p>
+            <label><input id="age-input" type="date" placeholder="Enter your date of birth."></label>
+            <button id="age-submit">Submit</button>
+        </div>
+    </div>
     {% block content %}{% endblock %}
 </main>
 <footer>

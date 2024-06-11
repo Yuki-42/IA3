@@ -70,6 +70,59 @@ function fillError(div, message) {
     div.appendChild(error);
 }
 
+function ageCheck() {
+    // Show the age modal if the user does not have an age cookie
+    if (getCookie("age")) {
+        return;
+    }
+
+    showAgeModal();
+
+    // Add the event listener to the date input
+    let dateInput = document.getElementById("age-input");
+
+    dateInput.addEventListener("change", () => {
+        // Get the value
+        let value = dateInput.value;
+
+        // Set the cookie
+        setCookie("age", value);
+    });
+
+    // Add the event listener to the submit button
+    let submitButton = document.getElementById("age-submit");
+
+    submitButton.addEventListener("click", () => {
+        // Get the value
+        let value = dateInput.value;
+
+        // Get the current date
+        let now = new Date();
+
+        // Calculate the age
+        let age = now.getFullYear() - new Date(value).getFullYear();
+
+        // Set age cookie
+        setCookie("age", age);
+
+        // Hide the modal
+        hideAgeModal();
+    });
+}
+
+function showAgeModal(){
+    // Show the age modal
+    let modal = document.getElementById("age-modal");
+    modal.style.display = "block";
+}
+
+function hideAgeModal(){
+    // Hide the age modal
+    let modal = document.getElementById("age-modal");
+    modal.style.display = "none";
+}
+
+
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", () => {
     // Get the current theme
@@ -83,5 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add the event listener to the theme toggle
     themeToggle.addEventListener("change", toggleTheme);
+
+    // Check the user's age
+    ageCheck();
 });
 

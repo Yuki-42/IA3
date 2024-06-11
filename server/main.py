@@ -22,7 +22,7 @@ from internals.routes import *
 from internals.wrapper.api import API
 
 # Constants
-EXPECTED_COOKIES: List[str] = ["theme"]
+EXPECTED_COOKIES: List[str] = ["theme", "age"]
 
 # Before we do anything, check if the working directory is correct. This is a fix for running the server from parent directory using the start script.
 if not getcwd().endswith("server"):
@@ -102,13 +102,10 @@ def beforeRequest() -> Response | None:
         return fail
 
     # Decode the authorization header and check if it is correct
-
     username, password = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")
 
     if password != config.server.auth.password or username != config.server.auth.username:
         return fail
-
-    pass
 
 
 @app.context_processor
