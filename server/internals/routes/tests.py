@@ -115,7 +115,7 @@ def getRequestArguments(
     """
     # Get the request arguments.
     requestArguments: Dict[str, Any] = {}
-    print(keys)
+
     for key, type_ in keys:
         value: Any = request.args.get(key)
         if value is None:
