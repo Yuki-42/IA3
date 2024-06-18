@@ -3,6 +3,7 @@ Contains infoBlueprint routes. Has urlPrefix of /games.
 """
 
 # Standard Library Imports
+from datetime import date, datetime, timedelta
 
 # Third Party Imports
 from flask import request, render_template as renderTemplate
@@ -31,15 +32,20 @@ def index(
         str: The rendered games page.
     """
     # Need trending, most popular (2007), Most popular of all time
-    trendingData: Response = api.game.list(dates=[], ordering="-rating")  # Games between the start of the year and the end of the year ordering -added
-    mostPopularTimespan: Response = api.game.list(ordering="-rating")  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
-    mostPopularAlltime: Response = api.game.list(ordering="-rating")  # Most popular games all time
+    trendingDates: list[date] = [
+        date.today() - timedelta(days=30*12),
+        date.today()
+    ]
+
+    trendingData: Response = api.game.list(dates=trendingDates, ordering="-metacritic", pageSize=6)  # Games between the start of the year and the end of the year ordering -added
+    mostPopularTimespan: Response = api.game.list(ordering="-metacritic")  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
+    mostPopularAlltime: Response = api.game.list(ordering="-metacritic")  # Most popular games all time
 
     return renderTemplate(
         "games/index.html",
-        trending=trendingData,
-        dateRange=mostPopularTimespan,
-        mostPopular=mostPopularAlltime,
+        trending=trendingData.results,
+        dateRange=mostPopularTimespan.results,
+        mostPopular=mostPopularAlltime.results,
     )
 
 

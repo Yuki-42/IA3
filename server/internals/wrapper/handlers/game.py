@@ -101,7 +101,7 @@ class GameHandler:
             genres: List[int | str | Genre] = None,
             tags: List[int | str | Tag] = None,
             creators: List[int | str] = None,
-            dates: List[str] = None,
+            dates: List[date] = None,
             updated: str = None,
             platformsCount: int = None,
             metacritic: List[int] = None,
@@ -148,6 +148,11 @@ class GameHandler:
             "page": page,
             "page_size": pageSize
         }
+
+        print(dates)
+
+        # Convert the dates into a list of strings in the YYYY-MM-dd format
+        dates = [ldate.strftime('%Y-%m-%d') for ldate in dates] if dates else None
 
         # Add parameters
         parameters = addParameters(
