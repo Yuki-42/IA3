@@ -42,3 +42,9 @@ nav a:hover {
     color: var(--text-primary);
     background-color: var(--yellow-1);
 }
+
+#age-submit {
+    background-color: var(--yellow-1);
+    border-color: var(--yellow-1);
+    color: var(--text-primary);
+}

@@ -261,4 +261,23 @@ code, pre {
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+}
+
+#age-submit {
+    border-radius: 5px;
+    padding: 0.5em;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.centre-flex {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
 }
