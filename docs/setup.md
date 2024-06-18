@@ -13,11 +13,22 @@ The following guide will walk you through the setup of this project for an outwa
 
 This project uses Python3.12 as the python version. It will not run on anything lower.
 
+Python3.12 is not available in the default repositories. You will need to add the deadsnakes repository:
+
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa;
+```
+
 Install python3.12 and pip3:
 
 ```bash
 sudo apt update;
 sudo apt install python3.12 python3-pip;
+```
+
+Install the following packages:
+```bash
+sudo apt install nginx screen git python3.12-venv authbind gunicorn;
 ```
 
 ## Step 2: Clone the Repository
