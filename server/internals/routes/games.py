@@ -21,14 +21,26 @@ gamesBlueprint: Blueprint = Blueprint("games", __name__, url_prefix="/games")
 # Routes
 @gamesBlueprint.get("/")
 @inject
-def index() -> str:
+def index(
+        api: API,
+) -> str:
     """
     The games page.
 
     Returns:
         str: The rendered games page.
     """
-    return renderTemplate("games/index.html")
+    # Need trending, most popular (2007), Most popular of all time
+    trendingData: Response = api.game.list(dates=[], ordering="-rating")  # Games between the start of the year and the end of the year ordering -added
+    mostPopularTimespan: Response = api.game.list(ordering="-rating")  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
+    mostPopularAlltime: Response = api.game.list(ordering="-rating")  # Most popular games all time
+
+    return renderTemplate(
+        "games/index.html",
+        trending=trendingData,
+        dateRange=mostPopularTimespan,
+        mostPopular=mostPopularAlltime,
+    )
 
 
 @gamesBlueprint.get("/search")
@@ -75,6 +87,12 @@ def game(
         age: int = request.cookies.get("age", 0, int)
     except TypeError:
         age: int = 0
+
+    if gameData.esrb_rating is None:
+        return renderTemplate(
+            "games/game.html",
+            game=api.game.details(gameId)
+        )
 
     if gameData.esrb_rating.slug == "adults-only" and age < 18:
         return renderTemplate("games/age.html", requiredAge=18)
