@@ -10,7 +10,7 @@
     <section id="main" class="grid-margins">
         <div id="left"></div>
         <div id="centre">
-            <h1>{{ game.name }}</h1>
+            <h1 id="game-title">{{ game.name }}</h1>
             <div class="banner centred">
                 <img src="{{ game.background_image }}" alt="<strong>{{ game.title }}</strong> background image">
             </div>
@@ -61,58 +61,60 @@
         </div>
         <div id="right">
             <h2>Details</h2>
-            <table>
-                <tr>
-                    <th>Keys</th>
-                    <td>
-                        <ul>
-                            <li>Id: {{ game.id }}</li>
-                            <li>Slug: {{ game.slug }}</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Genres</th>
-                    <td>
-                        <ul>
-                            {% for genre in game.genres %}
-                                <li>{{ genre.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Platforms</th>
-                    <td>
-                        <ul>
-                            {% for platform in game.platforms %}
-                                <li>{{ platform.platform.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Developers</th>
-                    <td>
-                        <ul>
-                            {% for developer in game.developers %}
-                                <li>{{ developer.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Publishers</th>
-                    <td>
-                        <ul>
-                            {% for publisher in game.publishers %}
-                                <li>{{ publisher.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-            <div id="age-rating">
+            <div id="keys" class="details-table">
+                <h4>Keys</h4>
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ game.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Slug</th>
+                        <td>{{ game.slug }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="genres" class="details-table">
+                <h4>Genres</h4>
+                <table>
+                    {% for genre in game.genres %}
+                        <tr>
+                            <td>{{ genre.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="platforms" class="details-table">
+                <h4>Platforms</h4>
+                <table>
+                    {% for platform in game.platforms %}
+                        <tr>
+                            <td>{{ platform.platform.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="developers" class="details-table">
+                <h4>Developers</h4>
+                <table>
+                    {% for developer in game.developers %}
+                        <tr>
+                            <td>{{ developer.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="publishers" class="details-table">
+                <h4>Publishers</h4>
+                <table>
+                    {% for publisher in game.publishers %}
+                        <tr>
+                            <td>{{ publisher.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="age-rating" class="details-table">
                 <table id="appropriate-audiences">
                     <tr>
                         <th>Audience</th><th>Appropriate</th>

@@ -15,8 +15,24 @@
     margin-right: 2vw;
 }
 
+#game-title {
+    font-size-adjust: 1.2;
+}
+
+.details-table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+
+#age-rating-image {
+    max-width: 50px;
+    max-height: 50px;
+}
+
 h1 {
-    font-size-adjust: 1.3;
+
 }
 
 .banner {
