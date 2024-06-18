@@ -16,12 +16,12 @@
 </head>
 <body>
 <header class="grid-margins">
-    <div id="header-left">
+    <div id="header-left" class="header-section">
         <div id="school-logo" class="school-logo">
             <img src="{{ url_for("static", filename="img/school-logo.png") }}" alt="School Logo">
         </div>
     </div>
-    <div id="header-centre">
+    <div id="header-centre" class="header-section">
         <nav>
             <div>
                 <a href="{{ url_for("info.index") }}">Home</a>
@@ -39,7 +39,7 @@
             -->
         </nav>
     </div>
-    <div id="header-right">
+    <div id="header-right" class="header-section">
         <div id="theme-selector">
             <label for="theme-selector-checkbox">Dark Mode</label>
             <input id="theme-selector-checkbox" type="checkbox">
