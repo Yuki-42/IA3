@@ -23,7 +23,7 @@ Install python3.12 and pip3:
 
 ```bash
 sudo apt update;
-sudo apt install python3.12 python3-pip;
+sudo apt install python3.12 python3.12-pip python3.12-venv;
 ```
 
 Install the following packages:
