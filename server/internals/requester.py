@@ -250,12 +250,11 @@ class Requester:
         headers["User-Agent"] = f"AHSHS IA3 {self.config.server.owner.name}"
         headers["From"] = self.config.server.owner.email
 
-        attempting: bool = True
         attempts: int = 0
         response: Response | None = None
 
-        while attempting:
-            self.logger.debug(f"{requestId} - Attempt {attempts + 1}")
+        while attempts < 5:
+            self.logger.debug(f"{requestId} - Attempt {attempts}")
             response: Response = method(
                 url,
                 params=params,
@@ -264,8 +263,6 @@ class Requester:
             attempts += 1  # Attempts counter
 
             if response.status_code == 502:
-                if attempts >= 5:
-                    raise RBadGateway(response=response)
                 continue  # Try again
 
             try:
