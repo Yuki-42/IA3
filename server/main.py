@@ -78,14 +78,14 @@ def beforeRequest() -> Response | None:
     g.uuid = uuid4()
     g.completed = False
     logger.info(  # 2 spaces here to match the indentation of the response log
-        f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.headers["X-Forwarded-For"] if "X-Forwarded-For" in request.headers else request.remote_addr} with "
+        f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.headers['X-Forwarded-For'] if 'X-Forwarded-For' in request.headers else request.remote_addr} with "
         f"with cookies {request.cookies.to_dict()}"
     )
 
     # Check if the request is for static
     if request.path == "/static/css/_colours.css" and request.method == "GET":
         # Return the correct colour css file based on the theme
-        return app.send_static_file(f"css/{request.cookies.get("theme", config.server.theme)}_colours.css")
+        return app.send_static_file(f"css/{request.cookies.get('theme', config.server.theme)}_colours.css")
 
     # Check if the request is coming from the server or is from one of the development machines
     if request.remote_addr == config.server.host or (request.remote_addr in ["192.168.0.223"] and config.server.debug):
@@ -172,7 +172,7 @@ print(f"Server starting with username {config.server.auth.username} and password
 # Run the app
 if __name__ == "__main__":
     # Log the start of the server including what address and port it is running on
-    logger.info(f"Server started on following addresses: {f"{"https" if config.server.ssl else "http"}://{config.server.host}:{config.server.port}"}")
+    logger.info(f"Server started on following addresses: {f'{"https" if config.server.ssl else "http"}://{config.server.host}:{config.server.port}'}")
 
     app.run(
         host=config.server.host,
