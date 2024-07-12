@@ -263,7 +263,9 @@ class Requester:
             )
             attempts += 1  # Attempts counter
 
-            if response.status_code == 502 and attempts < 5:
+            if response.status_code == 502:
+                if attempts >= 5:
+                    raise RBadGateway(response=response)
                 continue  # Try again
 
             try:
