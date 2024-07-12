@@ -255,6 +255,7 @@ class Requester:
         response: Response | None = None
 
         while attempting:
+            self.logger.debug(f"{requestId} - Attempt {attempts + 1}")
             response: Response = method(
                 url,
                 params=params,
