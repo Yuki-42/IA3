@@ -115,6 +115,7 @@ def processor() -> dict:
     """
     return {
         "year": datetime.now().year,
+        "owner": config.server.owner,
         "reCapchaSiteKey": config.server.recaptcha.siteKey
     }
 
