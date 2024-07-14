@@ -127,7 +127,7 @@ footer {
     padding: 1em 0; /* top right bottom left */
     max-height: min-content;
     min-height: 4vh;
-    color: var(--footer-colour);
+    background-color: var(--footer-colour);
 }
 
 footer #site-info {
@@ -326,10 +326,7 @@ code, pre {
     justify-content: center;
 }
 
-a[data-theme="light"] {
+a {
+    text-decoration: none;
     color: var(--text-primary);
-}
-
-a[data-theme="dark"] {
-    color: var(--text-secondary);
 }
