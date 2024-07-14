@@ -3,21 +3,20 @@ Main file for IA3 Project.
 """
 
 # Standard Library Imports
-from base64 import b64decode
 from datetime import datetime
+from logging import getLogger
 from os import chdir, getcwd
 from typing import List
 from uuid import uuid4
-from logging import getLogger
 
 # Third Party Imports
-from flask import Flask, g, request, Response
+from flask import Flask, Response, g, request
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 
+from internals.clogging import SuppressedLoggerAdapter, createLogger
 # Local Imports
 from internals.config import Config
-from internals.clogging import SuppressedLoggerAdapter, createLogger
 from internals.routes import *
 from internals.wrapper.api import API
 
