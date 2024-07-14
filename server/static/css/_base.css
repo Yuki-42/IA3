@@ -1,39 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import url("https://fonts.googleapis.com/css?family=JetBrains Mono");
 
-:root[data-theme="dark"] {
-    --primary-background: #121212;
-    --secondary-background: #1c1c1c;
-    --code-normal: #808080;
-    --code-yellow: #f5d342;
-    --yellow-1: #f2cf1c;
-    --yellow-2: #ccaa00;
-    --text-black: #000000;
-    --text-white: #ffffff;
-    --green-1: #049a49;
-    --text-primary: #d4d4d4;
-    --text-secondary: #000000;
-}
-
-:root[data-theme="light"] {
-    --primary-background: #ffffff;
-    --secondary-background: #f1f1f1;
-    --code-normal: #cccccc;
-    --code-yellow: #f5d342;
-    --yellow-1: #dbb700;
-    --yellow-2: #ccaa00;
-    --text-black: #000000;
-    --text-white: #ffffff;
-    --green-1: #034320;
-    --text-primary: #000000;
-    --text-secondary: #ffffff;
-}
-
 :root {
     font-family: "Open Sans", sans-serif;
     background-color: var(--primary-background);
     color: var(--text-primary);
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 1s, color 1s;  !important;
     overflow-x: clip;
 }
 
@@ -68,6 +40,42 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    background-color: var(--primary-background);
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] {
+    --primary-background: #121212;
+    --secondary-background: #1c1c1c;
+    --code-normal: #808080;
+    --code-yellow: #f5d342;
+    --yellow-1: #f2cf1c;
+    --yellow-2: #ccaa00;
+    --text-black: #000000;
+    --text-white: #ffffff;
+    --green-1: #049a49;
+    --text-primary: #d4d4d4;
+    --text-secondary: #000000;
+
+    --header-background: var(--secondary-background);
+    --footer-colour: var(--secondary-background);
+}
+
+body[data-theme="light"] {
+    --primary-background: #ffffff;
+    --secondary-background: #f1f1f1;
+    --code-normal: #cccccc;
+    --code-yellow: #f5d342;
+    --yellow-1: #dbb700;
+    --yellow-2: #ccaa00;
+    --text-black: #000000;
+    --text-white: #ffffff;
+    --green-1: #034320;
+    --text-primary: #000000;
+    --text-secondary: #ffffff;
+
+    --header-background: var(--green-1);
+    --footer-colour: var(--yellow-1);
 }
 
 header {
@@ -75,6 +83,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: var(--header-background);
 }
 
 .header-section {
@@ -93,7 +102,7 @@ header nav {
 }
 
 header nav div a {
-    color: var(--text-secondary);
+    color: var(--text-white);
     text-decoration: none;
     padding: 0.5em 1em;
     font-size: larger;
@@ -118,6 +127,7 @@ footer {
     padding: 1em 0; /* top right bottom left */
     max-height: min-content;
     min-height: 4vh;
+    color: var(--footer-colour);
 }
 
 footer #site-info {
@@ -314,4 +324,12 @@ code, pre {
     display: -webkit-flex;
     flex-direction: column;
     justify-content: center;
+}
+
+a[data-theme="light"] {
+    color: var(--text-primary);
+}
+
+a[data-theme="dark"] {
+    color: var(--text-secondary);
 }
