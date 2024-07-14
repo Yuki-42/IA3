@@ -12,17 +12,17 @@ function setCookie(name, value) {
 
 function toggleTheme() {
     // Get the current theme
-    let theme = getCookie("theme");
+    let theme = document.body.getAttribute("data-theme");
 
     // Set the theme to the opposite of the current theme
     if (theme === "dark") {
-        setCookie("theme", "light");
+        document.body.setAttribute("data-theme", "light");
     } else {
-        setCookie("theme", "dark");
+        document.body.setAttribute("data-theme", "dark");
     }
 
     // Reload the stylesheets
-    reloadColours();
+    // reloadColours();
 }
 
 
@@ -45,11 +45,11 @@ function _get(url, parameters = {}) {
     });
 }
 
-function reloadColours() {
-    let colours = document.getElementById("colours");
-
-    colours.href = colours.href.replace(/\?.*|$/, "?reload=" + new Date().getTime());
-}
+// function reloadColours() {
+//     let colours = document.getElementById("colours");
+//
+//     colours.href = colours.href.replace(/\?.*|$/, "?reload=" + new Date().getTime());
+// }
 
 
 // Adds a child div with the message to the parent div
@@ -126,7 +126,14 @@ function hideAgeModal(){
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", () => {
     // Get the current theme
-    let theme = getCookie("theme");
+    let theme = document.body.getAttribute("data-theme");
+
+    // Check if the theme is set
+    if (!theme) {
+        // Set the theme to light
+        document.body.setAttribute("data-theme", "light");
+        theme = "light";
+    }
 
     // Get the theme toggle element
     let themeToggle = document.getElementById("theme-selector-checkbox");

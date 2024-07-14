@@ -1,3 +1,4 @@
+/*
 :root {
     --primary-background: #ffffff;
     --secondary-background: #f1f1f1;
@@ -11,7 +12,7 @@
     --text-primary: #000000;
     --text-secondary: #ffffff;
 }
-
+*/
 header {
     background: var(--green-1);
 }
