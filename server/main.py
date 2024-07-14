@@ -39,9 +39,11 @@ logger: SuppressedLoggerAdapter = createLogger(
     config=config
 )
 
-# Kill the standard werkzeug logger
-werkzeugLogger = getLogger("werkzeug")
-werkzeugLogger.disabled = True
+# Check environment variable debug
+if not config.server.debug:
+    # Kill the standard werkzeug logger
+    werkzeugLogger = getLogger("werkzeug")
+    werkzeugLogger.disabled = True
 
 # Connect to the API
 api: API = API(config)
@@ -65,7 +67,7 @@ app.register_blueprint(errorsBlueprint)
 
 
 @app.before_request
-def beforeRequest() -> Response | None:
+def beforeRequest() -> None:
     """
     Runs before each request. Ensures that the user is logged in.
 
@@ -81,11 +83,7 @@ def beforeRequest() -> Response | None:
         f"Request  [{g.uuid}] [{request.method}] [{request.path}] from {request.headers['X-Forwarded-For'] if 'X-Forwarded-For' in request.headers else request.remote_addr} with "
         f"with cookies {request.cookies.to_dict()}"
     )
-
-    # Check if the request is for static
-    if request.path == "/static/css/_colours.css" and request.method == "GET":
-        # Return the correct colour css file based on the theme
-        return app.send_static_file(f"css/{request.cookies.get('theme', config.server.theme)}_colours.css")
+    return
 
 
 @app.context_processor
@@ -116,6 +114,7 @@ def afterRequest(
     g.completed = True
     g.response = response
     logger.info(f"Response [{g.uuid}] [{response.status_code}]")
+
     # Add a theme cookie to the response if the user doesn't have one
     if "theme" not in request.cookies:
         response.set_cookie("theme", config.server.theme, samesite="Strict")

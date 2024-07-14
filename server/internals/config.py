@@ -56,7 +56,7 @@ class Config:
             """
             self.host: str = settings.server.host if settings.server.host != "auto" else gethostbyname(gethostname())
             self.port: int = settings.server.port
-            self.debug: bool = settings.server.debug == "True"
+            self.debug: bool = settings.server.debug
             self.secretKey: str = settings.server.secretKey if settings.server.secretKey != "auto" else tokenUrlsafe(32)
             self.theme: str = settings.server.theme
 

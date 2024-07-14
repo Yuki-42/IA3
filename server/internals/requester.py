@@ -6,6 +6,7 @@ from hashlib import sha512
 from time import time
 from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
+from threading import Lock
 
 # Third Party Imports
 from requests import Response, delete, get, post, put, HTTPError
@@ -22,14 +23,16 @@ cacheLastChecked: float = time()
 Custom errors for Requester calls.
 """
 
+# Create a multi-thread lock for cache requests and a timeout of 100ms to acquire lock
+cacheLock: Lock = Lock()
+
 
 class RBadGateway(HTTPError):
     """
     Raised when a 502 Bad Gateway error is returned from the API.
     """
 
-
-
+# TODO: Add a lock for iteration
 def checkCache() -> None:
     """
     Checks the cache to see if any requests have expired.
