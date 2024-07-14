@@ -146,8 +146,6 @@ def configureDependencies(
 # Add dependencies
 FlaskInjector(app=app, modules=[configureDependencies])
 
-print(f"Server starting with username {config.server.auth.username} and password {config.server.auth.password}")
-
 # Run the app
 if __name__ == "__main__":
     # Log the start of the server including what address and port it is running on
@@ -156,6 +154,5 @@ if __name__ == "__main__":
     app.run(
         host=config.server.host,
         port=config.server.port,
-        debug=config.server.debug,
-        ssl_context=(config.server.ssl.cert, config.server.ssl.key) if config.server.ssl.enabled else None
+        debug=config.server.debug
     )

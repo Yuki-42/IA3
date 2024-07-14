@@ -45,8 +45,6 @@ class Config:
             "secretKey",
             "theme",
             "owner",
-            "auth",
-            "ssl",
             "recaptcha"
         ]
 
@@ -61,8 +59,6 @@ class Config:
             self.theme: str = settings.server.theme
 
             self.owner = self.Owner()
-            self.auth = self.Auth()
-            self.ssl = self.Ssl()
             self.recaptcha = self.Recaptcha()
 
         class Owner:
@@ -80,49 +76,6 @@ class Config:
                 """
                 self.name: str = settings.server.owner.name
                 self.email: str = settings.server.owner.email  # This is throwing an error
-
-        class Auth:
-            """
-            Contains auth related config data.
-            """
-            __slots__ = [
-                "username",
-                "password"
-            ]
-
-            def __init__(self) -> None:
-                """
-                Initializes the auth object.
-                """
-                username: str = settings.server.auth.username
-                password: str = settings.server.auth.password
-
-                # If the any of the values are "auto", generate a 16 digit random string
-                if username == "auto":
-                    username = tokenUrlsafe(6)
-                if password == "auto":
-                    password = tokenUrlsafe(16)
-
-                self.username = username
-                self.password = password
-
-        class Ssl:
-            """
-            Contains SSL related config data.
-            """
-            __slots__ = [
-                "cert",
-                "key",
-                "active",
-            ]
-
-            def __init__(self) -> None:
-                """
-                Initializes the ssl object.
-                """
-                self.cert: str = settings.server.ssl.cert
-                self.key: str = settings.server.ssl.key
-                self.active: bool = settings.server.ssl.active == "True"
 
         class Recaptcha:
             """
