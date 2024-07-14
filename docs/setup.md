@@ -56,13 +56,18 @@ pip3 install -r requirements.txt;
 Install Nginx:
 
 ```bash
-sudo apt install nginx;
+sudo apt install nginx apache2-utils;
 ```
 
 Remove the default configuration:
 
 ```bash
 sudo rm /etc/nginx/sites-enabled/default;
+```
+
+Create authentication file for your site and add a user:
+```bash
+sudo htpasswd -c /etc/nginx/.passwords admin;
 ```
 
 Create a new configuration file:
@@ -88,7 +93,10 @@ server {
     client_max_body_size 4G;
 
     # set the correct host(s) for your site
-    server_name ia3.dafox.au;
+    server_name ia3.YOURDOMAIN.au;
+    
+    auth_basic "Site In Development";
+    auth_basic_user_file /etc/nginx/.passwords;
 
     keepalive_timeout 5;
 

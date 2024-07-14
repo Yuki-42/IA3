@@ -87,26 +87,6 @@ def beforeRequest() -> Response | None:
         # Return the correct colour css file based on the theme
         return app.send_static_file(f"css/{request.cookies.get('theme', config.server.theme)}_colours.css")
 
-    # # Check if the request is coming from the server or is from one of the development machines
-    # if request.remote_addr == config.server.host or (request.remote_addr in ["192.168.0.223"] and config.server.debug):
-    #     # Continue to route
-    #     return
-    #
-    # fail: Response = Response(
-    #     "Unauthorized",
-    #     headers={"WWW-Authenticate": "Basic realm='Login Required.'"},
-    #     status=401
-    # )
-    #
-    # if "Authorization" not in request.headers:
-    #     return fail
-    #
-    # # Decode the authorization header and check if it is correct
-    # username, password = b64decode(request.headers["Authorization"].split(" ")[1]).decode("utf-8").split(":")
-    #
-    # if password != config.server.auth.password or username != config.server.auth.username:
-    #     return fail
-
 
 @app.context_processor
 def processor() -> dict:
