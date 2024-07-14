@@ -14,8 +14,8 @@ from flask import Flask, Response, g, request
 from flask_injector import FlaskInjector
 from injector import Binder, singleton
 
-from internals.clogging import SuppressedLoggerAdapter, createLogger
 # Local Imports
+from internals.clogging import SuppressedLoggerAdapter, createLogger
 from internals.config import Config
 from internals.routes import *
 from internals.wrapper.api import API
