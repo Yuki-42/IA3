@@ -50,7 +50,7 @@ api: API = API(config)
 Flask.url_for.__annotations__ = {}
 
 # Create the Flask app
-app: Flask = Flask(__name__, static_folder="static", template_folder="templates")
+app: Flask = Flask(__name__, template_folder="templates")
 
 # Set static and template folders
 app.static_folder = "static"

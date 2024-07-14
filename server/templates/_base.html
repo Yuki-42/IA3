@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
-    <link type="text/css" id="colours" rel="stylesheet" href="{{ url_for("static", filename="css/_colours.css") }}">
-    <link type="text/css" rel="stylesheet" href="{{ url_for("static", filename="css/_base.css") }}">
-    <script type="application/javascript" src="{{ url_for("static", filename="js/_base.js") }}"></script>
+    <link type="text/css" rel="stylesheet" href="static/css/_base.css">
+    <script type="application/javascript" src="static/js/_base.js"></script>
     <script type="application/javascript" src="https://kit.fontawesome.com/a7e9f794eb.js" crossorigin="anonymous"></script>
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script type="application/javascript" src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_{{ reCapchaSiteKey }}"></script>
@@ -18,7 +17,7 @@
 <header class="grid-margins">
     <div id="header-left" class="header-section">
         <div id="school-logo" class="school-logo">
-            <img src="{{ url_for("static", filename="img/school-logo.png") }}" alt="School Logo">
+            <img src="static/img/school-logo.png" alt="School Logo">
         </div>
     </div>
     <div id="header-centre" class="header-section">
@@ -62,7 +61,7 @@
     <div id="site-info">
         <p><a href="https://github.com/Yuki-42/IA3/blob/master/LICENSE">Licensed</a> {{ owner.name }} {{ year }}</p>
     </div>
-    <img id="footer-logo" src="{{ url_for("static", filename="img/gov-logo.svg") }}" alt="QLD Government Logo">
+    <img id="footer-logo" src="static/img/gov-logo.svg" alt="QLD Government Logo">
 </footer>
 </body>
 </html>
