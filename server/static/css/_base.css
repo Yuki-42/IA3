@@ -5,7 +5,6 @@
     font-family: "Open Sans", sans-serif;
     background-color: var(--primary-background);
     color: var(--text-primary);
-    transition: background-color 1s, color 1s;  !important;
     overflow-x: clip;
 }
 
@@ -42,6 +41,7 @@ body {
     flex-direction: column;
     background-color: var(--primary-background);
     color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;  !important;
 }
 
 body[data-theme="dark"] {
@@ -91,6 +91,7 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
+    max-height: 10vh;
 }
 
 header nav {
@@ -199,8 +200,9 @@ code, pre {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    color: var(--text-secondary);
+    color: var(--text-white);
     margin: 1em 6vw 1em 0;
+    max-height: 10vh;
 }
 
 #theme-selector input {
@@ -208,31 +210,35 @@ code, pre {
     -webkit-appearance: none;
     position: relative;
     background-color: var(--code-normal);
-    width: 120px;
-    height: 40px;
-    border-radius: 20px;
+    width: 6vw;
+    height: 2vw;
+    border-radius: 1vw;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.7s ease;
+    transition: width 0ms ease;
+    transition: height 0ms ease;
 }
 
 #theme-selector input::before {
     content: "";
     position: absolute;
     left: 0;
-    width: 40px;
-    height: 40px;
+    width: 2vw;
+    height: 2vw;
     background-color: #fff;
-    border-radius: 20px;
+    border-radius: 1vw;
     transform: scale(0.8);
     transition: all 0.7s ease;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: width 0ms ease;
+    transition: height 0ms ease;
 }
 
 #theme-selector input:checked::before {
     background-color: #fff;
-    left: 82px;
+    left: 4vw;
 }
 
 #theme-selector input:checked {
