@@ -100,6 +100,11 @@ server {
 
     keepalive_timeout 5;
 
+    # Path for static files
+    location /static/ {
+        alias /home/USERNAME/IA3/server/static/;
+    }
+
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -161,14 +166,4 @@ sudo service nginx restart;
 
 ## Step 5: Configure the Application
 
-This is currently a work in progress. Please check back later for updates.
-
-## Step 6: Start the Application
-
-Start the application:
-
-```bash
-screen -S IA3;  # Recommended to run in a screen session
-source venv/bin/activate;
-sh start.sh;
-```
+This is currentl
