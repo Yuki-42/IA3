@@ -32,6 +32,7 @@ class RBadGateway(HTTPError):
     Raised when a 502 Bad Gateway error is returned from the API.
     """
 
+
 # TODO: Add a lock for iteration
 def checkCache() -> None:
     """
