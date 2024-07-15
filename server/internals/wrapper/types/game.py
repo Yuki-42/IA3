@@ -21,27 +21,6 @@ from .tag import Tag
 breakTag = compile(r"<\s*br\s*(/)?>")  # Pre-compile the regex for br tags at application startup to save time
 
 
-# Temporary helper function
-# def getJsonDifference(
-#         json1: Dict[str, Any],
-#         json2: Dict[str, Any]
-# ) -> None:
-#     """
-#     Prints any missing keys in json2 compared to json1. Also prints mismatched values. Works recursively on both lists and dictionaries.
-#
-#     Args:
-#         json1 (Dict[str, Any]): The first JSON object. Considered the "correct" JSON object.
-#         json2 (Dict[str, Any]): The second JSON object.
-#     """
-#     for key in json1:
-#         if key not in json2:
-#             print(f"Key {key} is missing from json2")
-#         elif isinstance(json1[key], dict):
-#             getJsonDifference(json1[key], json2[key])
-#         elif json1[key] != json2[key]:
-#             print(f"Key {key} has a mismatched value. Expected:\n {dumps(json1[key], indent=4)} \n Got:\n {json2[key]}")
-
-
 class MetacriticPlatform(BaseModel):
     """
     Represents a metacritic platform.
@@ -151,10 +130,7 @@ class Game(BaseModel):
     rating: float
     rating_top: int
     ratings: List[Rating]
-
-    # This probably goes here
     ratings_count: int
-
     reactions: Optional[dict[str, int]] = None  # TODO: Get the details of this
     added: int
     added_by_status: Optional[dict[str, int]] = None  # TODO: Get the details of this
@@ -183,16 +159,13 @@ class Game(BaseModel):
     reviews_count: int
     saturated_color: str
     dominant_color: str
-
     parent_platforms: Optional[List[PPlatform]] = None
     platforms: List[GPlatform]
     released_at: Optional[date] = None
     requirements: Optional[Requirement] = None
-
     suggestions_count: int
     esrb_rating: Optional[EsrbRating] = None
     community_rating: Optional[int] = None
-
     genres: Optional[List[Genre]] = None
     stores: Optional[List[GStore]] = None
     clip: Any
@@ -200,7 +173,6 @@ class Game(BaseModel):
     developers: Optional[List[Developer]] = None
     publishers: Optional[List[Publisher]] = None
     short_screenshots: Optional[List[GShortScreenshot]] = None
-
     screenshots_count: Optional[int] = None
     movies_count: Optional[int] = None
     creators_count: Optional[int] = None

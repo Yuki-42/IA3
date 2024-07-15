@@ -8,7 +8,6 @@ from typing import Optional
 # Third Party Imports
 from pydantic import BaseModel
 
-
 # Local Imports
 
 
