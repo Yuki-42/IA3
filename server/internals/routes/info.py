@@ -10,9 +10,9 @@ from flask import render_template as renderTemplate
 from flask.blueprints import Blueprint
 from injector import inject
 
-from server.internals.wrapper import API, Response
-
 # Internal Imports
+from ..wrapper.api import API
+from ..wrapper.response import Response
 
 # Constants
 infoBlueprint: Blueprint = Blueprint("info", __name__, url_prefix="/")
