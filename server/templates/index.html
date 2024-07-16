@@ -49,9 +49,25 @@
             </div>
             <div id="popular">
                 {% if popular %}
-                    <h3>Popular Games of the past year</h3>
+                    <h3>Popular Games of all time</h3>
                     <div id="popular" class="gallery">
                         {% for game in popular %}
+                            <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
+                                <div class="gallery-item-details">
+                                    <a href="{{ url_for("games.game", gameId=game.id) }}">
+                                        <h2>{{ game.name }}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div id="best-year">
+                {% if range %}
+                    <h3>Best Games of 2007/8</h3>
+                    <div id="range" class="gallery">
+                        {% for game in range %}
                             <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
                                 <div class="gallery-item-details">
                                     <a href="{{ url_for("games.game", gameId=game.id) }}">
