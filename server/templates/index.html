@@ -47,6 +47,23 @@
                     </div>
                 {% endif %}
             </div>
+            <div id="popular">
+                {% if popular %}
+                    <h3>Popular Games of the past year</h3>
+                    <div id="popular" class="gallery">
+                        {% for game in popular %}
+                            <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
+                                <div class="gallery-item-details">
+                                    <a href="{{ url_for("games.game", gameId=game.id) }}">
+                                        <h2>{{ game.name }}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
         </div>
         <div id="right">
 
