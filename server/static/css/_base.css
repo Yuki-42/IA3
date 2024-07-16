@@ -34,8 +34,8 @@
 }
 
 body {
-    min-height: 101vh;
-    height: 104%;
+    min-height: 100vh;
+    height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -44,42 +44,53 @@ body {
     transition: background-color 0.3s, color 0.3s;  !important;
 }
 
-body[data-theme="dark"] {
-    --primary-background: #121212;
-    --secondary-background: #1c1c1c;
-    --code-normal: #808080;
-    --code-yellow: #f5d342;
-    --yellow-1: #f2cf1c;
-    --yellow-2: #ccaa00;
-    --text-black: #000000;
-    --text-white: #ffffff;
-    --green-1: #049a49;
-    --text-primary: #d4d4d4;
-    --text-secondary: #000000;
+@media (prefers-color-scheme: light) {
+    :root{
+        --primary-background: #ffffff;
+        --secondary-background: #f1f1f1;
+        --code-normal: #cccccc;
+        --code-yellow: #f5d342;
+        --yellow-1: #dbb700;
+        --yellow-2: #ccaa00;
+        --text-black: #000000;
+        --text-white: #ffffff;
+        --green-1: #034320;
+        --text-primary: #000000;
+        --text-secondary: #ffffff;
 
-    --header-background: var(--secondary-background);
-    --footer-colour: var(--secondary-background);
+        --header-background: var(--green-1);
+        --footer-colour: var(--yellow-1);
+    }
+    * {
+        color-scheme: light;
+    }
 }
 
-body[data-theme="light"] {
-    --primary-background: #ffffff;
-    --secondary-background: #f1f1f1;
-    --code-normal: #cccccc;
-    --code-yellow: #f5d342;
-    --yellow-1: #dbb700;
-    --yellow-2: #ccaa00;
-    --text-black: #000000;
-    --text-white: #ffffff;
-    --green-1: #034320;
-    --text-primary: #000000;
-    --text-secondary: #ffffff;
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-background: #121212;
+        --secondary-background: #1c1c1c;
+        --code-normal: #808080;
+        --code-yellow: #f5d342;
+        --yellow-1: #f2cf1c;
+        --yellow-2: #ccaa00;
+        --text-black: #000000;
+        --text-white: #ffffff;
+        --green-1: #049a49;
+        --text-primary: #d4d4d4;
+        --text-secondary: #000000;
 
-    --header-background: var(--green-1);
-    --footer-colour: var(--yellow-1);
+        --header-background: var(--secondary-background);
+        --footer-colour: var(--secondary-background);
+    }
+    * {
+        color-scheme: dark;
+    }
 }
 
 header {
     height: 10vh !important;
+    min-height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;

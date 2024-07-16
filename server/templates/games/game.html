@@ -3,7 +3,7 @@
 {% block title %}{{ game.name }}{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="static/css/games.css">
+    <link rel="stylesheet" href="/static/css/games.css">
 {% endblock %}
 
 {% block content %}
@@ -169,9 +169,9 @@
                 {% endif %}
                 <div id="age-rating-image">
                     {% if game.esrb_rating %}
-                        <img src="static/img/ratings/{{game.esrb_rating.slug}}.svg" alt="{{ game.esrb_rating.name }}">
+                        <img src="/static/img/ratings/{{game.esrb_rating.slug}}.svg" alt="{{ game.esrb_rating.name }}">
                     {% else %}
-                        <img src=static/img/ratings/rating-pending.svg" alt="Rating Pending">
+                        <img src="/static/img/ratings/rating-pending.svg" alt="Rating Pending">
                     {% endif %}
                 </div>
             </div>

@@ -149,8 +149,6 @@ class GameHandler:
             "page_size": pageSize
         }
 
-        print(dates)
-
         # Convert the dates into a list of strings in the YYYY-MM-dd format
         dates = [ldate.strftime('%Y-%m-%d') for ldate in dates] if dates else None
 

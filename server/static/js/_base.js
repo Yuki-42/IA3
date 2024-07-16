@@ -10,23 +10,6 @@ function setCookie(name, value) {
 }
 
 
-function toggleTheme() {
-    // Get the current theme
-    let theme = getCookie("theme");
-
-    // Set the theme to the opposite of the current theme
-    if (theme === "dark") {
-        document.body.setAttribute("data-theme", "light");
-        setCookie("theme", "light")
-    } else {
-        document.body.setAttribute("data-theme", "dark");
-        setCookie("theme", "dark")
-    }
-
-    // Reload the stylesheets
-    // reloadColours();
-}
-
 
 function _get(url, parameters = {}) {
     console.log(url)
@@ -127,21 +110,6 @@ function hideAgeModal(){
 
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", () => {
-    // Get the current theme
-    let theme = getCookie("theme");  // This will never be empty
-
-    // Set the body attribute
-    document.body.setAttribute("data-theme", theme);
-
-    // Get the theme toggle element
-    let themeToggle = document.getElementById("theme-selector-checkbox");
-
-    // Set the theme toggle to the current theme
-    themeToggle.checked = theme === "dark";
-
-    // Add the event listener to the theme toggle
-    themeToggle.addEventListener("change", toggleTheme);
-
     // Check the user's age
     ageCheck();
 });

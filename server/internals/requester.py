@@ -254,29 +254,11 @@ class Requester:
         headers["User-Agent"] = f"AHSHS IA3 {self.config.server.owner.name}"
         headers["From"] = self.config.server.owner.email
 
-        attempts: int = 0
-        response: Response | None = None
-
-        while attempts < 5:
-            self.logger.debug(f"{requestId} - Attempt {attempts}")
-            response: Response = method(
-                url,
-                params=params,
-                **kwargs
-            )
-            attempts += 1  # Attempts counter
-
-            if response.status_code == 502:
-                continue  # Try again
-
-            try:
-                response.raise_for_status()
-
-            except HTTPError as e:
-                if response.status_code == 502:
-                    raise RBadGateway(response=response)
-                else:
-                    raise e
+        response: Response = method(
+            url,
+            params=params,
+            **kwargs
+        )
 
         # Response is not nullable
         assert response is not None
