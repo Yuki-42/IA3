@@ -42,7 +42,7 @@ def index(
     mostPopularAlltime: Response = api.game.list(ordering="-metacritic")  # Most popular games all time
 
     return renderTemplate(
-        "games/index.html",
+        "index.html",
         trending=trendingData.results,
         dateRange=mostPopularTimespan.results,
         mostPopular=mostPopularAlltime.results,

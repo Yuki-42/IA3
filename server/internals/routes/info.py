@@ -22,7 +22,7 @@ def index() -> str:
     Returns:
         str: The rendered index page.
     """
-    return renderTemplate("info/index.html")
+    return renderTemplate("index.html")
 
 
 @infoBlueprint.get("/about")

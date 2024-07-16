@@ -1,0 +1,55 @@
+{% extends "_base.html" %}
+
+{% block title %}Games{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/games.css">
+{% endblock %}
+
+{% block content %}
+    <section id="search" class="grid-margins">
+        <div id="left">
+
+        </div>
+        <div id="centre">
+            <h1>Search For Games</h1>
+            <form id="game-search" method="get" action="{{ url_for("games.search") }}">
+                <label for="search">Search for a game:</label>
+                <input type="text" id="search" name="search">
+                <button type="submit">Search</button>
+            </form>
+            <div class="gallery">
+                {% if response %}
+                    {% for game in response.results %}
+                        <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
+                            <div class="gallery-item-details">
+                                <a href="{{ url_for("games.game", gameId=game.id) }}">
+                                    <h2>{{ game.name }}</h2>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="suggested">
+                {% if trending %}
+                    <h3>Trending Games of the past year</h3>
+                    <div id="trending" class="gallery">
+                        {% for game in trending %}
+                            <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
+                                <div class="gallery-item-details">
+                                    <a href="{{ url_for("games.game", gameId=game.id) }}">
+                                        <h2>{{ game.name }}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div id="right">
+
+        </div>
+    </section>
+{% endblock %}
