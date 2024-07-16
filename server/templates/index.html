@@ -64,10 +64,10 @@
                 {% endif %}
             </div>
             <div id="best-year">
-                {% if range %}
+                {% if bestYear %}
                     <h3>Best Games of 2007/8</h3>
                     <div id="range" class="gallery">
-                        {% for game in range %}
+                        {% for game in bestYear %}
                             <div class="gallery-item" style="background-image: url('{{ game.background_image if game.background_image else "" }}')">
                                 <div class="gallery-item-details">
                                     <a href="{{ url_for("games.game", gameId=game.id) }}">

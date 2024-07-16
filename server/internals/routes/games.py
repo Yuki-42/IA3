@@ -37,14 +37,14 @@ def index(
         date.today()
     ]
 
-    trendingData: Response = api.game.list(dates=trendingDates, ordering="-rating", pageSize=6)  # Games between the start of the year and the end of the year ordering -added
-    mostPopularTimespan: Response = api.game.list(dates=[date.fromisocalendar(day=7, week=51, year=2006), date.fromisocalendar(day=7, week=51, year=2008)], ordering="-rating", pageSize=6)  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
-    mostPopularAlltime: Response = api.game.list(ordering="-rating", pageSize=6)  # Most popular games all time
+    trendingData: Response = api.game.list(dates=trendingDates, ordering="-metacritic", pageSize=6)  # Games between the start of the year and the end of the year ordering -added
+    mostPopularTimespan: Response = api.game.list(dates=[date.fromisocalendar(day=7, week=51, year=2006), date.fromisocalendar(day=7, week=51, year=2008)], ordering="-metacritic", pageSize=6)  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
+    mostPopularAlltime: Response = api.game.list(ordering="-metacritic", pageSize=6)  # Most popular games all time
 
     return renderTemplate(
         "index.html",
         trending=trendingData.results,
-        range=mostPopularTimespan.results,
+        bestYear=mostPopularTimespan.results,
         popular=mostPopularAlltime.results,
     )
 
