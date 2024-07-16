@@ -26,7 +26,7 @@ def index(
         api: API,
 ) -> str:
     """
-    The games page.
+    The index page (identical to games page).
 
     Returns:
         str: The rendered games page.
