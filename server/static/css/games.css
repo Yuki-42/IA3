@@ -86,7 +86,7 @@ h1 {
     background-color: var(--secondary-background);
     display: grid;
     text-align: center;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .rating-graph {
@@ -101,8 +101,12 @@ h1 {
 /* align along the top */
 .rating-graph strong {
     align-self: flex-start;
+    margin: 6vh auto auto auto;
 }
 
 .rating-bar {
+    margin-top: 2vh;
     background-color: var(--green-1) !important;
+    width: 16vw;
+    border-radius: 6px;
 }

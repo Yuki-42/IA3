@@ -41,8 +41,10 @@
                     {% for rating in game.ratings %}
                         <div class="rating-graph">
                             <strong>{{ rating.title.capitalize() }}</strong>
-                            <div class="rating-bar" style="height: calc(1vh * {{ rating.percent }})"></div>
-                            <p>{{ rating.percent }}</p>
+                            <div class="rating-bar" style="height: calc(1vh * {{ rating.percent }});">
+
+                            </div>
+                            <p>{{ rating.percent }}%</p>
                         </div>
                     {% endfor %}
                 </div>
