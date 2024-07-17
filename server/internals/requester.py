@@ -15,8 +15,6 @@ from requests import Response, delete, get, post, put, HTTPError
 from .clogging import createLogger
 from .config import Config
 
-# Cache for the requests made
-cache: dict[str, Any] = {}
 cacheLastChecked: float = time()
 
 """
@@ -31,6 +29,43 @@ class RBadGateway(HTTPError):
     """
     Raised when a 502 Bad Gateway error is returned from the API.
     """
+
+
+class LockedCache(dict):
+    """
+    Thread-locked dictionary for cache.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def __getitem__(self, key: str) -> Any:
+        with cacheLock:
+            return super().__getitem__(key)
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        with cacheLock:
+            super().__setitem__(key, value)
+
+    def __delitem__(self, key: str) -> None:
+        with cacheLock:
+            super().__delitem__(key)
+
+    def __contains__(self, key: str) -> bool:
+        with cacheLock:
+            return super().__contains__(key)
+
+    def __len__(self) -> int:
+        with cacheLock:
+            return super().__len__()
+
+    def __iter__(self) -> Any:
+        with cacheLock:
+            return super().__iter__()
+
+
+# Create a locked cache
+cache: LockedCache = LockedCache()
 
 
 # TODO: Add a lock for iteration
