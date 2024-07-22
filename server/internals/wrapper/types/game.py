@@ -235,7 +235,7 @@ class Review(BaseModel):
     text_previews: List[str]
     text_attachments: int
     rating: int
-    reactions: dict[str, int]
+    reactions: list
     created: datetime
     edited: datetime
     likes_count: int
