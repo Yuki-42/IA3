@@ -59,3 +59,54 @@ h1 {
     text-decoration: none;
     text-align: center;
 }
+
+#ratings-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#ratings-cards li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--secondary-background);
+    border-radius: 8px;
+    text-align: center;
+    list-style-type: none;
+    margin: 0 1vw;
+    min-height: 10vh;
+    width: 10vw;
+}
+
+#rating-graph-container {
+    width: 100%;
+    min-height: 40vh;
+    border-radius: 10px;
+    background-color: var(--secondary-background);
+    display: grid;
+    text-align: center;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.rating-graph {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 1vw 0 1vw;
+}
+
+/* align along the top */
+.rating-graph strong {
+    align-self: flex-start;
+    margin: 6vh auto auto auto;
+}
+
+.rating-bar {
+    margin-top: 2vh;
+    background-color: var(--green-1) !important;
+    width: 16vw;
+    border-radius: 6px;
+}

@@ -30,12 +30,6 @@ function _get(url, parameters = {}) {
     });
 }
 
-// function reloadColours() {
-//     let colours = document.getElementById("colours");
-//
-//     colours.href = colours.href.replace(/\?.*|$/, "?reload=" + new Date().getTime());
-// }
-
 
 // Adds a child div with the message to the parent div
 function fillError(div, message) {
@@ -93,6 +87,26 @@ function ageCheck() {
         // Hide the modal
         hideAgeModal();
     });
+
+    // Add the enter key event listener
+    dateInput.addEventListener("keyup", event => {
+        if (event.key === "Enter") {
+            // Get the value
+            let value = dateInput.value;
+
+            // Get the current date
+            let now = new Date();
+
+            // Calculate the age
+            let age = now.getFullYear() - new Date(value).getFullYear();
+
+            // Set age cookie
+            setCookie("age", age);
+
+            // Hide the modal
+            hideAgeModal();
+        }
+    });
 }
 
 function showAgeModal(){
@@ -110,6 +124,14 @@ function hideAgeModal(){
 
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", () => {
+    // Use regex to check that the age cookie is a valid number between 0 and 150
+    let age = getCookie("age");
+
+    if (age && !/^\d+$/.test(age) || age < 0 || age > 150) {
+        // If the age cookie is not a valid number between 0 and 150, delete the cookie
+        document.cookie = "age=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+
     // Check the user's age
     ageCheck();
 });

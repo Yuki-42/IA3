@@ -36,6 +36,29 @@
                     <li>Average User Rating: {{ game.rating }}</li>
                     <li>Review count: {{ game.ratings_count }}</li>
                 </ul>
+
+                {% if game.ratings %}
+                    <ul id="ratings-cards">
+                        {% for rating in game.ratings %}
+                            <li>
+                                <strong>{{ rating.title.capitalize() }}</strong>
+                                <p>{{ rating.count }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <div id="rating-graph-container">
+                    {% for rating in game.ratings %}
+                        <div class="rating-graph">
+                            <strong>{{ rating.title.capitalize() }}</strong>
+                            <div class="rating-bar" style="height: calc(1vh * {{ rating.percent }});">
+
+                            </div>
+                            <p>{{ rating.percent }}%</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div id="see-also">
                 <!-- This is a list of games that this game is a parent of (or child of). -->
