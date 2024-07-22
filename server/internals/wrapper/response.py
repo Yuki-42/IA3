@@ -5,6 +5,8 @@ Contains the Response class.
 # Standard Library Imports
 from typing import Dict, List, Optional
 
+from pydantic import BaseModel
+
 # Internal Imports
 from .types import *
 
@@ -19,7 +21,7 @@ class Response:
     count: int
     next: Optional[str] = None
     previous: Optional[str] = None
-    results: List[Creator | Developer | Game | Genre | Platform | Publisher | Store | Tag]
+    results: List[BaseModel]
 
     def __iter__(self) -> iter:
         return iter(self.results)
@@ -30,7 +32,7 @@ class Response:
     def __init__(
             self,
             data: Dict,
-            results: List[Creator | Developer | Game | Genre | Platform | Publisher | Store | Tag]
+            results: List[BaseModel]
     ) -> None:
         """
         Initializes the Response class.

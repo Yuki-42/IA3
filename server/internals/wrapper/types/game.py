@@ -208,3 +208,44 @@ class DetailedGame(BaseModel):
     """
     Represents a game returned from a details query.
     """
+
+
+class User(BaseModel):
+    """
+    Represents a user.
+    """
+    id: int
+    username: str
+    slug: str
+    full_name: str
+    avatar: Optional[str] = None
+    games_count: int
+    collections_count: int
+
+
+class Review(BaseModel):
+    """
+    Represents a review.
+    """
+    id: int
+    user: User
+    game: int
+    text: str
+    text_preview: str
+    text_previews: List[str]
+    text_attachments: int
+    rating: int
+    reactions: dict[str, int]
+    created: datetime
+    edited: datetime
+    likes_count: int
+    likes_positive: int
+    likes_rating: int
+    comments_count: int
+    comments_parent_count: int
+    posts_count: int
+    share_image: str
+    is_text: bool
+    external_avatar: Optional[str] = None
+    comments: dict[str, Any]
+    can_delete: bool

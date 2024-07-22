@@ -21,6 +21,17 @@
             <div id="reviews">
                 <h3>Reviews</h3>
                 <ul>
+                    {% for review in reviews %}
+                        <li>
+                            <h4>{{ review.user.username }}</h4>
+                            <p>{{ review.content }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="Ratings">
+                <h3>Ratings</h3>
+                <ul>
                     <li>Metacritic: {{ game.metacritic }}</li>
                     <li>Average User Rating: {{ game.rating }}</li>
                     <li>Review count: {{ game.ratings_count }}</li>
@@ -46,6 +57,7 @@
                     {% endfor %}
                 </ul>
             </div>
+
             <div id="stores">
                 <h3>Stores</h3>
                 <ul>
