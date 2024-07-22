@@ -8,31 +8,6 @@
     overflow-x: clip;
 }
 
-/* Background Colour Classes */
-.bg-primary {
-    background-color: var(--primary-background);
-}
-
-.bg-secondary {
-    background-color: var(--secondary-background);
-}
-
-.bg-yellow-1 {
-    background-color: var(--yellow-1);
-}
-
-.bg-yellow-2 {
-    background-color: var(--yellow-2);
-}
-
-.bg-green-1 {
-    background-color: var(--green-1);
-}
-
-.black-text {
-    color: var(--text-black);
-}
-
 body {
     min-height: 100vh;
     height: 100%;
@@ -204,47 +179,6 @@ code, pre {
 
 .centre {
     text-align: center;
-}
-
-#theme-selector {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    color: var(--text-white);
-    margin: 1em 6vw 1em 0;
-    max-height: 10vh;
-}
-
-#theme-selector input {
-    align-self: center;
-    -webkit-appearance: none;
-    position: relative;
-    background-color: var(--code-normal);
-    width: 6vw;
-    height: 2vw;
-    border-radius: 1vw;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.7s ease;
-    transition: width 0ms ease;
-    transition: height 0ms ease;
-}
-
-#theme-selector input::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 2vw;
-    height: 2vw;
-    background-color: #fff;
-    border-radius: 1vw;
-    transform: scale(0.8);
-    transition: all 0.7s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: width 0ms ease;
-    transition: height 0ms ease;
 }
 
 #theme-selector input:checked::before {
