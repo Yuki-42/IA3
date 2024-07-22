@@ -20,14 +20,14 @@
             </div>
             <div id="reviews">
                 <h3>Reviews</h3>
-                <ul>
+                <div id="reviews-list">
                     {% for review in reviews %}
-                        <li>
+                        <div class="review">
                             <h4>{{ review.user.username }}</h4>
-                            <p>{{ review.content }}</p>
-                        </li>
+                            <p>{{ review.text|safe }}</p>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
             <div id="Ratings">
                 <h3>Ratings</h3>

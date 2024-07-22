@@ -110,3 +110,24 @@ h1 {
     width: 16vw;
     border-radius: 6px;
 }
+
+#reviews-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 1vw;
+}
+
+.review {
+    background-color: var(--secondary-background);
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.review p {
+    max-height: 20vh;
+    overflow: scroll;
+    /* Hide side scroll bar */
+    scrollbar-width: none;
+}
