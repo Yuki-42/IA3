@@ -4,7 +4,7 @@ Contains the Requester class.
 # Standard Library Imports
 from hashlib import sha512
 from time import time
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Optional
 from uuid import uuid4
 from threading import Lock
 
@@ -24,48 +24,14 @@ Custom errors for Requester calls.
 # Create a multi-thread lock for cache requests and a timeout of 100ms to acquire lock
 cacheLock: Lock = Lock()
 
+# Create cache dictionary
+cache: dict[str, dict] = {}
+
 
 class RBadGateway(HTTPError):
     """
     Raised when a 502 Bad Gateway error is returned from the API.
     """
-
-
-class LockedCache(dict):
-    """
-    Thread-locked dictionary for cache.
-    """
-
-    def __init__(self) -> None:
-        super().__init__()
-
-    def __getitem__(self, key: str) -> Any:
-        with cacheLock:
-            return super().__getitem__(key)
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        with cacheLock:
-            super().__setitem__(key, value)
-
-    def __delitem__(self, key: str) -> None:
-        with cacheLock:
-            super().__delitem__(key)
-
-    def __contains__(self, key: str) -> bool:
-        with cacheLock:
-            return super().__contains__(key)
-
-    def __len__(self) -> int:
-        with cacheLock:
-            return super().__len__()
-
-    def __iter__(self) -> Any:
-        with cacheLock:
-            return super().__iter__()
-
-
-# Create a locked cache
-cache: LockedCache = LockedCache()
 
 
 # TODO: Add a lock for iteration
@@ -79,12 +45,13 @@ def checkCache() -> None:
     if time() - cacheLastChecked < 60:
         return
 
-    # Check the cache
-    for rhash in cache:
-        if cache[rhash]["expires"] >= time():  # If the cache has not expired, skip it
-            continue
+    with cacheLock:
+        # Check the cache
+        for rhash in cache:
+            if cache[rhash]["expires"] >= time():  # If the cache has not expired, skip it
+                continue
 
-        del cache[rhash]
+            del cache[rhash]
 
 
 class Requester:
@@ -109,8 +76,8 @@ class Requester:
     def get(
             self,
             url: str,
-            params: Optional[Dict[str, Any]] = None,
-            headers: Optional[Dict[str, str]] = None,
+            params: Optional[dict[str, Any]] = None,
+            headers: Optional[dict[str, str]] = None,
             overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
@@ -119,8 +86,8 @@ class Requester:
 
         Args:
             url (str): The URL to make the request to.
-            params (Optional[Dict[str, Any]]): The parameters to pass to the request.
-            headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            params (Optional[dict[str, Any]]): The parameters to pass to the request.
+            headers (Optional[dict[str, str]]): The headers to pass to the request.
             overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
@@ -139,8 +106,8 @@ class Requester:
     def post(
             self,
             url: str,
-            data: Optional[Dict[str, Any]] = None,
-            headers: Optional[Dict[str, str]] = None,
+            data: Optional[dict[str, Any]] = None,
+            headers: Optional[dict[str, str]] = None,
             overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
@@ -149,8 +116,8 @@ class Requester:
 
         Args:
             url (str): The URL to make the request to.
-            data (Optional[Dict[str, Any]]): The data to pass to the request.
-            headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            data (Optional[dict[str, Any]]): The data to pass to the request.
+            headers (Optional[dict[str, str]]): The headers to pass to the request.
             overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
@@ -169,8 +136,8 @@ class Requester:
     def put(
             self,
             url: str,
-            data: Optional[Dict[str, Any]] = None,
-            headers: Optional[Dict[str, str]] = None,
+            data: Optional[dict[str, Any]] = None,
+            headers: Optional[dict[str, str]] = None,
             overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
@@ -179,8 +146,8 @@ class Requester:
 
         Args:
             url (str): The URL to make the request to.
-            data (Optional[Dict[str, Any]]): The data to pass to the request.
-            headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            data (Optional[dict[str, Any]]): The data to pass to the request.
+            headers (Optional[dict[str, str]]): The headers to pass to the request.
             overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
@@ -199,8 +166,8 @@ class Requester:
     def delete(
             self,
             url: str,
-            data: Optional[Dict[str, Any]] = None,
-            headers: Optional[Dict[str, str]] = None,
+            data: Optional[dict[str, Any]] = None,
+            headers: Optional[dict[str, str]] = None,
             overwriteUrl: bool = False,
             **kwargs
     ) -> Any:
@@ -209,8 +176,8 @@ class Requester:
 
         Args:
             url (str): The URL to make the request to.
-            data (Optional[Dict[str, Any]]): The data to pass to the request.
-            headers (Optional[Dict[str, str]]): The headers to pass to the request.
+            data (Optional[dict[str, Any]]): The data to pass to the request.
+            headers (Optional[dict[str, str]]): The headers to pass to the request.
             overwriteUrl (bool): Whether to overwrite the whole url or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
@@ -230,9 +197,9 @@ class Requester:
             self,
             method: Callable,
             url: str,
-            params: Optional[Dict[str, Any]] = None,
+            params: Optional[dict[str, Any]] = None,
             overwriteUrl: bool = False,
-            headers: Dict[str, Any] = None,
+            headers: dict[str, Any] = None,
             skipCache: bool = False,
             **kwargs
     ) -> Any:
@@ -242,9 +209,9 @@ class Requester:
         Args:
             method (Callable): The requests function to use.
             url (str): The URL to make the request to.
-            params (Optional[Dict[str, Any]]): The parameters to pass to the request.
+            params (Optional[dict[str, Any]]): The parameters to pass to the request.
             overwriteUrl (bool): Whether to use only use the URL or include the base URL.
-            headers (Dict[str, Any]): Headers to pass to the request.
+            headers (dict[str, Any]): Headers to pass to the request.
             skipCache (bool): Whether to skip the cache or not.
             **kwargs: Any additional keyword arguments to pass to the request.
 
@@ -268,12 +235,13 @@ class Requester:
         # Calculate request hash
         rHash: str = sha512(f"{url}{params}{headers}{kwargs}".encode()).hexdigest()
 
-        if rHash in cache and not skipCache:
-            self.logger.debug(f"{requestId} - Cache hit")
-            # Return the data from the cache without the expires key
-            _tempCache: dict = cache[rHash].copy()
-            _tempCache.pop("expires")
-            return _tempCache
+        with cacheLock:
+            if rHash in cache and not skipCache:
+                self.logger.debug(f"{requestId} - Cache hit")
+                # Return the data from the cache without the expires key
+                _tempCache: dict = cache[rHash].copy()
+                _tempCache.pop("expires")
+                return _tempCache
 
         # Add the API key to the data
         if params is None:
