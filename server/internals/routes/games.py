@@ -12,6 +12,7 @@ from flask_injector import inject
 
 # Internal Imports
 from .api import API
+from ..wrapper.types import Review
 from ..wrapper import Game
 from ..wrapper.response import Response
 
@@ -33,12 +34,16 @@ def index(
     """
     # Need trending, most popular (2007), Most popular of all time
     trendingDates: list[date] = [
-        date.today() - timedelta(days=30*12),
+        date.today() - timedelta(days=30 * 12),
         date.today()
     ]
 
     trendingData: Response = api.game.list(dates=trendingDates, ordering="-metacritic", pageSize=6)  # Games between the start of the year and the end of the year ordering -added
-    mostPopularTimespan: Response = api.game.list(dates=[date.fromisocalendar(day=7, week=51, year=2006), date.fromisocalendar(day=7, week=51, year=2008)], ordering="-metacritic", pageSize=6)  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
+    mostPopularTimespan: Response = api.game.list(
+        dates=[date.fromisocalendar(day=7, week=51, year=2006), date.fromisocalendar(day=7, week=51, year=2008)],
+        ordering="-metacritic",
+        pageSize=6
+        )  # Games between 1st jan 2007 and 31st dec 2007 ordering -added
     mostPopularAlltime: Response = api.game.list(ordering="-metacritic", pageSize=6)  # Most popular games all time
 
     return renderTemplate(
@@ -94,6 +99,9 @@ def game(
     except TypeError:
         age: int = 0
 
+    # Get reviews for the game
+    reviews: list[Review] = api.game.reviews(gameId).results
+
     if gameData.esrb_rating is None:
         return renderTemplate(
             "games/game.html",
@@ -108,5 +116,6 @@ def game(
 
     return renderTemplate(
         "games/game.html",
-        game=api.game.details(gameId)
+        game=api.game.details(gameId),
+        reviews=reviews
     )

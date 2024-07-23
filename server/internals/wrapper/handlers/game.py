@@ -496,3 +496,28 @@ class GameHandler:
             data=response,
             results=response["results"]
         )
+
+    def reviews(  # This does not exist in the API docs
+            self,
+            id: int | str
+    ) -> Response:
+        """
+        Gets a list of reviews for a game.
+
+        Args:
+            id (int | str): The id of the game (can be either rawgId or slug).
+
+        Returns:
+            List[Dict]: A list of reviews.
+        """
+        response: Dict = self.requester.get(
+            f"{self.baseUrl}/{id}/reviews",
+            {
+                "id": id
+            }
+        )
+
+        return Response(
+            data=response,
+            results=[Review(**review) for review in response["results"]]
+        )
