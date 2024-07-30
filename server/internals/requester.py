@@ -15,14 +15,10 @@ from requests import Response, delete, get, post, put, HTTPError
 from .clogging import createLogger
 from .config import Config
 
-cacheLastChecked: float = time()
 
-"""
-Custom errors for Requester calls.
-"""
-
-# Create a multi-thread lock for cache requests and a timeout of 100ms to acquire lock
+# Create cache variables
 cacheLock: Lock = Lock()
+cacheLastChecked: float = time()
 
 # Create cache dictionary
 cache: dict[str, dict] = {}
