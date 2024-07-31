@@ -274,11 +274,12 @@ class Requester:
         if "previous" in data and data["previous"] is not None:
             data["previous"] = data["previous"].replace(self.config.api.key, "KEY")
 
-        # Add the data to the cache
-        cache[rHash] = data.copy()
+        with cacheLock:
+            # Add the data to the cache
+            cache[rHash] = data.copy()
 
-        # Add the expiration time to the cache (current time + config.api.cacheExpiry)
-        cache[rHash]["expires"] = time() + self.config.api.cacheExpiry
+            # Add the expiration time to the cache (current time + config.api.cacheExpiry)
+            cache[rHash]["expires"] = time() + self.config.api.cacheExpiry
 
         # Return the data
         return data
