@@ -28,7 +28,7 @@ sudo apt install python3.12 python3.12-pip python3.12-venv -y;
 
 Install the following packages:
 ```bash
-sudo apt install nginx screen git python3.12-venv authbind gunicorn -y;
+sudo apt install nginx screen git authbind gunicorn -y;
 ```
 
 ## Step 2: Clone the Repository
